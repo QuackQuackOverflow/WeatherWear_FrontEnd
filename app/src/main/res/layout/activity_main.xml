@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -217,12 +218,13 @@
                         android:layout_marginLeft="30dp"
                         android:background="#aaaaaa">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textAlignment="center"
-                            android:text="의류 불러오기\n실패"></TextView>
+                        <ImageButton
+                            android:id="@+id/clothingButton1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minWidth="150dp"
+                            android:minHeight="150dp">
+                        </ImageButton>
 
                     </RelativeLayout>
 
@@ -233,12 +235,13 @@
                         android:layout_marginLeft="30dp"
                         android:background="#aaaaaa">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textAlignment="center"
-                            android:text="의류 불러오기\n실패"></TextView>
+                        <ImageButton
+                            android:id="@+id/clothingButton2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minWidth="150dp"
+                            android:minHeight="150dp">
+                        </ImageButton>
 
                     </RelativeLayout>
 
@@ -249,12 +252,13 @@
                         android:layout_marginLeft="30dp"
                         android:background="#aaaaaa">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textAlignment="center"
-                            android:text="의류 불러오기\n실패"></TextView>
+                        <ImageButton
+                            android:id="@+id/clothingButton3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minWidth="150dp"
+                            android:minHeight="150dp">
+                        </ImageButton>
 
                     </RelativeLayout>
 
@@ -265,12 +269,13 @@
                         android:layout_marginLeft="30dp"
                         android:background="#aaaaaa">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textAlignment="center"
-                            android:text="의류 불러오기\n실패"></TextView>
+                        <ImageButton
+                            android:id="@+id/clothingButton4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minWidth="150dp"
+                            android:minHeight="150dp">
+                        </ImageButton>
 
                     </RelativeLayout>
 
@@ -281,12 +286,13 @@
                         android:layout_marginLeft="30dp"
                         android:background="#aaaaaa">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:textAlignment="center"
-                            android:text="의류 불러오기\n실패"></TextView>
+                        <ImageButton
+                            android:id="@+id/clothingButton5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minWidth="150dp"
+                            android:minHeight="150dp">
+                        </ImageButton>
 
                     </RelativeLayout>
 
