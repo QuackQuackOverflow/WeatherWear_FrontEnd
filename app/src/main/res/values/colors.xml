@@ -4,6 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="skyblue">#87CEEB</color>
     <color name="sunyellow">#FFFF00</color>
-    <color name="lightSkyble">#C8EAFF</color>
+    <color name="lightSkyblue">#C8EAFF</color>
+    <color name="deppSkyblue">#157DB7</color>
+    <color name="lightGray">#C6C6C6</color>
+    <color name="hotRed">#FF7A73</color>
 
 </resources>

@@ -15,11 +15,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // 2초 동안 splash 화면을 띄운 후 LoginActivity로 전환
+        // 1.5초 동안 splash 화면을 띄운 후 LoginActivity로 전환
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this@SplashActivity, LoginActivity::class.java)
             startActivity(intent)
             finish() // SplashActivity를 종료
-        }, 2000) // 2000ms = 2초
+        }, 1500)
     }
 }
