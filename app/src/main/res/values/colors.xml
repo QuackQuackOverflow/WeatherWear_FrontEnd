@@ -7,6 +7,9 @@
     <color name="lightSkyblue">#C8EAFF</color>
     <color name="deppSkyblue">#157DB7</color>
     <color name="lightGray">#C6C6C6</color>
+    <color name="superLightGray">#E0E0E0</color>
     <color name="hotRed">#FF7A73</color>
+    <color name="lightHotRed">#FFAAA5</color>
+
 
 </resources>

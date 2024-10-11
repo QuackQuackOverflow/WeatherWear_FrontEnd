@@ -73,11 +73,106 @@
             android:ems="10"
             android:inputType="textPassword" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="50dp"
+            android:text="당신은"
+            android:textColor="#000000"
+            android:textSize="22sp"></TextView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical"
+                android:background="@color/lightSkyblue">
+
+                <RadioButton
+                    android:id="@+id/rbtn_userFeelsColdWell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                </RadioButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="추위를\n잘 타요"
+                    android:textColor="#000000"
+                    android:textAlignment="center"
+                    android:textSize="20sp">
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:background="@color/superLightGray">
+
+                <RadioButton
+                    android:id="@+id/rbtn_userFeelsAvg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                </RadioButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="보통"
+                    android:textColor="#000000"
+                    android:textAlignment="center"
+                    android:textSize="20sp">
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:orientation="vertical"
+                android:background="@color/lightHotRed">
+
+                <RadioButton
+                    android:id="@+id/rbtn_userFeelsHotWell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                </RadioButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="더위를\n잘 타요"
+                    android:textColor="#000000"
+                    android:textAlignment="center"
+                    android:textSize="20sp">
+                </TextView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
         <Button
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginVertical="20dp"
+            android:layout_marginTop="80dp"
             android:text="계정 생성"
             android:textSize="17sp"
             android:textStyle="bold"/>
