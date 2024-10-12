@@ -45,7 +45,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginHorizontal="5dp"
+                        android:layout_marginHorizontal="27dp"
                         android:text="웨더웨어"
                         android:textColor="#181818"
                         android:textSize="20sp"></TextView>
@@ -315,35 +315,42 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
             
-            <ImageButton
+            <Button
                 android:id="@+id/navigationBarBtn1"
-                android:layout_width="50dp"
+                android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"></ImageButton>
+                android:text="기록"
+                android:layout_marginHorizontal="14dp"></Button>
 
-            <ImageButton
+            <Button
                 android:id="@+id/navigationBarBtn2"
-                android:layout_width="50dp"
+                android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"></ImageButton>
+                android:text="리뷰쓰기"
+                android:layout_marginHorizontal="14dp"></Button>
 
-            <ImageButton
+            <Button
                 android:id="@+id/navigationBarBtn3"
-                android:layout_width="50dp"
+                android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"></ImageButton>
+                android:text="내 계정"
+                android:layout_marginHorizontal="14dp"></Button>
 
+            <!--
+            
             <ImageButton
                 android:id="@+id/navigationBarBtn4"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"></ImageButton>
+                android:layout_marginHorizontal="27dp"></ImageButton>
 
             <ImageButton
                 android:id="@+id/navigationBarBtn5"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginHorizontal="5dp"></ImageButton>
+                android:layout_marginHorizontal="27dp"></ImageButton>
+                
+                -->
             
         </LinearLayout>
         
