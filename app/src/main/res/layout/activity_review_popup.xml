@@ -77,27 +77,47 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_marginBottom="15dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cold"
+                    android:layout_width="130dp"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/skyblue"
+                    android:text="추웠어요"
+                    android:textSize="20sp"></Button>
+
+                <Button
+                    android:id="@+id/btn_hot"
+                    android:layout_width="130dp"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="15dp"
+                    android:background="@color/hotRed"
+                    android:text="더웠어요"
+                    android:textSize="20sp"></Button>
+
+            </LinearLayout>
 
             <Button
-                android:id="@+id/btn_cold"
-                android:layout_width="130dp"
+                android:id="@+id/btn_good"
+                android:layout_width="290dp"
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="15dp"
-                android:background="@color/skyblue"
-                android:text="추웠어요"
-                android:textSize="20sp"></Button>
-
-            <Button
-                android:id="@+id/btn_hot"
-                android:layout_width="130dp"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="15dp"
-                android:background="@color/hotRed"
-                android:text="더웠어요"
-                android:textSize="20sp"></Button>
+                android:layout_marginVertical="5dp"
+                android:background="@color/superLightGray"
+                android:text="마음에 들어요"
+                android:textSize="20sp">
+            </Button>
 
         </LinearLayout>
+
+
 
     </RelativeLayout>
 
