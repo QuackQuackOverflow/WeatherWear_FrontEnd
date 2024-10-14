@@ -183,7 +183,7 @@
     <!--옷 추천 레이아웃 전체적으로 감싸기-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="275dp"
         android:background="@color/skyblue"
         android:orientation="vertical">
 
@@ -320,21 +320,21 @@
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:text="기록"
-                android:layout_marginHorizontal="14dp"></Button>
+                android:layout_marginHorizontal="12dp"></Button>
 
             <Button
                 android:id="@+id/navigationBarBtn2"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:text="리뷰쓰기"
-                android:layout_marginHorizontal="14dp"></Button>
+                android:layout_marginHorizontal="12dp"></Button>
 
             <Button
                 android:id="@+id/navigationBarBtn3"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:text="내 계정"
-                android:layout_marginHorizontal="14dp"></Button>
+                android:layout_marginHorizontal="12dp"></Button>
 
             <!--
             
