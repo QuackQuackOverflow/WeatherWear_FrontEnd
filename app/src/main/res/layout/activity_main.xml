@@ -112,14 +112,15 @@
                     android:text="18°C"></TextView>
 
                 <Button
+                    android:id="@+id/checkCurrentLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:background="#00ff0000"
-                    android:text="지역 설정"
+                    android:minWidth="100sp"
                     android:minHeight="48sp"
-                    android:minWidth="100sp">
+                    android:text="현재 위치 확인">
 
                 </Button>
 
@@ -219,6 +220,7 @@
                         android:background="#aaaaaa">
 
                         <ImageButton
+                            android:src="@drawable/t_shirt_100dp"
                             android:id="@+id/clothingButton1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -236,6 +238,7 @@
                         android:background="#aaaaaa">
 
                         <ImageButton
+                            android:src="@drawable/t_shirt_100dp"
                             android:id="@+id/clothingButton2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -253,6 +256,7 @@
                         android:background="#aaaaaa">
 
                         <ImageButton
+                            android:src="@drawable/t_shirt_100dp"
                             android:id="@+id/clothingButton3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -270,6 +274,7 @@
                         android:background="#aaaaaa">
 
                         <ImageButton
+                            android:src="@drawable/t_shirt_100dp"
                             android:id="@+id/clothingButton4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -287,6 +292,7 @@
                         android:background="#aaaaaa">
 
                         <ImageButton
+                            android:src="@drawable/t_shirt_100dp"
                             android:id="@+id/clothingButton5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"

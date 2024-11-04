@@ -21,11 +21,14 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
         // '메인화면 바로 가기' 버튼 클릭 시 MainActivity로 전환
+
         val moveToMainButton = findViewById<Button>(R.id.moveToMainButton) // 메인화면 바로가기 버튼 ID
         moveToMainButton.setOnClickListener {
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
         }
+
     }
 }
