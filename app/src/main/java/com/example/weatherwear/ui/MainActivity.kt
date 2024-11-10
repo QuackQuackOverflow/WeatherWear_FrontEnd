@@ -1,4 +1,4 @@
-package com.example.weatherwear
+package com.example.weatherwear.ui
 
 import android.Manifest
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.weatherwear.R
 import com.google.android.gms.location.*
 
 class MainActivity : AppCompatActivity() {
@@ -19,40 +20,17 @@ class MainActivity : AppCompatActivity() {
 
     // FusedLocationProviderClient는 위치 서비스에 접근하는 객체
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
 
     // 위치 권한 요청 코드
     private val REQUEST_LOCATION_PERMISSION = 100
 
+    // 화면 생성
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // 위치 클라이언트 초기화
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        // 위치 요청 설정 (5초마다 업데이트)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
-            .setMinUpdateIntervalMillis(5000) // 최소 업데이트 간격을 5초로 설정
-            .build()
-
-        // 위치 콜백 설정
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                val location: Location? = locationResult.lastLocation
-                location?.let {
-                    val latitude = it.latitude
-                    val longitude = it.longitude
-                    // 위치 정보를 Toast로 표시
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Updated Location: Latitude = $latitude, Longitude = $longitude",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
 
         // 위치 권한 요청
         requestLocationPermission()
@@ -74,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_LOCATION_PERMISSION
             )
         } else {
-            startLocationUpdates() // 권한이 이미 있으면 위치 업데이트 시작
+            getCurrentLocation() // 권한이 이미 있으면 한 번만 위치를 가져옵니다.
         }
     }
 
@@ -87,48 +65,42 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationUpdates()
+                getCurrentLocation() // 권한이 허용된 경우 위치를 가져옵니다.
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    // 5초마다 위치 업데이트 시작
-    private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                mainLooper
-            )
-        }
-    }
-
-    // 위치 업데이트 중지
-    override fun onPause() {
-        super.onPause()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    // 마지막 알려진 위치 가져오기 (버튼 클릭 시 1회 호출용)
+    // 현재 위치를 가져오는 함수
     private fun getCurrentLocation() {
+        // 위치 접근 권한이 허용되었는지 확인
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
         ) {
+            // 권한이 있는 경우, 마지막으로 알려진 위치를 가져옴
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
-                    val latitude = it.latitude
-                    val longitude = it.longitude
-                    // 위치 정보를 ShowLocation 액티비티로 전달
+                    // 위치 정보를 성공적으로 가져온 경우
+                    val latitude = it.latitude  // 위도 값을 변수에 저장
+                    val longitude = it.longitude  // 경도 값을 변수에 저장
+
+                    // 위치 정보를 Toast로 표시
+                    Toast.makeText(
+                        this,
+                        "Location: Latitude = $latitude, Longitude = $longitude",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // ShowLocation 액티비티로 위치 정보를 전달하기 위한 인텐트 생성
                     val intent = Intent(this, ShowLocation::class.java).apply {
-                        putExtra("latitude", latitude)
-                        putExtra("longitude", longitude)
+                        putExtra("latitude", latitude)  // 위도 정보를 인텐트에 추가
+                        putExtra("longitude", longitude)  // 경도 정보를 인텐트에 추가
                     }
+                    // ShowLocation 액티비티 시작 (위치 정보를 전달)
                     startActivity(intent)
                 } ?: run {
+                    // 위치 정보를 가져올 수 없는 경우 사용자에게 알림 표시
                     Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -139,9 +111,9 @@ class MainActivity : AppCompatActivity() {
         customDialog = ClothingPopup(this)
         customDialog.show()
     }
-
     private fun showReviewPopup() {
         reviewPopup = ReviewPopup(this)
         reviewPopup.show()
     }
+
 }

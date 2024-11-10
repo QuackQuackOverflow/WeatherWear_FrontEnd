@@ -1,9 +1,8 @@
-package com.example.weatherwear
+package com.example.weatherwear.ui
 
 import android.app.Dialog
 import android.content.Context
-import android.widget.Button
-import android.widget.Toast
+import com.example.weatherwear.R
 
 class ReviewPopup(context: Context) : Dialog(context) {
 

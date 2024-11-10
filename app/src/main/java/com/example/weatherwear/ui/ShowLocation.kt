@@ -1,8 +1,9 @@
-package com.example.weatherwear
+package com.example.weatherwear.ui
 
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.weatherwear.R
 
 class ShowLocation : AppCompatActivity() {
 

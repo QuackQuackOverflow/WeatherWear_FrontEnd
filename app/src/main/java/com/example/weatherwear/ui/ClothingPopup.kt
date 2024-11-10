@@ -1,8 +1,9 @@
-package com.example.weatherwear
+package com.example.weatherwear.ui
 
 import android.app.Dialog
 import android.content.Context
 import android.widget.Button
+import com.example.weatherwear.R
 
 class ClothingPopup(context: Context) : Dialog(context) {
 

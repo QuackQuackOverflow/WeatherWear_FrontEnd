@@ -1,12 +1,11 @@
-package com.example.weatherwear
+package com.example.weatherwear.ui.account
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.weatherwear.R
+import com.example.weatherwear.ui.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -23,7 +22,6 @@ class LoginActivity : AppCompatActivity() {
 
 
         // '메인화면 바로 가기' 버튼 클릭 시 MainActivity로 전환
-
         val moveToMainButton = findViewById<Button>(R.id.moveToMainButton) // 메인화면 바로가기 버튼 ID
         moveToMainButton.setOnClickListener {
             val intent = Intent(this@LoginActivity, MainActivity::class.java)

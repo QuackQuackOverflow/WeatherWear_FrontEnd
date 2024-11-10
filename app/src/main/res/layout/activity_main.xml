@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <!--상단바 디자인-->
 
@@ -312,8 +312,8 @@
 
     <Toolbar
         android:layout_width="match_parent"
-        android:background="@color/lightSkyblue"
-        android:layout_height="80dp">
+        android:layout_height="match_parent"
+        android:background="@color/lightSkyblue">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    tools:context=".ReviewPopup">
+    tools:context=".ui.ReviewPopup">
 
     <Toolbar
         android:layout_width="match_parent"

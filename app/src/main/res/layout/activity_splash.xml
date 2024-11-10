@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/skyblue"
-    tools:context=".SplashActivity">
+    tools:context=".ui.SplashActivity">
 
     <TextView
         android:layout_width="wrap_content"
