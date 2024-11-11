@@ -138,44 +138,76 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginBottom="40dp"
-                android:baselineAligned="true">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/morningWeatherView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:background="@color/skyblue"
-                    android:text="오전 날씨 \n로딩 실패"
-                    android:textAlignment="center">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/lightSkyblue">
 
-                </TextView>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true">
 
-                <TextView
-                    android:id="@+id/afternoonWeatherView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:background="@color/skyblue"
-                    android:text="오후 날씨 \n로딩 실패"
-                    android:textAlignment="center"></TextView>
+                        <Button
+                            android:id="@+id/currentTempView_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginTop="70dp"
+                            android:background="@color/lightSkyblue"
+                            android:textColor="#000000"
+                            android:textSize="80sp"
+                            android:text="0°C" />
 
-                <TextView
-                    android:id="@+id/nightWeatherView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:background="@color/skyblue"
-                    android:text="야간 날씨 \n로딩 실패"
-                    android:textAlignment="center"></TextView>
+                        <Button
+                            android:id="@+id/checkCurrentLocation_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/lightSkyblue"
+                            android:minWidth="100sp"
+                            android:minHeight="48sp"
+                            android:text="충청남도 천안시 서북구 부대동"
+                            android:textSize="20sp"/>
 
-            </RelativeLayout>
+                        <ImageView
+                            android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
+                            android:id="@+id/currentWeatherView_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="30dp"
+                            android:layout_marginTop="60dp"
+                            android:textColor="#000000"
+                            android:textSize="80sp"
+                            android:text="18°C" />
+                    </RelativeLayout>
+
+                    <!-- 시간대별 날씨 스크롤 뷰 -->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginBottom="15dp">
+
+                        <LinearLayout
+                            android:id="@+id/hourlyWeatherScrollView_main"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <!-- 시간대별 날씨 정보가 동적으로 추가됩니다 -->
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </RelativeLayout>
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -315,16 +347,17 @@
         android:layout_height="match_parent"
         android:background="@color/lightSkyblue">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
-            
+
             <Button
                 android:id="@+id/navigationBarBtn1"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
                 android:text="기록"
                 android:layout_marginHorizontal="12dp"></Button>
 
@@ -332,6 +365,7 @@
                 android:id="@+id/navigationBarBtn2"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:text="리뷰쓰기"
                 android:layout_marginHorizontal="12dp"></Button>
 
@@ -339,11 +373,12 @@
                 android:id="@+id/navigationBarBtn3"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
+                android:layout_alignParentRight="true"
                 android:text="내 계정"
                 android:layout_marginHorizontal="12dp"></Button>
 
             <!--
-            
+
             <ImageButton
                 android:id="@+id/navigationBarBtn4"
                 android:layout_width="50dp"
@@ -355,15 +390,11 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="27dp"></ImageButton>
-                
+
                 -->
-            
-        </LinearLayout>
-        
 
-
+        </RelativeLayout>
 
     </Toolbar>
-
 
 </LinearLayout>

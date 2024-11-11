@@ -19,17 +19,15 @@
         android:textColor="@color/sunyellow"
         android:textStyle="bold">
 
-
     </TextView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="로고 빨리 그려 와"
+        android:text="살려줘"
         android:textSize="50sp"
         android:textStyle="bold"
         android:textColor="@color/black"></TextView>
-
 
 </LinearLayout>

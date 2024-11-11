@@ -31,56 +31,77 @@
                     android:layout_marginHorizontal="5dp"
                     android:text="상세 날씨"
                     android:textColor="#181818"
-                    android:textSize="20sp"></TextView>
-
+                    android:textSize="20sp" />
             </RelativeLayout>
-
         </Toolbar>
-
     </LinearLayout>
+
+    <!--여기까지가 상단바-->
+
+    <!--그 아래-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/locationView_detailed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="충청남도 천안시 서북구 부대동"
+            android:background="@color/lightSkyblue"
+            android:textSize="20sp"></TextView>
+
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="@color/lightSkyblue"
+            android:paddingVertical="20dp"
+            android:layout_marginTop="1dp">
+
+            <TextView
+                android:id="@+id/currentTempView_detailed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="30dp"
+                android:text="0°C"
+                android:textColor="#000000"
+                android:textSize="80sp" />
+
+            <ImageView
+                android:id="@+id/currentWeatherView_detailed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline" />
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/lightSkyblue">
 
-            <RelativeLayout
+            <HorizontalScrollView
+                android:id="@+id/hourlyWeatherScrollView_detailed"
+                android:background="@color/superLightGray"
+                android:layout_margin="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/currentTempView"
+                <!-- 시간대별 날씨 정보를 추가할 수 있도록 ID 설정 -->
+                <LinearLayout
+                    android:id="@+id/hourlyWeatherContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="20dp"
-                    android:textColor="#000000"
-                    android:textSize="80sp"
-                    android:text="18°C"></TextView>
+                    android:orientation="horizontal">
+                </LinearLayout>
 
-                <ImageView
-                    android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
-                    android:id="@+id/currentWeatherView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="30dp"
-                    android:textColor="#000000"
-                    android:textSize="80sp"
-                    android:text="18°C"></ImageView>
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
+            </HorizontalScrollView>
+        </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
+import android.view.Gravity
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,31 +17,34 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var customDialog: ClothingPopup
     private lateinit var reviewPopup: ReviewPopup
-
-    // FusedLocationProviderClient는 위치 서비스에 접근하는 객체
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
-    // 위치 권한 요청 코드
     private val REQUEST_LOCATION_PERMISSION = 100
 
-    // 화면 생성
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 위치 클라이언트 초기화
+        // FusedLocationProviderClient 초기화 (위치 서비스 접근)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // 위치 권한 요청
         requestLocationPermission()
 
-        // 현재 위치 버튼 클릭 시 위치 정보를 가져와서 ShowLocation 액티비티로 전달
+        // 현재 위치 버튼 클릭 시 위치 정보 요청
         findViewById<Button>(R.id.checkCurrentLocation).setOnClickListener {
             getCurrentLocation()
         }
+
+        // 시간대별 날씨 레이아웃 생성
+        generateTimeWeatherLayout()
+
+        // currentTempView 버튼 클릭 시 DetailedWeatherActivity로 이동
+        findViewById<Button>(R.id.currentTempView_main).setOnClickListener {
+            val intent = Intent(this, DetailedWeatherActivity::class.java)
+            startActivity(intent)
+        }
     }
 
-    // 위치 권한 요청 메서드
     private fun requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
@@ -52,11 +55,10 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_LOCATION_PERMISSION
             )
         } else {
-            getCurrentLocation() // 권한이 이미 있으면 한 번만 위치를 가져옵니다.
+            getCurrentLocation()
         }
     }
 
-    // 권한 요청 응답 처리
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -65,42 +67,34 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation() // 권한이 허용된 경우 위치를 가져옵니다.
+                getCurrentLocation()
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    // 현재 위치를 가져오는 함수
     private fun getCurrentLocation() {
-        // 위치 접근 권한이 허용되었는지 확인
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
         ) {
-            // 권한이 있는 경우, 마지막으로 알려진 위치를 가져옴
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 location?.let {
-                    // 위치 정보를 성공적으로 가져온 경우
-                    val latitude = it.latitude  // 위도 값을 변수에 저장
-                    val longitude = it.longitude  // 경도 값을 변수에 저장
+                    val latitude = it.latitude
+                    val longitude = it.longitude
 
-                    // 위치 정보를 Toast로 표시
                     Toast.makeText(
                         this,
                         "Location: Latitude = $latitude, Longitude = $longitude",
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    // ShowLocation 액티비티로 위치 정보를 전달하기 위한 인텐트 생성
                     val intent = Intent(this, ShowLocation::class.java).apply {
-                        putExtra("latitude", latitude)  // 위도 정보를 인텐트에 추가
-                        putExtra("longitude", longitude)  // 경도 정보를 인텐트에 추가
+                        putExtra("latitude", latitude)
+                        putExtra("longitude", longitude)
                     }
-                    // ShowLocation 액티비티 시작 (위치 정보를 전달)
                     startActivity(intent)
                 } ?: run {
-                    // 위치 정보를 가져올 수 없는 경우 사용자에게 알림 표시
                     Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -111,9 +105,52 @@ class MainActivity : AppCompatActivity() {
         customDialog = ClothingPopup(this)
         customDialog.show()
     }
+
     private fun showReviewPopup() {
         reviewPopup = ReviewPopup(this)
         reviewPopup.show()
     }
 
+    // 시간대별 날씨 레이아웃 생성 함수
+    private fun generateTimeWeatherLayout() {
+        val timeWeatherContainer = findViewById<LinearLayout>(R.id.hourlyWeatherScrollView_main)
+        val defaultIcon = R.drawable.baseline_sunny_24_40dp_with_outline
+        val defaultTemperature = "0°C"
+
+        for (hour in 0..23) {
+            val hourLayout = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(10, 0, 10, 0)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val hourText = TextView(this).apply {
+                text = "${hour}시"
+                textSize = 20f
+                gravity = Gravity.CENTER
+            }
+
+            val weatherIcon = ImageView(this).apply {
+                setImageResource(defaultIcon)
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val tempText = TextView(this).apply {
+                text = defaultTemperature
+                textSize = 20f
+                gravity = Gravity.CENTER
+            }
+
+            hourLayout.addView(hourText)
+            hourLayout.addView(weatherIcon)
+            hourLayout.addView(tempText)
+            timeWeatherContainer.addView(hourLayout)
+        }
+    }
 }
