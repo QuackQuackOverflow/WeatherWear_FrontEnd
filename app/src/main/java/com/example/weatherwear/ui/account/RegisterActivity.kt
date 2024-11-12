@@ -57,17 +57,26 @@ class RegisterActivity : AppCompatActivity() {
         // User 객체를 생성하여 서버로 보낼 데이터 준비
         val newUser = User(username = username, id = id, password = password, temperaturePreference = temperaturePreference)
 
-        // 비동기 작업 수행 (네트워크 요청)
+        // CoroutineScope를 사용하여 비동기 네트워크 요청 수행
         CoroutineScope(Dispatchers.IO).launch {
-            val response = userRepository.registerUser(newUser)
-            if (response.isSuccessful) {
-                runOnUiThread {
-                    Toast.makeText(this@RegisterActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
-                    finish() // 회원가입 완료 후 액티비티 종료
+            try {
+                val response = userRepository.registerUser(newUser)
+                if (response.isSuccessful) {
+                    // 회원가입 성공 시 메시지 출력 및 화면 종료
+                    runOnUiThread {
+                        Toast.makeText(this@RegisterActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                        finish() // 회원가입 완료 후 액티비티 종료
+                    }
+                } else {
+                    // 회원가입 실패 시 메시지 표시
+                    runOnUiThread {
+                        Toast.makeText(this@RegisterActivity, "회원가입 실패: 다시 시도하세요", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            } else {
+            } catch (e: Exception) {
+                // 네트워크 오류 시 메시지 표시
                 runOnUiThread {
-                    Toast.makeText(this@RegisterActivity, "회원가입 실패: 다시 시도하세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "네트워크 오류 발생!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

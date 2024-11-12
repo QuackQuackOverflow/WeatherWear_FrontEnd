@@ -47,12 +47,12 @@
                 android:src="@drawable/t_shirt_100dp"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerInParent="true"
-                android:background="#ffffff"
-                android:layout_marginTop="25dp">
+                android:layout_centerInParent="true">
 
             </ImageView>
+
+
+            <!-- 옷에 대한 설명(필요 없어짐)
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -93,6 +93,8 @@
                     android:text="옷 추천 이유 2"></TextView>
 
             </LinearLayout>
+
+            -->
 
         </RelativeLayout>
 

@@ -57,21 +57,28 @@ class LoginActivity : AppCompatActivity() {
         // User 객체를 생성하여 서버로 보낼 데이터 준비
         val user = User(username = "", id = id, password = password, temperaturePreference = "average")
 
-        // 비동기 작업 수행 (네트워크 요청)
+        // CoroutineScope를 사용하여 비동기 네트워크 요청 수행
         CoroutineScope(Dispatchers.IO).launch {
-            val response = userRepository.loginUser(user)
-            if (response.isSuccessful) {
-                // 로그인 성공 시 메인 화면으로 이동
-                val loggedInUser = response.body()
-                runOnUiThread {
-                    Toast.makeText(this@LoginActivity, "로그인 성공: ${loggedInUser?.username}", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    finish() // 로그인 후 현재 액티비티 종료
+            try {
+                val response = userRepository.loginUser(user)
+                if (response.isSuccessful) {
+                    // 로그인 성공 시 메인 화면으로 이동
+                    val loggedInUser = response.body()
+                    runOnUiThread {
+                        Toast.makeText(this@LoginActivity, "로그인 성공: ${loggedInUser?.username}", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish() // 로그인 후 현재 액티비티 종료
+                    }
+                } else {
+                    // 로그인 실패 시 메시지 표시
+                    runOnUiThread {
+                        Toast.makeText(this@LoginActivity, "로그인 실패: ID 또는 비밀번호를 확인하세요.", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            } else {
-                // 로그인 실패 시 메시지 표시
+            } catch (e: Exception) {
+                // 네트워크 오류 시 메시지 표시
                 runOnUiThread {
-                    Toast.makeText(this@LoginActivity, "로그인 실패: ID 또는 비밀번호를 확인하세요.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "네트워크 오류 발생!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

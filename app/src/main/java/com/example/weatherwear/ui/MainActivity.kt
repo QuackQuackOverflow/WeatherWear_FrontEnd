@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_LOCATION_PERMISSION = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        //
+
+        //
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -76,30 +81,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED
+            != PackageManager.PERMISSION_GRANTED
         ) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                location?.let {
-                    val latitude = it.latitude
-                    val longitude = it.longitude
+            requestLocationPermission()
+            return
+        }
 
-                    Toast.makeText(
-                        this,
-                        "Location: Latitude = $latitude, Longitude = $longitude",
-                        Toast.LENGTH_SHORT
-                    ).show()
+        // 위치 정보를 가져오기
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                val latitude = it.latitude
+                val longitude = it.longitude
 
-                    val intent = Intent(this, ShowLocation::class.java).apply {
-                        putExtra("latitude", latitude)
-                        putExtra("longitude", longitude)
-                    }
-                    startActivity(intent)
-                } ?: run {
-                    Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Location: Latitude = $latitude, Longitude = $longitude",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                val intent = Intent(this, ShowLocation::class.java).apply {
+                    putExtra("latitude", latitude)
+                    putExtra("longitude", longitude)
                 }
+                startActivity(intent)
+            } ?: run {
+                Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun showClothingPopup() {
         customDialog = ClothingPopup(this)

@@ -177,6 +177,8 @@
                             android:text="충청남도 천안시 서북구 부대동"
                             android:textSize="20sp"/>
 
+                        <!--
+
                         <ImageView
                             android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
                             android:id="@+id/currentWeatherView_main"
@@ -188,6 +190,9 @@
                             android:textColor="#000000"
                             android:textSize="80sp"
                             android:text="18°C" />
+
+                            -->
+
                     </RelativeLayout>
 
                     <!-- 시간대별 날씨 스크롤 뷰 -->
