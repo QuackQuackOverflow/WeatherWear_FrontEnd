@@ -16,11 +16,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.weatherwear.R
 import com.google.android.gms.location.*
 
 class MainActivity : AppCompatActivity() {
 
+    //SwipeRefreshLayout(스와이프하여 새로고침을 위한 레이아웃)에 대한 액션처리를 위해 추가
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     // 위치 서비스를 제공하는 클라이언트
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     // 위치 권한 요청 코드
@@ -28,8 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     // MainActivity 초기화 함수
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // 메인 화면 레이아웃 설정
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this) // 위치 서비스 초기화
@@ -58,6 +61,12 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.currentTempView_main).setOnClickListener {
             val intent = Intent(this, DetailedWeatherActivity::class.java)
             startActivity(intent)
+        }
+
+        //스와이프하면 위치정보를 갱신하여 새로고침
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            refreshLocation() // 새로고침 시 위치 갱신
         }
     }
 
@@ -119,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 val (nx, ny) = convertToGrid(it.latitude, it.longitude) // 위도와 경도를 NX, NY로 변환함.
-                findViewById<Button>(R.id.checkCurrentLocation_main).text = "NX: %d, NY: %d".format(nx, ny) // 정수형 좌표를 버튼 텍스트에 설정함.
+                findViewById<Button>(R.id.checkCurrentLocation_main).text = "NX: %d, NY: %d".format(nx, ny) // 정수형 좌표를 버튼 텍스트에 반영함.
             } ?: run {
                 Toast.makeText(this, "Unable to get location", Toast.LENGTH_SHORT).show() // 위치 정보를 가져오지 못했을 경우 메시지를 표시함.
             }
@@ -218,6 +227,14 @@ class MainActivity : AppCompatActivity() {
         val reviewPopup = ReviewPopup(this)
         reviewPopup.show()
     }
+
+    // 위치값을 새로 업데이트하여 MainActivity를 다시 시작
+    private fun refreshLocation() {
+        // 현재 액티비티를 종료하고 새로 시작하여 위치 정보 갱신
+        finish() // 현재 액티비티 종료
+        startActivity(intent) // MainActivity를 다시 시작하여 새로운 위치 정보를 반영
+    }
+
 
 }
 

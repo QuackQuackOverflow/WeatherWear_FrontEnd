@@ -47,6 +47,7 @@ dependencies {
     위치 관련 클래스와 기능을 사용할 수 있게 함.
     이를 통해 GPS 기반의 사용자 위치 정보를 효율적으로 가져올 수 있음*/
     implementation(libs.play.services.location)
+    implementation(libs.androidx.swiperefreshlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
