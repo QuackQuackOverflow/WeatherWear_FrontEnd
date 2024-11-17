@@ -115,6 +115,13 @@
             android:text="메인화면 바로 가기">
         </Button>
 
+        <Button
+            android:id="@+id/connectServerTestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="서버 접속 테스트">
+        </Button>
+
 
     </LinearLayout>
 

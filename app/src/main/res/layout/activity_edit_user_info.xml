@@ -1,0 +1,117 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".ui.EditUserInfoActivity">
+
+    <!-- 제목 -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용자 정보 수정"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="20dp" />
+
+    <!-- 이름 입력 -->
+    <EditText
+        android:id="@+id/editUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="사용자 이름"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        android:layout_marginBottom="20dp" />
+
+    <!-- ID 입력 -->
+    <EditText
+        android:id="@+id/editUserId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID"
+        android:inputType="text"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editUserName" />
+
+    <!-- 온도 민감도 -->
+    <TextView
+        android:id="@+id/temperatureSensitivityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="온도 민감도"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editUserId"
+        android:layout_marginBottom="10dp" />
+
+    <!-- 온도 민감도 RadioGroup -->
+    <RadioGroup
+        android:id="@+id/radioGroupTemperaturePreference"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/temperatureSensitivityText">
+
+        <!-- 추위를 잘 타요 -->
+        <RadioButton
+            android:id="@+id/rbtn_userFeelsColdWell"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightSkyblue"
+            android:text="추위를\n잘 타요"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <!-- 보통 -->
+        <RadioButton
+            android:id="@+id/rbtn_userFeelsAvg"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/superLightGray"
+            android:text="보통"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <!-- 더위를 잘 타요 -->
+        <RadioButton
+            android:id="@+id/rbtn_userFeelsHotWell"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/lightHotRed"
+            android:text="더위를\n잘 타요"
+            android:textColor="#000000"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+    </RadioGroup>
+
+    <!-- 저장 버튼 -->
+    <Button
+        android:id="@+id/saveUserInfoButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/skyblue"
+        android:text="저장"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioGroupTemperaturePreference"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

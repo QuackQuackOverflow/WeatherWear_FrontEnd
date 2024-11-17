@@ -50,6 +50,12 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             startActivity(intent)
         }
+
+        // 서버 접속 테스트 버튼 클릭 시 서버 연결 테스트 수행
+        val connectServerTestButton = findViewById<Button>(R.id.connectServerTestButton)
+        connectServerTestButton.setOnClickListener {
+            testServerConnection()
+        }
     }
 
     // 로그인 요청을 서버로 보내는 함수
@@ -83,4 +89,29 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    // 서버 연결 테스트 함수
+    private fun testServerConnection() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // 서버 연결 테스트를 위한 임시 호출
+                val response = userRepository.testConnection()
+                runOnUiThread {
+                    if (response.isSuccessful) {
+                        // 서버 연결 성공 메시지 표시
+                        Toast.makeText(this@LoginActivity, "서버 연결에 성공했습니다!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // 서버 연결 실패 메시지 표시
+                        Toast.makeText(this@LoginActivity, "서버 연결 실패: 상태 코드 ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    // 네트워크 오류 메시지 표시
+                    Toast.makeText(this@LoginActivity, "서버 연결 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 }

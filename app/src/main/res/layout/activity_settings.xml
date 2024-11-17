@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.SettingsActivity">
 
+    <!-- Toolbar -->
     <Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/skyblue">
+        android:background="@color/skyblue"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,71 +27,97 @@
                 android:textSize="25sp"
                 android:textColor="#000000"
                 android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"></TextView>
+                android:layout_centerVertical="true" />
 
             <ImageButton
-                android:background="@android:color/transparent"
                 android:id="@+id/returnFromSettings"
+                android:background="@android:color/transparent"
                 android:src="@drawable/baseline_arrow_back_24_40dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"></ImageButton>
-
+                android:layout_centerVertical="true" />
         </RelativeLayout>
 
     </Toolbar>
 
+    <!-- 사용자 정보 섹션 -->
+
+    <!-- 버튼 섹션 -->
+
     <LinearLayout
+        android:id="@+id/userInfoSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin = "30dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonSection"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
-        <!--계정-->
+        <TextView
+            android:id="@+id/textViewUserInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용자 정보"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="10dp">
 
             <TextView
+                android:id="@+id/textViewUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="계정"
-                android:textSize="25sp">
+                android:paddingBottom="10dp"
+                android:text="사용자 이름: [사용자 이름]"
+                android:textSize="18sp" />
 
-            </TextView>
-
-            <!--내부 블록-->
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/textViewUserId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:orientation="vertical">
+                android:paddingBottom="10dp"
+                android:text="ID: [사용자 ID]"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:text="사용자 이름 : "
-                    android:textSize="20sp"></TextView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:text="ID : "
-                    android:textSize="20sp"></TextView>
-
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/textViewColdSensitivity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="체온 체질: [체온 체질 정보]"
+                android:textSize="18sp" />
         </LinearLayout>
-
-
-
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/buttonSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="로그아웃"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/editUserInfoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="사용자 정보 수정"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

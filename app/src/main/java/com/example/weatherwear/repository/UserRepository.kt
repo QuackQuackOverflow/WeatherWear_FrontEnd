@@ -21,4 +21,10 @@ class UserRepository {
     suspend fun registerUser(user: User): Response<User> {
         return api.registerUser(user)
     }
+
+    // 서버와의 연결을 테스트하는 함수
+    suspend fun testConnection(): Response<Void> {
+        return RetrofitInstance.api.testConnection()
+    }
+
 }
