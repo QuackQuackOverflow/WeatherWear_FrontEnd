@@ -59,6 +59,8 @@ dependencies {
 
     // OkHttp 로깅 인터셉터 추가 (네트워크 요청/응답 로그 확인용)
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
 
     // ConstraintLayout 의존성 추가
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")

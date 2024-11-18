@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
 
     //임시 url, network_security_config도 수정 해 줘야 함.
-    private const val BASE_URL = "http://192.168.0.4:8000" // 임시 URL
+    private const val BASE_URL = "http://192.168.200.126:8080" // 임시 URL
 
     // 로깅 인터셉터를 사용하여 네트워크 요청/응답 로그를 확인
     private val loggingInterceptor = HttpLoggingInterceptor().apply {

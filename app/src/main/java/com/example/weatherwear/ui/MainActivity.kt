@@ -68,6 +68,12 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             refreshLocation() // 새로고침 시 위치 갱신
         }
+
+        // 설정 버튼을 클릭했을 떄
+        findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     // 시간대별 날씨 레이아웃 생성 함수

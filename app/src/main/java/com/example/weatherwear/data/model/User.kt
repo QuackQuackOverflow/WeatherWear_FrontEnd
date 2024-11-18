@@ -1,15 +1,10 @@
 package com.example.weatherwear.data.model
 
-/*
-    private Long id;
-    private String memberEmail;
-    private String memberPassword;
-    private String memberName;
- */
+import android.provider.ContactsContract.CommonDataKinds.Email
 
 data class User(
-    val username: String,
-    val id: String,
-    val password: String,
-    val temperaturePreference: String
+    val memberName: String,
+    val memberEmail: String,
+    val memberPassword: String,
+    val userType: String
 )
