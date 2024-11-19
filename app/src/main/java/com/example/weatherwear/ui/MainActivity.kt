@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.apitest.APITest2Activity
+import com.example.apitest.APITestActivity
 import com.example.weatherwear.R
 import com.google.android.gms.location.*
 
@@ -39,28 +41,44 @@ class MainActivity : AppCompatActivity() {
 
         // 위치 권한 요청 전에 NX, NY 좌표를 설정하는 함수 호출
         requestLocationPermission()
-
         // 위치 정보를 버튼에 표시하는 함수 호출을 위치 서비스 초기화 이후로 이동함.
         setNxNyToLocationButton()
-
         // 시간대별 날씨 레이아웃을 생성하는 함수 호출
         generateTimeWeatherLayout()
-
         // 현재 위치 버튼을 클릭했을 때 위치 정보를 요청하도록 설정함.
         findViewById<Button>(R.id.checkCurrentLocation).setOnClickListener {
             getCurrentLocation()
         }
 
-        // 리뷰 쓰기 버튼을 누르면 ReviewPopup이 나오도록
+        // navigationBarBtn2 클릭 시 APITest2Activity로 이동
         findViewById<Button>(R.id.navigationBarBtn2).setOnClickListener {
-            showReviewPopup()
-        }
-
-        // 상세 날씨 화면으로 이동하는 버튼 클릭 이벤트 설정
-        findViewById<Button>(R.id.currentTempView_main).setOnClickListener {
-            val intent = Intent(this, DetailedWeatherActivity::class.java)
+            val intent = Intent(this, APITest2Activity::class.java)
             startActivity(intent)
         }
+
+        // navigationBarBtn3 클릭 시 APITestActivity로 이동
+        findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
+            val intent = Intent(this, APITestActivity::class.java)
+            startActivity(intent)
+        }
+
+        /**
+         *         // 설정 버튼을 클릭했을 떄
+         *         findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
+         *             val intent = Intent(this, SettingsActivity::class.java)
+         *             startActivity(intent)
+         *         }
+         *
+         *                 // 리뷰 쓰기 버튼을 누르면 ReviewPopup이 나오도록
+         *         findViewById<Button>(R.id.navigationBarBtn2).setOnClickListener {
+         *             showReviewPopup()
+         *         }
+         *         // 상세 날씨 화면으로 이동하는 버튼 클릭 이벤트 설정
+         *         findViewById<Button>(R.id.currentTempView_main).setOnClickListener {
+         *             val intent = Intent(this, DetailedWeatherActivity::class.java)
+         *             startActivity(intent)
+         *         }
+         */
 
         //스와이프하면 위치정보를 갱신하여 새로고침
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
@@ -68,12 +86,10 @@ class MainActivity : AppCompatActivity() {
             refreshLocation() // 새로고침 시 위치 갱신
         }
 
-        // 설정 버튼을 클릭했을 떄
-        findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
+
     }
+
+
 
     // 시간대별 날씨 레이아웃 생성 함수
     private fun generateTimeWeatherLayout() {
@@ -239,8 +255,6 @@ class MainActivity : AppCompatActivity() {
         finish() // 현재 액티비티 종료
         startActivity(intent) // MainActivity를 다시 시작하여 새로운 위치 정보를 반영
     }
-
-
 }
 
 
