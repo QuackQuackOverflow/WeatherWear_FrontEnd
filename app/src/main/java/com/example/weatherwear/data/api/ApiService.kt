@@ -62,4 +62,5 @@ interface ApiService {
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double
     ): Call<RWCResponse>
+
 }

@@ -372,7 +372,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
-                    android:text="날씨APi test"
+                    android:text="리뷰APi test"
                     android:layout_marginHorizontal="12dp"></Button>
 
                 <Button
