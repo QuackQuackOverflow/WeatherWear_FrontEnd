@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ScrollView를 사용하여 화면이 길어질 경우 스크롤 가능하도록 설정 -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- 전체 화면을 감싸는 LinearLayout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 위치정보 전송 버튼 -->
+        <Button
+            android:id="@+id/buttonSendLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="위치정보 전송" />
+
+        <!-- 결과를 표시할 TextView -->
+        <TextView
+            android:id="@+id/textViewResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:text="결과가 여기에 표시됩니다."
+            android:textSize="16sp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

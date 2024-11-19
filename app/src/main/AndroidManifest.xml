@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.APITestActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.account.EditUserInfoActivity"
             android:exported="false" />
         <activity

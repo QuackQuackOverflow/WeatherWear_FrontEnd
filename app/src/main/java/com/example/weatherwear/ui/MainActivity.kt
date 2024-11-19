@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
             showReviewPopup()
         }
 
-
         // 상세 날씨 화면으로 이동하는 버튼 클릭 이벤트 설정
         findViewById<Button>(R.id.currentTempView_main).setOnClickListener {
             val intent = Intent(this, DetailedWeatherActivity::class.java)
