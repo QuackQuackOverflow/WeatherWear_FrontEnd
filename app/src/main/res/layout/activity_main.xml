@@ -372,7 +372,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
-                    android:text="기록"
+                    android:text="날씨APi test"
                     android:layout_marginHorizontal="12dp"></Button>
 
                 <Button
@@ -380,7 +380,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:text="리뷰쓰기"
+                    android:text="옷 API test"
                     android:layout_marginHorizontal="12dp"></Button>
 
                 <Button
@@ -388,7 +388,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
-                    android:text="설정"
+                    android:text="RWC test"
                     android:layout_marginHorizontal="12dp"></Button>
 
                 <!--
