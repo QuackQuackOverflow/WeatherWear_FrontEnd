@@ -95,24 +95,3 @@ class APITest2Activity : AppCompatActivity() {
     }
 }
 
-/**
- *     // 의류 추천 데이터 가져오기
- *     private fun sendClothingSetRequest(nx: Int, ny: Int) {
- *         val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
- *         CoroutineScope(Dispatchers.IO).launch {
- *             val response = apiService.getClothingSet(nx, ny)
- *             withContext(Dispatchers.Main) {
- *                 if (response.isSuccessful) {
- *                     val clothingSet = response.body()
- *                     val sb = StringBuilder("의상 세트:\n")
- *                     clothingSet?.recommendedClothings?.forEach {
- *                         sb.append("${it.type}: ${it.name}\n")
- *                     }
- *                     resultTextView.text = sb.toString()
- *                 } else {
- *                     Toast.makeText(this@APITest2Activity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
- *                 }
- *             }
- *         }
- *     }
- */
