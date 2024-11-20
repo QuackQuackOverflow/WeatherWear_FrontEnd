@@ -48,29 +48,16 @@ class APITest2Activity : AppCompatActivity() {
         // 지역과 날씨 정보 버튼 클릭
         getRegionAndWeatherButton.setOnClickListener {
             locationHelper.getCurrentNxNy { nx, ny ->
+                // TextView에 nx, ny 표시
+                resultTextView.text = "nx: $nx, ny: $ny"
                 sendRegionAndWeatherRequest(nx, ny)
             }
         }
     }
 
-    // 의류 추천 데이터 가져오기
+    //의류 추천 데이터 가져오기
     private fun sendClothingSetRequest(nx: Int, ny: Int) {
-        val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiService.getClothingSet(nx, ny)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    val clothingSet = response.body()
-                    val sb = StringBuilder("의상 세트:\n")
-                    clothingSet?.recommendedClothings?.forEach {
-                        sb.append("${it.type}: ${it.name}\n")
-                    }
-                    resultTextView.text = sb.toString()
-                } else {
-                    Toast.makeText(this@APITest2Activity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        // 갸악 하기 싫어
     }
 
     // 지역과 날씨 정보 가져오기
@@ -107,3 +94,25 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 }
+
+/**
+ *     // 의류 추천 데이터 가져오기
+ *     private fun sendClothingSetRequest(nx: Int, ny: Int) {
+ *         val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
+ *         CoroutineScope(Dispatchers.IO).launch {
+ *             val response = apiService.getClothingSet(nx, ny)
+ *             withContext(Dispatchers.Main) {
+ *                 if (response.isSuccessful) {
+ *                     val clothingSet = response.body()
+ *                     val sb = StringBuilder("의상 세트:\n")
+ *                     clothingSet?.recommendedClothings?.forEach {
+ *                         sb.append("${it.type}: ${it.name}\n")
+ *                     }
+ *                     resultTextView.text = sb.toString()
+ *                 } else {
+ *                     Toast.makeText(this@APITest2Activity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+ *                 }
+ *             }
+ *         }
+ *     }
+ */

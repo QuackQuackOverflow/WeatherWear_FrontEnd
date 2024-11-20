@@ -38,15 +38,19 @@ interface ApiService {
     // 1. Region 객체를 보내고 지역 이름, 날씨 정보, 의상 세트를 포함한 RWCResponse를 받는 API
     @POST("api/weather")
     suspend fun getRegionDetails(@Body region: GPSreport): Response<RWCResponse>
-    // 2. Region 객체를 보내고 지역 이름만 반환받는 API
-    @GET("api/weather")
-    suspend fun getRegionName(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<GPSreport>
-    // 3. Region 객체를 보내고 날씨 정보만 반환받는 API
-    @GET("api/weather")
-    suspend fun getWeather(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<Weather>
-    // 4. Region 객체를 보내고 의상 세트만 반환받는 API
-    @GET("api/weather")
-    suspend fun getClothingSet(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<ClothingSet>
+
+    /**
+     *     // 2. Region 객체를 보내고 지역 이름만 반환받는 API
+     *     @GET("api/weather")
+     *     suspend fun getRegionName(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<GPSreport>
+     *     // 3. Region 객체를 보내고 날씨 정보만 반환받는 API
+     *     @GET("api/weather")
+     *     suspend fun getWeather(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<Weather>
+     *     // 4. Region 객체를 보내고 의상 세트만 반환받는 API
+     *     @GET("api/weather")
+     *     suspend fun getClothingSet(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<ClothingSet>
+     */
+
     // 5. Region 객체를 보내고 지역과 날씨 반환받는 API
     @GET("api/weather")
     suspend fun getRegionAndWeather(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<RWResponse>
