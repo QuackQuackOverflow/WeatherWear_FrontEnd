@@ -1,6 +1,8 @@
 package com.example.weatherwear.data.api
 
 import RWCResponse
+import RWResponse
+import android.graphics.Region
 import com.example.weatherwear.data.model.*
 import retrofit2.Call
 import retrofit2.Response
@@ -26,7 +28,6 @@ interface ApiService {
     // 회원가입 요청: 사용자 정보를 서버에 전송하여 회원가입 처리
     @POST("api/members")
     suspend fun registerUser(@Body user: User): Response<User>
-
     // 로그인 요청: 사용자 인증 정보를 서버에 전송하여 로그인 처리
     @POST("api/members/login")
     suspend fun loginUser(@Body user: User): Response<User>
@@ -35,20 +36,20 @@ interface ApiService {
      * Region 관련 API
      */
     // 1. Region 객체를 보내고 지역 이름, 날씨 정보, 의상 세트를 포함한 RWCResponse를 받는 API
-    @POST("/")
+    @POST("api/weather")
     suspend fun getRegionDetails(@Body region: GPSreport): Response<RWCResponse>
-
     // 2. Region 객체를 보내고 지역 이름만 반환받는 API
-    @POST("/")
-    suspend fun getRegionName(@Body region: GPSreport): Response<GPSreport>
-
+    @GET("api/weather")
+    suspend fun getRegionName(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<GPSreport>
     // 3. Region 객체를 보내고 날씨 정보만 반환받는 API
-    @POST("/")
-    suspend fun getWeather(@Body region: GPSreport): Response<Weather>
-
+    @GET("api/weather")
+    suspend fun getWeather(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<Weather>
     // 4. Region 객체를 보내고 의상 세트만 반환받는 API
-    @POST("/")
-    suspend fun getClothingSet(@Body region: GPSreport): Response<ClothingSet>
+    @GET("api/weather")
+    suspend fun getClothingSet(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<ClothingSet>
+    // 5. Region 객체를 보내고 지역과 날씨 반환받는 API
+    @GET("api/weather")
+    suspend fun getRegionAndWeather(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<RWResponse>
 
     /**
      * Review 관련 API
@@ -59,8 +60,8 @@ interface ApiService {
 
     @POST("api/sendLocation")
     fun sendLocation(
-        @Query("latitude") latitude: Double,
-        @Query("longitude") longitude: Double
+        @Query("nx") nx: Int,
+        @Query("ny") ny: Int
     ): Call<RWCResponse>
 
 }

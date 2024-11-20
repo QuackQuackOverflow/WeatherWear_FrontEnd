@@ -27,50 +27,31 @@ class MainActivity : AppCompatActivity() {
         // LocationHelper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationHelper = LocationHelper(this, fusedLocationClient)
-
         // 위치 권한 요청
         locationHelper.requestLocationPermission()
 
-        // NX, NY 좌표를 버튼에 표시
-        locationHelper.setNxNyToLocationButton(R.id.checkCurrentLocation_main)
+        // checkCurrentRegion_main에 지역이름 반영
+
 
         // 시간대별 날씨 레이아웃 생성
         generateTimeWeatherLayout()
 
-        // 현재 위치 버튼 클릭 시 NX, NY 좌표 갱신
-        findViewById<Button>(R.id.checkCurrentLocation).setOnClickListener {
-            locationHelper.getCurrentLocation { nx, ny ->
-                findViewById<Button>(R.id.checkCurrentLocation_main).text = "NX: $nx, NY: $ny"
-            }
-        }
+        //
 
         // navigationBarBtn2 클릭 시 APITest2Activity로 이동
         findViewById<Button>(R.id.navigationBarBtn2).setOnClickListener {
             startActivity(Intent(this, APITest2Activity::class.java))
         }
-
         // navigationBarBtn3 클릭 시 APITestActivity로 이동
         findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
             startActivity(Intent(this, APITestActivity::class.java))
         }
-
         // 스와이프 새로고침 설정
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
             refreshLocation()
         }
     }
-
-    // 위치 권한 요청 결과 처리
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        locationHelper.handlePermissionsResult(requestCode, grantResults) {
-            locationHelper.getCurrentLocation { nx, ny ->
-                findViewById<Button>(R.id.checkCurrentLocation_main).text = "NX: $nx, NY: $ny"
-            }
-        }
-    }
-
     // 시간대별 날씨 레이아웃 생성 함수
     private fun generateTimeWeatherLayout() {
         val timeWeatherContainer = findViewById<LinearLayout>(R.id.hourlyWeatherScrollView_main)
@@ -116,13 +97,11 @@ class MainActivity : AppCompatActivity() {
             timeWeatherContainer.addView(hourLayout)
         }
     }
-
     // 리뷰 팝업을 표시하는 함수
     private fun showReviewPopup() {
         val reviewPopup = ReviewPopup(this)
         reviewPopup.show()
     }
-
     // 새로고침 시 위치 갱신
     private fun refreshLocation() {
         // 현재 액티비티를 종료하고 다시 시작

@@ -144,7 +144,7 @@ class APITestActivity : AppCompatActivity() {
     // NX, NY를 백엔드로 전송하는 함수
     private fun sendLocationToBackend(nx: Int, ny: Int) {
         val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
-        val call = apiService.sendLocation(nx.toDouble(), ny.toDouble()) // NX, NY를 Double로 변환 후 전송
+        val call = apiService.sendLocation(nx, ny) // NX, NY를 Double로 변환 후 전송
 
         call.enqueue(object : Callback<RWCResponse> {
             override fun onResponse(call: Call<RWCResponse>, response: Response<RWCResponse>) {
@@ -173,19 +173,20 @@ class APITestActivity : AppCompatActivity() {
 
             // Weather 정보
             sb.append("2. Weather\n")
-            sb.append("1시간 기온 : ${it.weather?.temp ?: "Unknown"}\n")
-            sb.append("강수 확률 : ${it.weather?.probabilityOfRain ?: "Unknown"}\n")
-            sb.append("강수량 : ${it.weather?.rainAmount ?: "Unknown"}\n")
-            sb.append("강수 형태 : ${it.weather?.precipitationForm ?: "Unknown"}\n")
+            sb.append("1시간 기온 : ${it.weather?.temp ?: "Unknown"} °C\n")
+            sb.append("강수 확률 : ${it.weather?.rainProbability ?: "Unknown"} %\n")
+            sb.append("강수량 : ${it.weather?.rainAmount ?: "Unknown"} mm\n")
+            sb.append("강수 형태 : ${it.weather?.rainType ?: "Unknown"}\n")
             sb.append("하늘 상태 : ${it.weather?.skyCondition ?: "Unknown"}\n")
-            sb.append("최고 기온 : ${it.weather?.highestDailyTemp ?: "Unknown"}\n")
-            sb.append("최저 기온 : ${it.weather?.lowestDailyTemp ?: "Unknown"}\n")
-            sb.append("습도 : ${it.weather?.humid ?: "Unknown"}\n\n")
+            sb.append("최고 기온 : ${it.weather?.maxTemp ?: "Unknown"} °C\n")
+            sb.append("최저 기온 : ${it.weather?.minTemp ?: "Unknown"} °C\n")
+            sb.append("습도 : ${it.weather?.humid ?: "Unknown"} %\n")
+            sb.append("풍속 : ${it.weather?.windSpeed ?: "Unknown"} m/s\n\n")
 
             // ClothingSet 정보
             sb.append("3. ClothingSet\n")
             sb.append("SetID : ${it.clothingSet.id ?: "Unknown"}\n")
-            it.clothingSet.recommencdedClothings?.forEach { clothing ->
+            it.clothingSet.recommendedClothings?.forEach { clothing ->
                 sb.append("${clothing.type} : ${clothing.name}\n")
             }
 

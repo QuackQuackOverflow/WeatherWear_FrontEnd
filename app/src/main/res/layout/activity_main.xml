@@ -9,9 +9,6 @@
     tools:context=".ui.MainActivity">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -174,8 +171,8 @@
                                 android:textSize="80sp"
                                 android:text="0°C" />
 
-                            <Button
-                                android:id="@+id/checkCurrentLocation_main"
+                            <TextView
+                                android:id="@+id/checkCurrentRegion_main"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
@@ -183,8 +180,9 @@
                                 android:background="@color/lightSkyblue"
                                 android:minWidth="100sp"
                                 android:minHeight="48sp"
-                                android:text="충청남도 천안시 서북구 부대동"
-                                android:textSize="20sp"/>
+                                android:text="충청남도 천안시 서북구"
+                                android:textStyle="bold"
+                                android:textSize="22sp"/>
 
                             <!--
 
@@ -242,11 +240,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이런 옷은 어떠세요?"
-                    android:textSize="20sp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:textColor="#000000"></TextView>
+                    android:text="이런 옷은 어떠세요?"
+                    android:textColor="#000000"
+                    android:textSize="20sp"></TextView>
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -266,13 +264,12 @@
                             android:background="#aaaaaa">
 
                             <ImageButton
-                                android:src="@drawable/t_shirt_100dp"
                                 android:id="@+id/clothingButton1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:minWidth="150dp"
-                                android:minHeight="150dp">
-                            </ImageButton>
+                                android:minHeight="150dp"
+                                android:src="@drawable/t_shirt_100dp"></ImageButton>
 
                         </RelativeLayout>
 
@@ -284,13 +281,12 @@
                             android:background="#aaaaaa">
 
                             <ImageButton
-                                android:src="@drawable/t_shirt_100dp"
                                 android:id="@+id/clothingButton2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:minWidth="150dp"
-                                android:minHeight="150dp">
-                            </ImageButton>
+                                android:minHeight="150dp"
+                                android:src="@drawable/t_shirt_100dp"></ImageButton>
 
                         </RelativeLayout>
 
@@ -302,13 +298,12 @@
                             android:background="#aaaaaa">
 
                             <ImageButton
-                                android:src="@drawable/t_shirt_100dp"
                                 android:id="@+id/clothingButton3"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:minWidth="150dp"
-                                android:minHeight="150dp">
-                            </ImageButton>
+                                android:minHeight="150dp"
+                                android:src="@drawable/t_shirt_100dp"></ImageButton>
 
                         </RelativeLayout>
 
@@ -320,13 +315,12 @@
                             android:background="#aaaaaa">
 
                             <ImageButton
-                                android:src="@drawable/t_shirt_100dp"
                                 android:id="@+id/clothingButton4"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:minWidth="150dp"
-                                android:minHeight="150dp">
-                            </ImageButton>
+                                android:minHeight="150dp"
+                                android:src="@drawable/t_shirt_100dp"></ImageButton>
 
                         </RelativeLayout>
 
@@ -338,13 +332,12 @@
                             android:background="#aaaaaa">
 
                             <ImageButton
-                                android:src="@drawable/t_shirt_100dp"
                                 android:id="@+id/clothingButton5"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:minWidth="150dp"
-                                android:minHeight="150dp">
-                            </ImageButton>
+                                android:minHeight="150dp"
+                                android:src="@drawable/t_shirt_100dp"></ImageButton>
 
                         </RelativeLayout>
 
