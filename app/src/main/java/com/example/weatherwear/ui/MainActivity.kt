@@ -2,6 +2,7 @@ package com.example.weatherwear.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageView
@@ -42,9 +43,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.navigationBarBtn2).setOnClickListener {
             startActivity(Intent(this, APITest2Activity::class.java))
         }
-        // navigationBarBtn3 클릭 시 APITestActivity로 이동
+        // navigationBarBtn3 클릭 시 Settings로 이동
         findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
-            startActivity(Intent(this, APITestActivity::class.java))
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
         // 스와이프 새로고침 설정
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)

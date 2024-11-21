@@ -11,7 +11,7 @@ data class User(
 )
 
 data class Member(
-    val id : Int,
+    val id: Long?,
     val memberEmail: String,
     val memberPassword: String,
     val memberName: String,

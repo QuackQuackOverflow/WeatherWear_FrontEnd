@@ -381,7 +381,7 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
-                    android:text="RWC통합test"
+                    android:text="내 계정"
                     android:layout_marginHorizontal="12dp"></Button>
 
                 <!--

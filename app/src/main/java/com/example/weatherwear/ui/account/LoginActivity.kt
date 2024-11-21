@@ -1,11 +1,13 @@
 package com.example.weatherwear.ui.account
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
 import com.example.weatherwear.data.model.User
+import com.example.weatherwear.data.model.Member
 import com.example.weatherwear.repository.UserRepository
 import com.example.weatherwear.ui.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -21,6 +23,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        // SharedPreferences에서 저장된 로그인 정보 확인 및 자동 로그인 시도
+        autoLogin()
 
         // ID와 비밀번호 입력 필드 가져오기
         val idEditText = findViewById<EditText>(R.id.editTextID)
@@ -90,6 +95,9 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
+                        // 로그인 성공 시 SharedPreferences에 로그인 정보 저장
+                        saveLoginInfo(responseBody)
+
                         // 로그인 성공 시 메인 화면으로 이동
                         runOnUiThread {
                             Toast.makeText(this@LoginActivity, "로그인 성공: ${responseBody.memberName}", Toast.LENGTH_SHORT).show()
@@ -120,6 +128,46 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // 자동 로그인 함수
+    private fun autoLogin() {
+        val loginedData = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val savedEmail = loginedData.getString("memberEmail", null)
+        val savedPassword = loginedData.getString("memberPassword", null)
+
+        if (!savedEmail.isNullOrEmpty() && !savedPassword.isNullOrEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = userRepository.loginUser(User(savedEmail, savedPassword, "", ""))
+                    if (response.isSuccessful && response.body() != null) {
+                        runOnUiThread {
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            finish()
+                        }
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(this@LoginActivity, "자동 로그인 실패: 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        Toast.makeText(this@LoginActivity, "네트워크 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+
+    // 로그인 정보 저장 함수
+    private fun saveLoginInfo(member: Member) {
+        val loginedData = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val editor = loginedData.edit()
+
+        editor.putString("memberEmail", member.memberEmail)
+        editor.putString("memberPassword", member.memberPassword)
+        editor.apply()
     }
 
     // 서버 연결 테스트 함수

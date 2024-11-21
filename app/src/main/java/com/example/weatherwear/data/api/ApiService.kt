@@ -30,7 +30,7 @@ interface ApiService {
     suspend fun registerUser(@Body user: User): Response<User>
     // 로그인 요청: 사용자 인증 정보를 서버에 전송하여 로그인 처리
     @POST("api/members/login")
-    suspend fun loginUser(@Body user: User): Response<User>
+    suspend fun loginUser(@Body user: User): Response<Member>
 
     /**
      * Region 관련 API

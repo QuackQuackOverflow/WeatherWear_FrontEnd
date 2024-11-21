@@ -1,6 +1,7 @@
 package com.example.weatherwear.repository
 
 import com.example.weatherwear.data.api.ApiService
+import com.example.weatherwear.data.model.Member
 import com.example.weatherwear.data.model.User
 import com.example.weatherwear.util.RetrofitInstance
 import retrofit2.Response
@@ -12,9 +13,9 @@ class UserRepository {
     // Retrofit API 인스턴스
     private val api = RetrofitInstance.api
 
-    // 서버에 로그인 요청을 보내는 함수
-    suspend fun loginUser(user: User): Response<User> {
-        return api.loginUser(user)
+    /// 서버에 로그인 요청을 보내는 함수
+    suspend fun loginUser(user: User): Response<Member> {
+        return api.loginUser(user) // ApiService의 loginUser 호출
     }
 
     // 서버에 회원가입 요청을 보내는 함수
