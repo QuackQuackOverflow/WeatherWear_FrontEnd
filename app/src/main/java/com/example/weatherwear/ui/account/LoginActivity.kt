@@ -165,10 +165,15 @@ class LoginActivity : AppCompatActivity() {
         val loginedData = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val editor = loginedData.edit()
 
-        editor.putString("memberEmail", member.memberEmail)
-        editor.putString("memberPassword", member.memberPassword)
-        editor.apply()
+        // 모든 Member 데이터 저장
+        editor.putString("memberEmail", member.memberEmail)      // 이메일
+        editor.putString("memberPassword", member.memberPassword) // 비밀번호
+        editor.putString("memberName", member.memberName)        // 이름
+        editor.putString("userType", member.userType)            // 사용자 체질 타입
+
+        editor.apply() // 변경 사항 저장
     }
+
 
     // 서버 연결 테스트 함수
     private fun testServerConnection() {
