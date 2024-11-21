@@ -132,9 +132,9 @@ class LoginActivity : AppCompatActivity() {
 
     // 자동 로그인 함수
     private fun autoLogin() {
-        val loginedData = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val savedEmail = loginedData.getString("memberEmail", null)
-        val savedPassword = loginedData.getString("memberPassword", null)
+        val loginPrefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val savedEmail = loginPrefs.getString("memberEmail", null)
+        val savedPassword = loginPrefs.getString("memberPassword", null)
 
         if (!savedEmail.isNullOrEmpty() && !savedPassword.isNullOrEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -162,8 +162,8 @@ class LoginActivity : AppCompatActivity() {
 
     // 로그인 정보 저장 함수
     private fun saveLoginInfo(member: Member) {
-        val loginedData = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val editor = loginedData.edit()
+        val loginPrefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val editor = loginPrefs.edit()
 
         // 모든 Member 데이터 저장
         editor.putString("memberEmail", member.memberEmail)      // 이메일
