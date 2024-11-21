@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
 import com.example.weatherwear.data.api.ApiService
+import com.example.weatherwear.data.model.ClothingSet
 import com.example.weatherwear.helpers.LocationHelper
 import com.example.weatherwear.util.RetrofitInstance
 import com.google.android.gms.location.LocationServices
@@ -40,9 +41,7 @@ class APITest2Activity : AppCompatActivity() {
 
         // 의류 추천받기 버튼 클릭
         getClothingSetButton.setOnClickListener {
-            locationHelper.getCurrentNxNy { nx, ny ->
-                sendClothingSetRequest(nx, ny)
-            }
+            fetchClothingSet()
         }
 
         // 지역과 날씨 정보 버튼 클릭
@@ -55,9 +54,42 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 
-    //의류 추천 데이터 가져오기
-    private fun sendClothingSetRequest(nx: Int, ny: Int) {
-        // 갸악 하기 싫어
+    // 의류 추천 데이터 가져오기
+    private fun fetchClothingSet() {
+        val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // userType 쿼리를 사용하여 요청
+                val response = apiService.getClothingSet(userType = "hot")
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val clothingSet = response.body()
+                        if (clothingSet != null) {
+                            val resultText = buildClothingSetDisplayText(clothingSet)
+                            resultTextView.text = resultText
+                        } else {
+                            resultTextView.text = "추천 의상 세트를 가져올 수 없습니다."
+                        }
+                    } else {
+                        resultTextView.text = "Error: ${response.code()}"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@APITest2Activity, "네트워크 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // 의상 세트 텍스트 포맷팅
+    private fun buildClothingSetDisplayText(clothingSet: ClothingSet): String {
+        val builder = StringBuilder()
+        builder.append("의상 Set ID: ${clothingSet.id}\n")
+        clothingSet.recommendedClothings.forEachIndexed { index, clothing ->
+            builder.append("옷${index + 1}: ${clothing.name} (${clothing.type})\n")
+        }
+        return builder.toString()
     }
 
     // 지역과 날씨 정보 가져오기
@@ -94,4 +126,3 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 }
-

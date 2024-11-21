@@ -102,7 +102,7 @@
             android:id="@+id/editUserInfoButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="사용자 정보 수정"
+            android:text="로그아웃"
             android:textSize="18sp" />
     </LinearLayout>
 

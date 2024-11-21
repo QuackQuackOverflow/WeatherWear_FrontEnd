@@ -25,28 +25,30 @@ interface ApiService {
     /**
      * 계정 관련 API
      */
-    // 회원가입 요청: 사용자 정보를 서버에 전송하여 회원가입 처리
     @POST("api/members")
     suspend fun registerUser(@Body user: User): Response<User>
-    // 로그인 요청: 사용자 인증 정보를 서버에 전송하여 로그인 처리
+
     @POST("api/members/login")
     suspend fun loginUser(@Body user: User): Response<Member>
 
     /**
-     * Region 관련 API
+     * Region 을 보내고 필요한 데이터를 받는 API
      */
-    // 1. Region 객체를 보내고 지역 이름, 날씨 정보, 의상 세트를 포함한 RWCResponse를 받는 API
-    @POST("api/weather")
-    suspend fun getRegionDetails(@Body region: GPSreport): Response<RWCResponse>
-
-    // 5. Region 객체를 보내고 지역과 날씨 반환받는 API
     @GET("api/weather")
-    suspend fun getRegionAndWeather(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<RWResponse>
+    suspend fun getRWC
+                (@Query("nx") nx: Int,
+                 @Query("ny") ny: Int
+    ): Response<RWCResponse>
+
+    @GET("api/weather")
+    suspend fun getRegionAndWeather
+                (@Query("nx") nx: Int,
+                 @Query("ny") ny: Int
+    ): Response<RWResponse>
 
     /**
      * Review 관련 API
      */
-    // 리뷰 데이터를 서버에 전송
     @POST("/")
     fun submitReviews(@Body reviews: List<Review>): Call<Void>
 
@@ -56,5 +58,12 @@ interface ApiService {
         @Query("ny") ny: Int
     ): Call<RWCResponse>
 
-}
+    /**
+     * userType을 보내고 ClothingSet을 반환받는 API
+     */
+    @GET("api/clothingSet")
+    suspend fun getClothingSet(
+        @Query("userType") userType: String
+    ): Response<ClothingSet>
 
+}
