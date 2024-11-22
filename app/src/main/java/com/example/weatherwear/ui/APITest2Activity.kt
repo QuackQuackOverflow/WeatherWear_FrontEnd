@@ -31,19 +31,23 @@ class APITest2Activity : AppCompatActivity() {
         resultTextView = findViewById(R.id.textViewResult)
         getClothingSetButton = findViewById(R.id.buttonGetClothingSet)
         getRegionAndWeatherButton = findViewById(R.id.buttonGetRegionAndWeather)
+
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationToWeatherHelper = LocationToWeatherHelper(this, fusedLocationClient)
         getClothingHelper = GetClothingHelper(this)
+
         // 의류 추천받기 버튼 클릭
         getClothingSetButton.setOnClickListener {
             fetchAndDisplayClothingSet()
         }
+
         // 지역과 날씨 정보 버튼 클릭
         getRegionAndWeatherButton.setOnClickListener {
             fetchAndDisplayRegionAndWeather()
         }
     }
+
     // 의류 추천 데이터 가져오기 및 UI 반영
     private fun fetchAndDisplayClothingSet() {
         getClothingHelper.fetchClothingSet(userType = "hot") { clothingSet ->
@@ -56,6 +60,7 @@ class APITest2Activity : AppCompatActivity() {
             }
         }
     }
+
     // 지역 및 날씨 정보 가져오기 및 UI 반영
     private fun fetchAndDisplayRegionAndWeather() {
         locationToWeatherHelper.fetchRegionAndWeatherFromGPS { weatherData ->
@@ -68,6 +73,7 @@ class APITest2Activity : AppCompatActivity() {
             }
         }
     }
+
     // 의상 세트 텍스트 포맷팅
     private fun buildClothingSetDisplayText(clothingSet: ClothingSet): String {
         val builder = StringBuilder()
@@ -77,20 +83,27 @@ class APITest2Activity : AppCompatActivity() {
         }
         return builder.toString()
     }
+
     // 지역 및 날씨 정보 텍스트 포맷팅
     private fun buildRegionAndWeatherDisplayText(weatherData: RWResponse): String {
         val builder = StringBuilder()
-        builder.append("지역: ${weatherData.regionName ?: "알 수 없음"}\n")
+        builder.append("지역: ${weatherData.regionName}\n")
         builder.append("날씨 정보:\n")
-        builder.append("- 1시간 기온: ${weatherData.weather?.temp ?: "Unknown"} °C\n")
-        builder.append("- 최저 기온: ${weatherData.weather?.minTemp ?: "Unknown"} °C\n")
-        builder.append("- 최고 기온: ${weatherData.weather?.maxTemp ?: "Unknown"} °C\n")
-        builder.append("- 강수량: ${weatherData.weather?.rainAmount ?: "Unknown"} mm\n")
-        builder.append("- 강수 확률: ${weatherData.weather?.rainProbability ?: "Unknown"} %\n")
-        builder.append("- 강수 형태: ${weatherData.weather?.rainType ?: "Unknown"}\n")
-        builder.append("- 하늘 상태: ${weatherData.weather?.skyCondition ?: "Unknown"}\n")
-        builder.append("- 습도: ${weatherData.weather?.humid ?: "Unknown"}%\n")
-        builder.append("- 풍속: ${weatherData.weather?.windSpeed ?: "Unknown"}m/s")
+        weatherData.weatherList.forEachIndexed { index, weather ->
+            builder.append("날씨 정보 ${index + 1}:\n")
+            builder.append(" - 날짜: ${weather.forecastDate}\n")
+            builder.append(" - 시간: ${weather.forecastTime}\n")
+            builder.append(" - 1시간 기온: ${weather.temp} °C\n")
+            builder.append(" - 최저 기온: ${weather.minTemp} °C\n")
+            builder.append(" - 최고 기온: ${weather.maxTemp} °C\n")
+            builder.append(" - 강수량: ${weather.rainAmount} mm\n")
+            builder.append(" - 강수 확률: ${weather.rainProbability} %\n")
+            builder.append(" - 강수 형태: ${weather.rainType}\n")
+            builder.append(" - 하늘 상태: ${weather.skyCondition}\n")
+            builder.append(" - 습도: ${weather.humid} %\n")
+            builder.append(" - 풍속: ${weather.windSpeed} m/s\n")
+            builder.append("\n")
+        }
         return builder.toString()
     }
 }

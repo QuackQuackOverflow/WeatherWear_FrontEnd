@@ -11,33 +11,78 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GetClothingHelper(private val context: Context) {
+class GetClothingHelper(
+    private val context: Context,
+    private val apiService: ApiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java),
+    private val gson: Gson = Gson()
+) {
 
-    // 의류 추천 데이터 가져오기
+    companion object {
+        private const val PREF_NAME = "ClothingPrefs"
+        private const val PREF_CLOTHING_SET_KEY = "clothingSet"
+    }
+
+    /**
+     * 의류 추천 데이터 가져오기
+     */
     fun fetchClothingSet(userType: String, callback: (ClothingSet?) -> Unit) {
-        val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.getClothingSet(userType = userType)
+                val response = apiService.getClothingSet(userType)
                 withContext(Dispatchers.Main) {
-                    callback(response.body())
+                    if (response.isSuccessful) {
+                        callback(response.body())
+                    } else {
+                        showToast("Failed to fetch clothing set: ${response.code()}")
+                        callback(null)
+                    }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "네트워크 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                    showToast("Network error: ${e.message}")
                     callback(null)
                 }
             }
         }
     }
 
-    // SharedPreferences에 의류 세트 데이터를 저장
+    /**
+     * SharedPreferences에 의류 세트 데이터를 저장
+     */
     fun saveClothingSetToPreferences(clothingSet: ClothingSet) {
-        val sharedPreferences = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val gson = Gson()
-        val clothingSetJson = gson.toJson(clothingSet) // ClothingSet 객체를 JSON 문자열로 변환
-        editor.putString("clothingSet", clothingSetJson)
-        editor.apply()
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.saveAsJson(PREF_CLOTHING_SET_KEY, clothingSet, gson)
+        showToast("Clothing set saved to preferences")
     }
+
+    /**
+     * SharedPreferences에서 의류 세트 데이터를 불러오기
+     */
+    fun loadClothingSetFromPreferences(): ClothingSet? {
+        val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return sharedPreferences.loadFromJson(PREF_CLOTHING_SET_KEY, ClothingSet::class.java, gson)
+    }
+
+    /**
+     * Toast 메시지를 간단히 보여주는 함수
+     */
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+}
+
+/**
+ * SharedPreferences 확장 함수: 객체를 JSON 형태로 저장
+ */
+private fun <T> android.content.SharedPreferences.saveAsJson(key: String, data: T, gson: Gson) {
+    val json = gson.toJson(data)
+    edit().putString(key, json).apply()
+}
+
+/**
+ * SharedPreferences 확장 함수: JSON 형태 데이터를 객체로 변환
+ */
+private fun <T> android.content.SharedPreferences.loadFromJson(key: String, clazz: Class<T>, gson: Gson): T? {
+    val json = getString(key, null) ?: return null
+    return gson.fromJson(json, clazz)
 }

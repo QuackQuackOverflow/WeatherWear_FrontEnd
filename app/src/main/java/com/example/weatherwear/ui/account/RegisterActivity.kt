@@ -80,7 +80,12 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // 회원가입 요청을 서버로 보내는 함수
-    private fun register(username: String, id: String, password: String, temperaturePreference: String) {
+    private fun register(
+        username: String,
+        id: String,
+        password: String,
+        temperaturePreference: String
+    ) {
         // 서버로 전송할 User 객체 생성
         val newUser = User(
             memberName = username,
@@ -91,7 +96,6 @@ class RegisterActivity : AppCompatActivity() {
 
         // ProgressBar 표시
         runOnUiThread { showLoading(findViewById(R.id.loadingProgressBar), true) }
-
         // 비동기 네트워크 요청 수행
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -103,7 +107,8 @@ class RegisterActivity : AppCompatActivity() {
                     runOnUiThread {
                         showLoading(findViewById(R.id.loadingProgressBar), false) // ProgressBar 숨김
                         if (responseBody != null) {
-                            Toast.makeText(this@RegisterActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@RegisterActivity, "회원가입 성공", Toast.LENGTH_SHORT)
+                                .show()
                         } else {
                             Toast.makeText(
                                 this@RegisterActivity,
@@ -111,23 +116,36 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                        // 회원가입 성공 시 메인 화면으로 이동
-                        startActivity(Intent(this@RegisterActivity, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                        })
+                        // 회원가입 성공 시 LoginActivity로 이동
+                        startActivity(
+                            Intent(
+                                this@RegisterActivity,
+                                LoginActivity::class.java
+                            ).apply {
+                                flags =
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                            })
                         finish()
                     }
                 } else {
                     val errorBody = response.errorBody()?.string()
                     runOnUiThread {
                         showLoading(findViewById(R.id.loadingProgressBar), false) // ProgressBar 숨김
-                        Toast.makeText(this@RegisterActivity, "회원가입 실패: $errorBody", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            "회원가입 실패: $errorBody",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } catch (e: Exception) {
                 runOnUiThread {
                     showLoading(findViewById(R.id.loadingProgressBar), false) // ProgressBar 숨김
-                    Toast.makeText(this@RegisterActivity, "네트워크 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "네트워크 오류 발생: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

@@ -24,7 +24,25 @@ import kotlinx.coroutines.launch
 
 class ReviewPopup(context: Context) : Dialog(context) {
 
-    private var clothingId: Int? = null // Clothing ID는 내부에서 설정
+    // Clothing ID는 내부에서 설정
+    private var clothingId: Int? = null
+
+    /**
+     * 테스트용 ClothingSet 생성 함수
+     */
+    private fun createTestClothingSet(): ClothingSet {
+        return ClothingSet(
+            id = 1, // 테스트용 ID
+            recommendedClothings = listOf(
+                Clothing(name = "셔츠1", type = "상의"),
+                Clothing(name = "바지1", type = "하의"),
+                Clothing(name = "재킷1", type = "아우터"),
+                Clothing(name = "셔츠2", type = "상의"),
+                Clothing(name = "바지2", type = "하의"),
+                Clothing(name = "재킷2", type = "아우터")
+            )
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +52,20 @@ class ReviewPopup(context: Context) : Dialog(context) {
         val loginPrefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         val userEmail = loginPrefs.getString("memberEmail", null)
 
-        // 테스트용 데이터 생성 및 UI 초기화
-        val clothingSet = createTestClothingSet()
+        /**
+         * 테스트용 ClothingSet 저장 및 SharedPreferences에서 가져오기
+         */
+        val testClothingSet = createTestClothingSet() // 테스트 데이터 생성
+        saveClothingSetToPreferences(testClothingSet) // SharedPreferences에 저장
+
+        val clothingSet = getClothingSetFromPreferences() // SharedPreferences에서 가져오기
+        if (clothingSet == null) {
+            Toast.makeText(context, "저장된 의류 데이터가 없습니다.", Toast.LENGTH_SHORT).show()
+            dismiss() // 팝업 닫기
+            return
+        }
+
+        // UI 초기화
         clothingId = clothingSet.id
         populateClothingUI(clothingSet)
 
@@ -55,20 +85,36 @@ class ReviewPopup(context: Context) : Dialog(context) {
     }
 
     /**
-     * 테스트용 ClothingSet 생성 함수
+     * SharedPreferences에 ClothingSet 저장
      */
-    private fun createTestClothingSet(): ClothingSet {
-        return ClothingSet(
-            id = 1, // 테스트용 ID
-            recommendedClothings = listOf(
-                Clothing(name = "셔츠1", type = "상의"),
-                Clothing(name = "바지1", type = "하의"),
-                Clothing(name = "재킷1", type = "아우터"),
-                Clothing(name = "셔츠2", type = "상의"),
-                Clothing(name = "바지2", type = "하의"),
-                Clothing(name = "재킷2", type = "아우터")
-            )
-        )
+    private fun saveClothingSetToPreferences(clothingSet: ClothingSet) {
+        val clothingPrefs = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+        val editor = clothingPrefs.edit()
+        val gson = Gson()
+        val clothingSetJson = gson.toJson(clothingSet) // ClothingSet 객체를 JSON 문자열로 변환
+        editor.putString("clothingSet", clothingSetJson)
+        editor.apply()
+        Log.d("ReviewPopup", "ClothingSet이 SharedPreferences에 저장되었습니다.")
+    }
+
+    /**
+     * SharedPreferences에서 ClothingSet 가져오기
+     */
+    private fun getClothingSetFromPreferences(): ClothingSet? {
+        val clothingPrefs = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+        val clothingSetJson = clothingPrefs.getString("clothingSet", null)
+
+        if (clothingSetJson.isNullOrEmpty()) {
+            Log.e("ReviewPopup", "ClothingPrefs에 저장된 데이터가 없습니다.")
+            return null
+        }
+
+        return try {
+            Gson().fromJson(clothingSetJson, ClothingSet::class.java)
+        } catch (e: Exception) {
+            Log.e("ReviewPopup", "ClothingSet JSON 파싱 실패: ${e.message}")
+            null
+        }
     }
 
     /**
@@ -125,9 +171,6 @@ class ReviewPopup(context: Context) : Dialog(context) {
         // 컨테이너의 부모 레이아웃 정렬 확인
         container.gravity = Gravity.CENTER_HORIZONTAL // 아이템 전체를 가로 중앙 정렬
     }
-
-
-
 
     /**
      * 리뷰 전송 함수

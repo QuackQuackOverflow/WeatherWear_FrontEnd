@@ -158,8 +158,8 @@ class MainActivity : AppCompatActivity() {
                 val regionName = response.regionName ?: "지역 정보 없음"
                 checkCurrentRegionMain.text = regionName
                 // 현재 온도 업데이트
-                val currentTemp = response.weather?.temp?.let { "$it°C" } ?: "온도 정보 없음"
-                currentTempViewMain.text = currentTemp
+//                val currentTemp = response.weather?.temp?.let { "$it°C" } ?: "온도 정보 없음"
+//                currentTempViewMain.text = currentTemp
             } else {
                 Toast.makeText(this, "날씨 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
                 checkCurrentRegionMain.text = "정보 없음"
