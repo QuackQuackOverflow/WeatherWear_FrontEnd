@@ -197,7 +197,6 @@
                                 android:textColor="#000000"
                                 android:textSize="80sp"
                                 android:text="18°C" />
-
                                 -->
 
                         </RelativeLayout>
@@ -256,13 +255,20 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <RelativeLayout
+                        <LinearLayout
                             android:id="@+id/clothesView1"
                             android:layout_width="150dp"
-                            android:layout_height="150dp"
+                            android:layout_height="180dp"
                             android:layout_marginLeft="30dp"
+                            android:orientation="vertical"
                             android:background="#aaaaaa">
-
+                            <TextView
+                                android:id="@+id/clothingName1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="옷 이름1"
+                                android:textSize="20sp"
+                                android:textAlignment="center"></TextView>
                             <ImageButton
                                 android:id="@+id/clothingButton1"
                                 android:layout_width="match_parent"
@@ -270,16 +276,23 @@
                                 android:minWidth="150dp"
                                 android:minHeight="150dp"
                                 android:src="@drawable/t_shirt_100dp"></ImageButton>
+                        </LinearLayout>
 
-                        </RelativeLayout>
-
-                        <RelativeLayout
+                        <LinearLayout
                             android:id="@+id/clothesView2"
                             android:layout_width="150dp"
-                            android:layout_height="150dp"
+                            android:layout_height="180dp"
                             android:layout_marginLeft="30dp"
+                            android:orientation="vertical"
                             android:background="#aaaaaa">
 
+                            <TextView
+                                android:id="@+id/clothingName2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="옷 이름1"
+                                android:textSize="20sp"
+                                android:textAlignment="center"></TextView>
                             <ImageButton
                                 android:id="@+id/clothingButton2"
                                 android:layout_width="match_parent"
@@ -287,59 +300,7 @@
                                 android:minWidth="150dp"
                                 android:minHeight="150dp"
                                 android:src="@drawable/t_shirt_100dp"></ImageButton>
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/clothesView3"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_marginLeft="30dp"
-                            android:background="#aaaaaa">
-
-                            <ImageButton
-                                android:id="@+id/clothingButton3"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:minWidth="150dp"
-                                android:minHeight="150dp"
-                                android:src="@drawable/t_shirt_100dp"></ImageButton>
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/clothesView4"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_marginLeft="30dp"
-                            android:background="#aaaaaa">
-
-                            <ImageButton
-                                android:id="@+id/clothingButton4"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:minWidth="150dp"
-                                android:minHeight="150dp"
-                                android:src="@drawable/t_shirt_100dp"></ImageButton>
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/clothesView5"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
-                            android:layout_marginLeft="30dp"
-                            android:background="#aaaaaa">
-
-                            <ImageButton
-                                android:id="@+id/clothingButton5"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:minWidth="150dp"
-                                android:minHeight="150dp"
-                                android:src="@drawable/t_shirt_100dp"></ImageButton>
-
-                        </RelativeLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
 

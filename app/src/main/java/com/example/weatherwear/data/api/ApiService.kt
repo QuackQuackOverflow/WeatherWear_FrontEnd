@@ -57,7 +57,7 @@ interface ApiService {
     /**
      * userType을 보내고 ClothingSet을 반환받는 API
      */
-    @GET("api/clothingSet")
+    @GET("/")
     suspend fun getClothingSet(
         @Query("userType") userType: String
     ): Response<ClothingSet>

@@ -1,6 +1,5 @@
 package com.example.weatherwear.ui
 
-import com.example.weatherwear.ui.*
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -9,50 +8,56 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.apitest.APITest2Activity
 import com.example.weatherwear.R
-import com.example.weatherwear.helpers.LocationHelper
+import com.example.weatherwear.helpers.LocationToWeatherHelper
 import com.google.android.gms.location.LocationServices
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout // 스와이프 새로고침 레이아웃
-    private lateinit var locationHelper: LocationHelper // LocationHelper 객체 선언
+    private lateinit var locationToWeatherHelper: LocationToWeatherHelper // LocationToWeatherHelper 객체 선언
+    private lateinit var checkCurrentRegionMain: TextView // 지역 이름 표시 텍스트뷰
+    private lateinit var currentTempViewMain: TextView // 현재 온도 표시 텍스트뷰
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // 메인 레이아웃 설정
 
-        // LocationHelper 초기화
+        // 뷰 초기화
+        checkCurrentRegionMain = findViewById(R.id.checkCurrentRegion_main)
+        currentTempViewMain = findViewById(R.id.currentTempView_main)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+
+        // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationHelper = LocationHelper(this, fusedLocationClient)
-        // 위치 권한 요청
-        locationHelper.requestLocationPermission()
+        locationToWeatherHelper = LocationToWeatherHelper(this, fusedLocationClient)
 
-        // checkCurrentRegion_main에 지역이름 반영
-
+        // 위치 기반 날씨 정보 가져오기
+        fetchWeatherAndUpdateUI()
 
         // 시간대별 날씨 레이아웃 생성
         generateTimeWeatherLayout()
-
-        //
 
         // navigationBarBtn2 클릭 시 APITest2Activity로 이동
         findViewById<Button>(R.id.navigationBarBtn2).setOnClickListener {
             startActivity(Intent(this, APITest2Activity::class.java))
         }
+
         // navigationBarBtn3 클릭 시 Settings로 이동
         findViewById<Button>(R.id.navigationBarBtn3).setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+
         // 스와이프 새로고침 설정
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
             refreshLocation()
         }
     }
+
     // 시간대별 날씨 레이아웃 생성 함수
     private fun generateTimeWeatherLayout() {
         val timeWeatherContainer = findViewById<LinearLayout>(R.id.hourlyWeatherScrollView_main)
@@ -98,15 +103,35 @@ class MainActivity : AppCompatActivity() {
             timeWeatherContainer.addView(hourLayout)
         }
     }
+
     // 리뷰 팝업을 표시하는 함수
     private fun showReviewPopup() {
         val reviewPopup = ReviewPopup(this)
         reviewPopup.show()
     }
+
     // 새로고침 시 위치 갱신
     private fun refreshLocation() {
-        // 현재 액티비티를 종료하고 다시 시작
-        finish()
-        startActivity(intent)
+        fetchWeatherAndUpdateUI()
+        swipeRefreshLayout.isRefreshing = false
+    }
+
+    // LocationToWeatherHelper를 사용하여 날씨 정보 가져오고 UI 업데이트
+    private fun fetchWeatherAndUpdateUI() {
+        locationToWeatherHelper.fetchRegionAndWeatherFromGPS { response ->
+            if (response != null) {
+                // 지역 이름 업데이트
+                val regionName = response.regionName ?: "지역 정보 없음"
+                checkCurrentRegionMain.text = regionName
+
+                // 현재 온도 업데이트
+                val currentTemp = response.weather?.temp?.let { "$it°C" } ?: "온도 정보 없음"
+                currentTempViewMain.text = currentTemp
+            } else {
+                Toast.makeText(this, "날씨 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                checkCurrentRegionMain.text = "정보 없음"
+                currentTempViewMain.text = "정보 없음"
+            }
+        }
     }
 }
