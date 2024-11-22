@@ -27,7 +27,6 @@ interface ApiService {
      */
     @POST("api/members")
     suspend fun registerUser(@Body user: User): Response<User>
-
     @POST("api/members/login")
     suspend fun loginUser(@Body user: User): Response<Member>
 
@@ -50,13 +49,10 @@ interface ApiService {
      * Review 관련 API
      */
     @POST("/")
-    fun submitReviews(@Body reviews: List<Review>): Call<Void>
-
-    @POST("api/sendLocation")
-    fun sendLocation(
-        @Query("nx") nx: Int,
-        @Query("ny") ny: Int
-    ): Call<RWCResponse>
+    suspend fun submitReview(
+        @Query("userEmail") userEmail: String, // 쿼리 파라미터로 이메일 전송
+        @Body review: Review                   // 요청 본문으로 Review 데이터 전송
+    ): Response<Void>
 
     /**
      * userType을 보내고 ClothingSet을 반환받는 API
@@ -65,5 +61,7 @@ interface ApiService {
     suspend fun getClothingSet(
         @Query("userType") userType: String
     ): Response<ClothingSet>
+
+
 
 }

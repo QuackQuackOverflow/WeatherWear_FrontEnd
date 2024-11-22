@@ -159,7 +159,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
     // 로그인 정보 저장 함수
     private fun saveLoginInfo(member: Member) {
         val loginPrefs = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
@@ -173,7 +172,6 @@ class LoginActivity : AppCompatActivity() {
 
         editor.apply() // 변경 사항 저장
     }
-
 
     // 서버 연결 테스트 함수
     private fun testServerConnection() {

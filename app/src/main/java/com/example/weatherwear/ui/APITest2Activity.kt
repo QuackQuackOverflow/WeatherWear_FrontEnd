@@ -1,5 +1,6 @@
 package com.example.apitest
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -11,6 +12,7 @@ import com.example.weatherwear.data.model.ClothingSet
 import com.example.weatherwear.helpers.LocationHelper
 import com.example.weatherwear.util.RetrofitInstance
 import com.google.android.gms.location.LocationServices
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,6 +67,8 @@ class APITest2Activity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val clothingSet = response.body()
                         if (clothingSet != null) {
+                            // SharedPreferences에 ClothingSet 저장
+                            saveClothingSetToPreferences(clothingSet)
                             val resultText = buildClothingSetDisplayText(clothingSet)
                             resultTextView.text = resultText
                         } else {
@@ -124,5 +128,15 @@ class APITest2Activity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    // ClothingSet 데이터를 SharedPreferences에 저장하는 함수
+    private fun saveClothingSetToPreferences(clothingSet: ClothingSet) {
+        val sharedPreferences = getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val clothingSetJson = gson.toJson(clothingSet) // ClothingSet 객체를 JSON 문자열로 변환
+        editor.putString("clothingSet", clothingSetJson)
+        editor.apply()
     }
 }

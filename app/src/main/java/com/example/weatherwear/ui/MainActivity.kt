@@ -1,5 +1,6 @@
 package com.example.weatherwear.ui
 
+import com.example.weatherwear.ui.*
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -11,7 +12,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.apitest.APITest2Activity
-import com.example.apitest.APITestActivity
 import com.example.weatherwear.R
 import com.example.weatherwear.helpers.LocationHelper
 import com.google.android.gms.location.LocationServices
