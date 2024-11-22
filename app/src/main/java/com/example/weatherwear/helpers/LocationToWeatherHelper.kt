@@ -52,7 +52,7 @@ class LocationToWeatherHelper(
     /**
      * NX, NY 좌표를 사용해 백엔드로부터 RWResponse를 가져오는 함수
      */
-    private fun fetchRegionAndWeather(nx: Int, ny: Int, callback: (RWResponse?) -> Unit) {
+    fun fetchRegionAndWeather(nx: Int, ny: Int, callback: (RWResponse?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.getRegionAndWeather(nx, ny)

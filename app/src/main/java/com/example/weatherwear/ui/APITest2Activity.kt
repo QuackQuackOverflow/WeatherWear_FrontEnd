@@ -3,6 +3,7 @@ package com.example.apitest
 import RWResponse
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
@@ -18,6 +19,9 @@ class APITest2Activity : AppCompatActivity() {
     private lateinit var resultTextView: TextView
     private lateinit var getClothingSetButton: Button
     private lateinit var getRegionAndWeatherButton: Button
+    private lateinit var getRegionAndWeatherCustomButton: Button
+    private lateinit var nxEditText: EditText
+    private lateinit var nyEditText: EditText
 
     // Helper 객체
     private lateinit var locationToWeatherHelper: LocationToWeatherHelper
@@ -31,6 +35,9 @@ class APITest2Activity : AppCompatActivity() {
         resultTextView = findViewById(R.id.textViewResult)
         getClothingSetButton = findViewById(R.id.buttonGetClothingSet)
         getRegionAndWeatherButton = findViewById(R.id.buttonGetRegionAndWeather)
+        getRegionAndWeatherCustomButton = findViewById(R.id.buttonGetRegionAndWeather_Custom)
+        nxEditText = findViewById(R.id.editTextNx)
+        nyEditText = findViewById(R.id.editTextNy)
 
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -42,9 +49,14 @@ class APITest2Activity : AppCompatActivity() {
             fetchAndDisplayClothingSet()
         }
 
-        // 지역과 날씨 정보 버튼 클릭
+        // GPS 기반 지역과 날씨 정보 버튼 클릭
         getRegionAndWeatherButton.setOnClickListener {
             fetchAndDisplayRegionAndWeather()
+        }
+
+        // 사용자 입력 nx, ny로 지역과 날씨 정보 버튼 클릭
+        getRegionAndWeatherCustomButton.setOnClickListener {
+            fetchAndDisplayRegionAndWeatherCustom()
         }
     }
 
@@ -61,7 +73,7 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 
-    // 지역 및 날씨 정보 가져오기 및 UI 반영
+    // GPS 기반 지역 및 날씨 정보 가져오기 및 UI 반영
     private fun fetchAndDisplayRegionAndWeather() {
         locationToWeatherHelper.fetchRegionAndWeatherFromGPS { weatherData ->
             if (weatherData != null) {
@@ -70,6 +82,27 @@ class APITest2Activity : AppCompatActivity() {
                 resultTextView.text = resultText
             } else {
                 resultTextView.text = "지역 및 날씨 정보를 가져올 수 없습니다."
+            }
+        }
+    }
+
+    // 사용자 입력 nx, ny로 지역 및 날씨 정보 가져오기 및 UI 반영
+    private fun fetchAndDisplayRegionAndWeatherCustom() {
+        val nx = nxEditText.text.toString().toIntOrNull()
+        val ny = nyEditText.text.toString().toIntOrNull()
+
+        if (nx == null || ny == null) {
+            resultTextView.text = "nx와 ny 값을 올바르게 입력해주세요."
+            return
+        }
+
+        locationToWeatherHelper.fetchRegionAndWeather(nx, ny) { weatherData ->
+            if (weatherData != null) {
+                locationToWeatherHelper.saveRegionAndWeatherToPreferences(weatherData)
+                val resultText = buildRegionAndWeatherDisplayText(weatherData)
+                resultTextView.text = resultText
+            } else {
+                resultTextView.text = "입력한 nx, ny로 지역 및 날씨 정보를 가져올 수 없습니다."
             }
         }
     }
