@@ -31,23 +31,19 @@ class APITest2Activity : AppCompatActivity() {
         resultTextView = findViewById(R.id.textViewResult)
         getClothingSetButton = findViewById(R.id.buttonGetClothingSet)
         getRegionAndWeatherButton = findViewById(R.id.buttonGetRegionAndWeather)
-
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationToWeatherHelper = LocationToWeatherHelper(this, fusedLocationClient)
         getClothingHelper = GetClothingHelper(this)
-
         // 의류 추천받기 버튼 클릭
         getClothingSetButton.setOnClickListener {
             fetchAndDisplayClothingSet()
         }
-
         // 지역과 날씨 정보 버튼 클릭
         getRegionAndWeatherButton.setOnClickListener {
             fetchAndDisplayRegionAndWeather()
         }
     }
-
     // 의류 추천 데이터 가져오기 및 UI 반영
     private fun fetchAndDisplayClothingSet() {
         getClothingHelper.fetchClothingSet(userType = "hot") { clothingSet ->
@@ -60,7 +56,6 @@ class APITest2Activity : AppCompatActivity() {
             }
         }
     }
-
     // 지역 및 날씨 정보 가져오기 및 UI 반영
     private fun fetchAndDisplayRegionAndWeather() {
         locationToWeatherHelper.fetchRegionAndWeatherFromGPS { weatherData ->
@@ -73,7 +68,6 @@ class APITest2Activity : AppCompatActivity() {
             }
         }
     }
-
     // 의상 세트 텍스트 포맷팅
     private fun buildClothingSetDisplayText(clothingSet: ClothingSet): String {
         val builder = StringBuilder()
@@ -83,7 +77,6 @@ class APITest2Activity : AppCompatActivity() {
         }
         return builder.toString()
     }
-
     // 지역 및 날씨 정보 텍스트 포맷팅
     private fun buildRegionAndWeatherDisplayText(weatherData: RWResponse): String {
         val builder = StringBuilder()

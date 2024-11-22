@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
@@ -41,11 +40,11 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:src="@drawable/baseline_wb_sunny_24_30dp_with_outline"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"></ImageView>
+                            android:layout_gravity="center"
+                            android:src="@drawable/baseline_wb_sunny_24_30dp_with_outline"></ImageView>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -73,10 +72,10 @@
                                 android:id="@+id/menuButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@color/skyblue"
                                 android:layout_marginRight="10dp"
-                                android:minHeight="30dp"
+                                android:background="@color/skyblue"
                                 android:minWidth="30dp"
+                                android:minHeight="30dp"
                                 android:src="@drawable/baseline_menu_24_30dp"></ImageButton>
 
 
@@ -113,9 +112,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="30dp"
                         android:layout_marginTop="70dp"
+                        android:text="18°C"
                         android:textColor="#000000"
-                        android:textSize="80sp"
-                        android:text="18°C"></TextView>
+                        android:textSize="80sp"></TextView>
 
                     <Button
                         android:id="@+id/checkCurrentLocation"
@@ -131,16 +130,16 @@
                     </Button>
 
                     <ImageView
-                        android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
                         android:id="@+id/currentWeatherView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="30dp"
                         android:layout_marginTop="60dp"
+                        android:layout_marginRight="30dp"
+                        android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
+                        android:text="18°C"
                         android:textColor="#000000"
-                        android:textSize="80sp"
-                        android:text="18°C"></ImageView>
+                        android:textSize="80sp"></ImageView>
 
                 </RelativeLayout>
 
@@ -167,9 +166,9 @@
                                 android:layout_marginLeft="30dp"
                                 android:layout_marginTop="70dp"
                                 android:background="@color/lightSkyblue"
+                                android:text="0°C"
                                 android:textColor="#000000"
-                                android:textSize="80sp"
-                                android:text="0°C" />
+                                android:textSize="80sp" />
 
                             <TextView
                                 android:id="@+id/checkCurrentRegion_main"
@@ -181,8 +180,8 @@
                                 android:minWidth="100sp"
                                 android:minHeight="48sp"
                                 android:text="충청남도 천안시 서북구"
-                                android:textStyle="bold"
-                                android:textSize="22sp"/>
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
 
                             <!--
 
@@ -243,70 +242,27 @@
                     android:layout_marginTop="5dp"
                     android:text="이런 옷은 어떠세요?"
                     android:textColor="#000000"
-                    android:textSize="20sp"></TextView>
+                    android:textSize="20sp" />
 
                 <HorizontalScrollView
+                    android:id="@+id/clothesViewContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/clothesLinearLayout"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:id="@+id/clothesView1"
-                            android:layout_width="150dp"
-                            android:layout_height="180dp"
-                            android:layout_marginLeft="30dp"
-                            android:orientation="vertical"
-                            android:background="#aaaaaa">
-                            <TextView
-                                android:id="@+id/clothingName1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="옷 이름1"
-                                android:textSize="20sp"
-                                android:textAlignment="center"></TextView>
-                            <ImageButton
-                                android:id="@+id/clothingButton1"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:minWidth="150dp"
-                                android:minHeight="150dp"
-                                android:src="@drawable/t_shirt_100dp"></ImageButton>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/clothesView2"
-                            android:layout_width="150dp"
-                            android:layout_height="180dp"
-                            android:layout_marginLeft="30dp"
-                            android:orientation="vertical"
-                            android:background="#aaaaaa">
-
-                            <TextView
-                                android:id="@+id/clothingName2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="옷 이름1"
-                                android:textSize="20sp"
-                                android:textAlignment="center"></TextView>
-                            <ImageButton
-                                android:id="@+id/clothingButton2"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:minWidth="150dp"
-                                android:minHeight="150dp"
-                                android:src="@drawable/t_shirt_100dp"></ImageButton>
-                        </LinearLayout>
-
+                        <!-- 개별 의상 아이템 동적으로 추가 -->
                     </LinearLayout>
-
                 </HorizontalScrollView>
 
+
             </RelativeLayout>
+
 
         </LinearLayout>
 
@@ -326,24 +282,24 @@
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
-                    android:text="리뷰APi test"
-                    android:layout_marginHorizontal="12dp"></Button>
+                    android:layout_marginHorizontal="12dp"
+                    android:text="리뷰APi test"></Button>
 
                 <Button
                     android:id="@+id/navigationBarBtn2"
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_centerInParent="true"
-                    android:text="개별API test"
-                    android:layout_marginHorizontal="12dp"></Button>
+                    android:layout_marginHorizontal="12dp"
+                    android:text="개별API test"></Button>
 
                 <Button
                     android:id="@+id/navigationBarBtn3"
                     android:layout_width="80dp"
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
-                    android:text="내 계정"
-                    android:layout_marginHorizontal="12dp"></Button>
+                    android:layout_marginHorizontal="12dp"
+                    android:text="내 계정"></Button>
 
                 <!--
 
