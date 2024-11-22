@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.isRefreshing = false
     }
 
-    // LocationToWeatherHelper를 사용하여 날씨 정보 가져오고 UI 업데이트
+    // LocationToWeatherHelper를 사용하여 날씨 정보 가져오고 UI 업데이트!!
     private fun fetchWeatherAndUpdateUI() {
         locationToWeatherHelper.fetchRegionAndWeatherFromGPS { response ->
             if (response != null) {
