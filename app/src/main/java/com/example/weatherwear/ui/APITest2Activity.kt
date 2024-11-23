@@ -122,21 +122,22 @@ class APITest2Activity : AppCompatActivity() {
         val builder = StringBuilder()
         builder.append("지역: ${weatherData.regionName}\n")
         builder.append("날씨 정보:\n")
-        weatherData.weatherList.forEachIndexed { index, weather ->
-            builder.append("날씨 정보 ${index + 1}:\n")
-            builder.append(" - 날짜: ${weather.forecastDate}\n")
-            builder.append(" - 시간: ${weather.forecastTime}\n")
-            builder.append(" - 1시간 기온: ${weather.temp} °C\n")
-            builder.append(" - 최저 기온: ${weather.minTemp} °C\n")
-            builder.append(" - 최고 기온: ${weather.maxTemp} °C\n")
-            builder.append(" - 강수량: ${weather.rainAmount} mm\n")
-            builder.append(" - 강수 확률: ${weather.rainProbability} %\n")
-            builder.append(" - 강수 형태: ${weather.rainType}\n")
-            builder.append(" - 하늘 상태: ${weather.skyCondition}\n")
-            builder.append(" - 습도: ${weather.humid} %\n")
-            builder.append(" - 풍속: ${weather.windSpeed} m/s\n")
-            builder.append("\n")
-        }
+
+        // Weather 객체를 단일 처리
+        val weather = weatherData.weather
+        builder.append(" - 날짜: ${weather.forecastDate}\n")
+        builder.append(" - 시간: ${weather.forecastTime}\n")
+        builder.append(" - 1시간 기온: ${weather.temp} °C\n")
+        builder.append(" - 최저 기온: ${weather.minTemp} °C\n")
+        builder.append(" - 최고 기온: ${weather.maxTemp} °C\n")
+        builder.append(" - 강수량: ${weather.rainAmount} mm\n")
+        builder.append(" - 강수 확률: ${weather.rainProbability} %\n")
+        builder.append(" - 강수 형태: ${weather.rainType}\n")
+        builder.append(" - 하늘 상태: ${weather.skyCondition}\n")
+        builder.append(" - 습도: ${weather.humid} %\n")
+        builder.append(" - 풍속: ${weather.windSpeed} m/s\n")
+
         return builder.toString()
     }
+
 }

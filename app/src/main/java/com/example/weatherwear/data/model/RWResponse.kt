@@ -9,5 +9,5 @@ import com.example.weatherwear.data.model.Weather
 
 data class RWResponse(
     val regionName: String,            // 지역 이름
-    val weatherList: List<Weather>,    // 날씨 정보
+    val weather : Weather,    // 날씨 정보
 )

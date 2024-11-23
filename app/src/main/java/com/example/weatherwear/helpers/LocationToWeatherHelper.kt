@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.weatherwear.data.api.ApiService
@@ -56,17 +57,31 @@ class LocationToWeatherHelper(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.getRegionAndWeather(nx, ny)
-                withContext(Dispatchers.Main) {
-                    callback(response.body())
+                if (response.isSuccessful) {
+                    // 성공적으로 응답을 받은 경우
+                    val weatherData = response.body()
+                    Log.d("APITest", "Success! Response body: $weatherData")
+                    withContext(Dispatchers.Main) {
+                        callback(weatherData)
+                    }
+                } else {
+                    // 서버에서 에러 응답이 온 경우
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("APITest", "Error! HTTP code: ${response.code()}, error body: $errorBody")
+                    withContext(Dispatchers.Main) {
+                        callback(null)
+                    }
                 }
             } catch (e: Exception) {
+                // 네트워크 요청 중 예외 발생
+                Log.e("APITest", "Exception occurred during API call: ${e.message}")
                 withContext(Dispatchers.Main) {
-                    showToast("네트워크 오류 발생: ${e.message}")
                     callback(null)
                 }
             }
         }
     }
+
 
     /**
      * 위치 권한을 요청하는 함수

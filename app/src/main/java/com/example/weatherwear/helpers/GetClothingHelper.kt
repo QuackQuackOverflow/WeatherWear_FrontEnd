@@ -1,6 +1,7 @@
 package com.example.weatherwear.helpers
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.example.weatherwear.data.api.ApiService
 import com.example.weatherwear.data.model.ClothingSet
@@ -31,13 +32,30 @@ class GetClothingHelper(
                 val response = apiService.getClothingSet(userType)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        callback(response.body())
+                        val clothingSet = response.body()
+                        if (clothingSet != null) {
+                            Log.d(
+                                "FetchClothingSet",
+                                "Successfully fetched clothing set: $clothingSet"
+                            )
+                            callback(clothingSet)
+                        } else {
+                            Log.e("FetchClothingSet", "Response body is null.")
+                            showToast("Failed to fetch clothing set: Response body is null.")
+                            callback(null)
+                        }
                     } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.e(
+                            "FetchClothingSet",
+                            "Failed to fetch clothing set: HTTP ${response.code()}, error body: $errorBody"
+                        )
                         showToast("Failed to fetch clothing set: ${response.code()}")
                         callback(null)
                     }
                 }
             } catch (e: Exception) {
+                Log.e("FetchClothingSet", "Exception occurred during API call: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     showToast("Network error: ${e.message}")
                     callback(null)
@@ -45,6 +63,7 @@ class GetClothingHelper(
             }
         }
     }
+
 
     /**
      * SharedPreferences에 의류 세트 데이터를 저장
@@ -82,7 +101,11 @@ private fun <T> android.content.SharedPreferences.saveAsJson(key: String, data: 
 /**
  * SharedPreferences 확장 함수: JSON 형태 데이터를 객체로 변환
  */
-private fun <T> android.content.SharedPreferences.loadFromJson(key: String, clazz: Class<T>, gson: Gson): T? {
+private fun <T> android.content.SharedPreferences.loadFromJson(
+    key: String,
+    clazz: Class<T>,
+    gson: Gson
+): T? {
     val json = getString(key, null) ?: return null
     return gson.fromJson(json, clazz)
 }
