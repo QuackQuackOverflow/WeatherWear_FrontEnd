@@ -4,7 +4,6 @@ import RWCResponse
 import RWResponse
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
@@ -17,6 +16,10 @@ class APITest2Activity : AppCompatActivity() {
     // UI 요소
     private lateinit var resultTextView: TextView
     private lateinit var getRegionAndWeatherCustomButton: Button
+    /**
+     * 샘플 데이터를 테스트하기 위한 버튼
+     */
+    private lateinit var getSampleDataButton: Button
 
     // Helper 객체
     private lateinit var getRWCHelper: GetRWCHelper
@@ -28,6 +31,11 @@ class APITest2Activity : AppCompatActivity() {
         // UI 초기화
         resultTextView = findViewById(R.id.textViewResult)
         getRegionAndWeatherCustomButton = findViewById(R.id.buttonGetRegionAndWeather_Custom)
+
+        /**
+         * 샘플 데이터를 위한 버튼 초기화
+         */
+        getSampleDataButton = findViewById(R.id.buttonGetSampleData)
 
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -43,6 +51,15 @@ class APITest2Activity : AppCompatActivity() {
                     resultTextView.text = "RWC 데이터를 가져올 수 없습니다."
                 }
             }
+        }
+
+        /**
+         * 샘플 데이터를 출력하는 버튼
+         */
+        getSampleDataButton.setOnClickListener {
+            val sampleRWCResponse = SampleRWC().createSampleRWCResponse()
+            val resultText = buildRWCDisplayText(sampleRWCResponse)
+            resultTextView.text = resultText
         }
     }
 
