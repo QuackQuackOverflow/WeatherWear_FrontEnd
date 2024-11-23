@@ -3,6 +3,7 @@ package com.example.weatherwear.ui
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -152,21 +153,32 @@ class MainActivity : AppCompatActivity() {
 
     // LocationToWeatherHelper를 사용하여 날씨 정보 가져오고 UI 업데이트
     private fun fetchWeatherAndUpdateUI() {
-        locationToWeatherHelper.fetchRegionAndWeatherFromGPS { response ->
-            if (response != null) {
+        locationToWeatherHelper.fetchRegionAndWeatherFromGPS { responseList ->
+            if (!responseList.isNullOrEmpty()) {
+                // 첫 번째 응답 데이터를 사용하여 지역 및 날씨 정보 업데이트
+                val firstResponse = responseList.first()
+
                 // 지역 이름 업데이트
-                val regionName = response.regionName ?: "지역 정보 없음"
+                val regionName = firstResponse.regionName ?: "지역 정보 없음"
                 checkCurrentRegionMain.text = regionName
+
                 // 현재 온도 업데이트
-//                val currentTemp = response.weather?.temp?.let { "$it°C" } ?: "온도 정보 없음"
-//                currentTempViewMain.text = currentTemp
+                val currentTemp = firstResponse.weather?.temp?.let { "$it°C" } ?: "온도 정보 없음"
+                currentTempViewMain.text = currentTemp
+
+                // 추가적인 리스트 데이터가 있다면, 이를 로그로 출력하거나 필요에 따라 처리
+                if (responseList.size > 1) {
+                    Log.d("WeatherUpdate", "Additional regions found: ${responseList.drop(1)}")
+                }
             } else {
+                // 응답이 없을 경우 UI에 기본 메시지 표시
                 Toast.makeText(this, "날씨 정보를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
                 checkCurrentRegionMain.text = "정보 없음"
                 currentTempViewMain.text = "정보 없음"
             }
         }
     }
+
 
     // GetClothingHelper를 사용하여 의류 추천 리스트 가져오고 UI 업데이트
     private fun fetchClothingSetAndUpdateUI() {

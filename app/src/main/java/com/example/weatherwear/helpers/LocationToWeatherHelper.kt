@@ -32,9 +32,9 @@ class LocationToWeatherHelper(
     }
 
     /**
-     * GPS를 통해 현재 NX, NY 좌표를 가져온 뒤 RWResponse를 반환
+     * GPS를 통해 현재 NX, NY 좌표를 가져온 뒤 RWResponse 리스트를 반환
      */
-    fun fetchRegionAndWeatherFromGPS(callback: (RWResponse?) -> Unit) {
+    fun fetchRegionAndWeatherFromGPS(callback: (List<RWResponse>?) -> Unit) {
         if (!checkLocationPermission()) {
             requestLocationPermission()
             return
@@ -51,18 +51,18 @@ class LocationToWeatherHelper(
     }
 
     /**
-     * NX, NY 좌표를 사용해 백엔드로부터 RWResponse를 가져오는 함수
+     * NX, NY 좌표를 사용해 백엔드로부터 RWResponse 리스트를 가져오는 함수
      */
-    fun fetchRegionAndWeather(nx: Int, ny: Int, callback: (RWResponse?) -> Unit) {
+    fun fetchRegionAndWeather(nx: Int, ny: Int, callback: (List<RWResponse>?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.getRegionAndWeather(nx, ny)
                 if (response.isSuccessful) {
                     // 성공적으로 응답을 받은 경우
-                    val weatherData = response.body()
-                    Log.d("APITest", "Success! Response body: $weatherData")
+                    val weatherDataList = response.body()
+                    Log.d("APITest", "Success! Response body: $weatherDataList")
                     withContext(Dispatchers.Main) {
-                        callback(weatherData)
+                        callback(weatherDataList)
                     }
                 } else {
                     // 서버에서 에러 응답이 온 경우
@@ -81,7 +81,6 @@ class LocationToWeatherHelper(
             }
         }
     }
-
 
     /**
      * 위치 권한을 요청하는 함수
@@ -115,20 +114,20 @@ class LocationToWeatherHelper(
     }
 
     /**
-     * SharedPreferences에 RWResponse 데이터를 저장
+     * SharedPreferences에 RWResponse 리스트 데이터를 저장
      */
-    fun saveRegionAndWeatherToPreferences(weatherData: RWResponse) {
+    fun saveRegionAndWeatherToPreferences(weatherDataList: List<RWResponse>) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        sharedPreferences.saveAsJson(PREF_WEATHER_KEY, weatherData, gson)
+        sharedPreferences.saveAsJson(PREF_WEATHER_KEY, weatherDataList, gson)
         showToast("날씨 정보가 SharedPreferences에 저장되었습니다.")
     }
 
     /**
-     * SharedPreferences에서 RWResponse 데이터를 불러오기
+     * SharedPreferences에서 RWResponse 리스트 데이터를 불러오기
      */
-    fun loadRegionAndWeatherFromPreferences(): RWResponse? {
+    fun loadRegionAndWeatherFromPreferences(): List<RWResponse>? {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.loadFromJson(PREF_WEATHER_KEY, RWResponse::class.java, gson)
+        return sharedPreferences.loadFromJson(PREF_WEATHER_KEY, Array<RWResponse>::class.java, gson)?.toList()
     }
 
     /**

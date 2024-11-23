@@ -43,7 +43,7 @@ interface ApiService {
     suspend fun getRegionAndWeather
                 (@Query("nx") nx: Int,
                  @Query("ny") ny: Int
-    ): Response<RWResponse>
+    ): Response<List<RWResponse>>
 
 
 
