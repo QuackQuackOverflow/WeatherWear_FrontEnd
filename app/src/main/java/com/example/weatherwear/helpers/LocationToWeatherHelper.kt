@@ -1,5 +1,6 @@
 package com.example.weatherwear.helpers
 
+import RWCResponse
 import RWResponse
 import android.Manifest
 import android.content.Context
@@ -81,6 +82,33 @@ class LocationToWeatherHelper(
             }
         }
     }
+
+    fun fetchRWC(nx: Int, ny: Int, userType: String, callback: (RWCResponse?) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiService.getRWC(nx, ny, userType)
+                if (response.isSuccessful) {
+                    val rwcResponse = response.body()
+                    Log.d("FetchRWC", "Successfully fetched RWCResponse: $rwcResponse")
+                    withContext(Dispatchers.Main) {
+                        callback(rwcResponse)
+                    }
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("FetchRWC", "Failed to fetch RWCResponse: ${response.code()}, $errorBody")
+                    withContext(Dispatchers.Main) {
+                        callback(null)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("FetchRWC", "Exception occurred during fetchRWC: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    callback(null)
+                }
+            }
+        }
+    }
+
 
     /**
      * 위치 권한을 요청하는 함수

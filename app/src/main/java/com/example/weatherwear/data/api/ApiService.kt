@@ -36,7 +36,8 @@ interface ApiService {
     @GET("api/weather")
     suspend fun getRWC
                 (@Query("nx") nx: Int,
-                 @Query("ny") ny: Int
+                 @Query("ny") ny: Int,
+                 @Query("userType") userType: String
     ): Response<RWCResponse>
 
     @GET("api/weather")
@@ -44,8 +45,6 @@ interface ApiService {
                 (@Query("nx") nx: Int,
                  @Query("ny") ny: Int
     ): Response<List<RWResponse>>
-
-
 
     /**
      * Review 관련 API
