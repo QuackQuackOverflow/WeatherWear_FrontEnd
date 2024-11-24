@@ -1,13 +1,13 @@
 package com.example.apitest
 
 import RWCResponse
-import RWResponse
+import RegionAndWeather
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
-import com.example.weatherwear.data.samples.SampleRWC
+import com.example.weatherwear.data.sample.SampleRWC
 import com.example.weatherwear.helpers.GetRWCHelper
 import com.google.android.gms.location.LocationServices
 
@@ -75,8 +75,8 @@ class APITest2Activity : AppCompatActivity() {
         return builder.toString()
     }
 
-    // 지역 및 날씨 정보를 출력하는 함수 (List<RWResponse>에 맞게 수정)
-    private fun formatWeatherInfoList(regionAndWeatherList: List<RWResponse>): String {
+    // 지역 및 날씨 정보를 출력하는 함수
+    private fun formatWeatherInfoList(regionAndWeatherList: List<RegionAndWeather>): String {
         val builder = StringBuilder()
         regionAndWeatherList.forEachIndexed { index, regionAndWeather ->
             builder.append("지역 ${index + 1}:\n")
@@ -86,8 +86,8 @@ class APITest2Activity : AppCompatActivity() {
         return builder.toString()
     }
 
-    // 단일 RWResponse 날씨 정보를 출력하는 함수
-    private fun formatWeatherInfo(regionAndWeather: RWResponse): String {
+    // 단일 RegionAndWeather 날씨 정보를 출력하는 함수
+    private fun formatWeatherInfo(regionAndWeather: RegionAndWeather): String {
         val builder = StringBuilder()
         builder.append("지역: ${regionAndWeather.regionName}\n")
         val weather = regionAndWeather.weather

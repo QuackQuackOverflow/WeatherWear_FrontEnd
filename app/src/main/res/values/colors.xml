@@ -6,6 +6,7 @@
     <color name="sunyellow">#FFFF00</color>
     <color name="lightSkyblue">#C8EAFF</color>
     <color name="deppSkyblue">#157DB7</color>
+    <color name="hourlyTempViewSkyblue">#9EDDFF</color>
     <color name="lightGray">#C6C6C6</color>
     <color name="superLightGray">#E0E0E0</color>
     <color name="hotRed">#FF7A73</color>

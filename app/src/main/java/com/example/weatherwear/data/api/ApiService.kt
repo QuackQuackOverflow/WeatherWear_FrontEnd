@@ -1,10 +1,8 @@
 package com.example.weatherwear.data.api
 
 import RWCResponse
-import RWResponse
-import android.graphics.Region
+import RegionAndWeather
 import com.example.weatherwear.data.model.*
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -44,7 +42,7 @@ interface ApiService {
     suspend fun getRegionAndWeather
                 (@Query("nx") nx: Int,
                  @Query("ny") ny: Int
-    ): Response<List<RWResponse>>
+    ): Response<List<RegionAndWeather>>
 
     /**
      * Review 관련 API

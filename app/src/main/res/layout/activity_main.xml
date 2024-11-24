@@ -44,7 +44,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
-                            android:src="@drawable/baseline_wb_sunny_24_30dp_with_outline"></ImageView>
+                            android:src="@drawable/baseline_wb_sunny_30dp_outline"></ImageView>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                                 android:background="@color/skyblue"
                                 android:minWidth="30dp"
                                 android:minHeight="30dp"
-                                android:src="@drawable/baseline_menu_24_30dp"></ImageButton>
+                                android:src="@drawable/baseline_menu_30dp"></ImageButton>
 
 
                         </LinearLayout>
@@ -92,12 +92,12 @@
         <!--날씨화면 표시-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="350dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="match_parent"
                 android:background="@color/lightSkyblue">
 
                 <RelativeLayout
@@ -117,15 +117,15 @@
                         android:textSize="80sp"></TextView>
 
                     <Button
-                        android:id="@+id/checkCurrentLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/toDetailedWeatherActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="10dp"
                         android:background="#00ff0000"
                         android:minWidth="100sp"
                         android:minHeight="48sp"
-                        android:text="현재 위치 확인">
+                        android:text="">
 
                     </Button>
 
@@ -136,7 +136,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="60dp"
                         android:layout_marginRight="30dp"
-                        android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
+                        android:src="@drawable/baseline_wb_sunny_100dp_outline"
                         android:text="18°C"
                         android:textColor="#000000"
                         android:textSize="80sp"></ImageView>
@@ -145,20 +145,23 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="match_parent"
                         android:background="@color/lightSkyblue">
+
+                        <!-- 시간대별 날씨 스크롤 뷰 -->
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true">
+                            android:layout_alignParentTop="true"
+                            android:layout_marginTop="0dp">
 
-                            <Button
+                            <TextView
                                 android:id="@+id/currentTempView_main"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -183,10 +186,8 @@
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
 
-                            <!--
-
                             <ImageView
-                                android:src="@drawable/baseline_wb_sunny_24_100dp_with_outline"
+                                android:src="@drawable/baseline_wb_sunny_100dp_outline"
                                 android:id="@+id/currentWeatherView_main"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -196,11 +197,9 @@
                                 android:textColor="#000000"
                                 android:textSize="80sp"
                                 android:text="18°C" />
-                                -->
 
                         </RelativeLayout>
 
-                        <!-- 시간대별 날씨 스크롤 뷰 -->
                         <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -226,7 +225,7 @@
         <!--옷 추천 레이아웃 전체적으로 감싸기-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="275dp"
+            android:layout_height="240dp"
             android:background="@color/skyblue"
             android:orientation="vertical">
 

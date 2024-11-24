@@ -1,7 +1,7 @@
 package com.example.weatherwear.helpers
 
 import RWCResponse
-import RWResponse
+import RegionAndWeather
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
@@ -35,7 +35,7 @@ class LocationToWeatherHelper(
     /**
      * GPS를 통해 현재 NX, NY 좌표를 가져온 뒤 RWResponse 리스트를 반환
      */
-    fun fetchRegionAndWeatherFromGPS(callback: (List<RWResponse>?) -> Unit) {
+    fun fetchRegionAndWeatherFromGPS(callback: (List<RegionAndWeather>?) -> Unit) {
         if (!checkLocationPermission()) {
             requestLocationPermission()
             return
@@ -54,7 +54,7 @@ class LocationToWeatherHelper(
     /**
      * NX, NY 좌표를 사용해 백엔드로부터 RWResponse 리스트를 가져오는 함수
      */
-    fun fetchRegionAndWeather(nx: Int, ny: Int, callback: (List<RWResponse>?) -> Unit) {
+    fun fetchRegionAndWeather(nx: Int, ny: Int, callback: (List<RegionAndWeather>?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.getRegionAndWeather(nx, ny)
@@ -144,7 +144,7 @@ class LocationToWeatherHelper(
     /**
      * SharedPreferences에 RWResponse 리스트 데이터를 저장
      */
-    fun saveRegionAndWeatherToPreferences(weatherDataList: List<RWResponse>) {
+    fun saveRegionAndWeatherToPreferences(weatherDataList: List<RegionAndWeather>) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         sharedPreferences.saveAsJson(PREF_WEATHER_KEY, weatherDataList, gson)
         showToast("날씨 정보가 SharedPreferences에 저장되었습니다.")
@@ -153,9 +153,9 @@ class LocationToWeatherHelper(
     /**
      * SharedPreferences에서 RWResponse 리스트 데이터를 불러오기
      */
-    fun loadRegionAndWeatherFromPreferences(): List<RWResponse>? {
+    fun loadRegionAndWeatherFromPreferences(): List<RegionAndWeather>? {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.loadFromJson(PREF_WEATHER_KEY, Array<RWResponse>::class.java, gson)?.toList()
+        return sharedPreferences.loadFromJson(PREF_WEATHER_KEY, Array<RegionAndWeather>::class.java, gson)?.toList()
     }
 
     /**

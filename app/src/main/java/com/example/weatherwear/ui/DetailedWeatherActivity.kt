@@ -26,7 +26,7 @@ class DetailedWeatherActivity : AppCompatActivity() {
         val hourlyWeatherContainer = findViewById<LinearLayout>(R.id.hourlyWeatherContainer)
 
         // 기본 아이콘 및 기온 설정
-        val defaultIcon = R.drawable.baseline_sunny_24_40dp_with_outline
+        val defaultIcon = R.drawable.baseline_sunny_40dp_outline
         val defaultTemperature = "0°C"
 
         // 0시부터 23시까지 반복하여 레이아웃을 동적으로 생성

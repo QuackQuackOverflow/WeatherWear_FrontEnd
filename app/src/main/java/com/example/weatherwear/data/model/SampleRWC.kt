@@ -1,6 +1,6 @@
 package com.example.apitest
 
-import RWResponse
+import RegionAndWeather
 import RWCResponse
 import com.example.weatherwear.data.model.Clothing
 import com.example.weatherwear.data.model.ClothingSet
@@ -40,12 +40,12 @@ class SampleRWC {
         )
 
         // 샘플 지역 및 날씨 정보 생성
-        val sampleRWResponse1 = RWResponse(
+        val sampleRegionAndWeather1 = RegionAndWeather(
             regionName = "서울",
             weather = sampleWeather1
         )
 
-        val sampleRWResponse2 = RWResponse(
+        val sampleRegionAndWeather2 = RegionAndWeather(
             regionName = "부산",
             weather = sampleWeather2
         )
@@ -63,7 +63,7 @@ class SampleRWC {
 
         // 최종 RWCResponse 생성
         return RWCResponse(
-            regionAndWeather = listOf(sampleRWResponse1, sampleRWResponse2),
+            regionAndWeather = listOf(sampleRegionAndWeather1, sampleRegionAndWeather2),
             clothingSet = sampleClothingSet
         )
     }
