@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,320 +6,202 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/main"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.MainActivity">
+        android:layout_height="match_parent">
 
-        <!--상단바 디자인-->
-
-        <LinearLayout
+        <!-- 상단바 -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/skyblue"
+            android:layout_alignParentTop="true">
 
-            <!--툴바 본체-->
-            <Toolbar
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/skyblue">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <!--좌, 우에 떨어트려서 배치하기 위해 Relative Layout-->
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <!--태양 아이콘, 앱 이름 좌측에 배치-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:baselineAligned="true"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_gravity="center"
-                            android:src="@drawable/baseline_wb_sunny_30dp_outline"></ImageView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_marginHorizontal="27dp"
-                            android:text="웨더웨어"
-                            android:textColor="#181818"
-                            android:textSize="20sp"></TextView>
-
-                    </LinearLayout>
-
-                    <!--메뉴 버튼,,, 우측에 배치-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <ImageButton
-                                android:id="@+id/menuButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
-                                android:background="@color/skyblue"
-                                android:minWidth="30dp"
-                                android:minHeight="30dp"
-                                android:src="@drawable/baseline_menu_30dp"></ImageButton>
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-            </Toolbar>
-
-        </LinearLayout>
-
-        <!--날씨화면 표시-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/lightSkyblue">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true">
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_wb_sunny_30dp_outline" />
 
                     <TextView
-                        android:id="@+id/currentTempView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="70dp"
-                        android:text="18°C"
-                        android:textColor="#000000"
-                        android:textSize="80sp"></TextView>
+                        android:layout_marginStart="10dp"
+                        android:text="웨더웨어"
+                        android:textColor="#181818"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/menuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/skyblue"
+                    android:src="@drawable/baseline_menu_30dp" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <!-- 콘텐츠 스크롤 영역 -->
+        <ScrollView
+            android:id="@+id/contentScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:layout_above="@+id/navigationBar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- 날씨 정보 -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:background="@color/lightSkyblue">
 
                     <Button
                         android:id="@+id/toDetailedWeatherActivity"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="10dp"
                         android:background="#00ff0000"
-                        android:minWidth="100sp"
-                        android:minHeight="48sp"
-                        android:text="">
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal" />
 
-                    </Button>
-
-                    <ImageView
-                        android:id="@+id/currentWeatherView"
+                    <TextView
+                        android:id="@+id/currentTempView_main"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="60dp"
-                        android:layout_marginRight="30dp"
-                        android:src="@drawable/baseline_wb_sunny_100dp_outline"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="70dp"
                         android:text="18°C"
                         android:textColor="#000000"
-                        android:textSize="80sp"></ImageView>
+                        android:textSize="80sp" />
 
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/lightSkyblue">
-
-                        <!-- 시간대별 날씨 스크롤 뷰 -->
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginTop="0dp">
-
-                            <TextView
-                                android:id="@+id/currentTempView_main"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_marginLeft="30dp"
-                                android:layout_marginTop="70dp"
-                                android:background="@color/lightSkyblue"
-                                android:text="0°C"
-                                android:textColor="#000000"
-                                android:textSize="80sp" />
-
-                            <TextView
-                                android:id="@+id/checkCurrentRegion_main"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@color/lightSkyblue"
-                                android:minWidth="100sp"
-                                android:minHeight="48sp"
-                                android:text="충청남도 천안시 서북구"
-                                android:textSize="22sp"
-                                android:textStyle="bold" />
-
-                            <ImageView
-                                android:src="@drawable/baseline_wb_sunny_100dp_outline"
-                                android:id="@+id/currentWeatherView_main"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="30dp"
-                                android:layout_marginTop="60dp"
-                                android:textColor="#000000"
-                                android:textSize="80sp"
-                                android:text="18°C" />
-
-                        </RelativeLayout>
-
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginHorizontal="15dp"
-                            android:layout_marginBottom="15dp">
-
-                            <LinearLayout
-                                android:id="@+id/hourlyWeatherScrollView_main"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-                                <!-- 시간대별 날씨 정보가 동적으로 추가됩니다 -->
-                            </LinearLayout>
-                        </HorizontalScrollView>
-                    </RelativeLayout>
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <!--옷 추천 레이아웃 전체적으로 감싸기-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:background="@color/skyblue"
-            android:orientation="vertical">
-
-            <!--옷 추천 레이아웃-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="이런 옷은 어떠세요?"
-                    android:textColor="#000000"
-                    android:textSize="20sp" />
-
-                <HorizontalScrollView
-                    android:id="@+id/clothesViewContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true">
-
-                    <LinearLayout
-                        android:id="@+id/clothesLinearLayout"
+                    <TextView
+                        android:id="@+id/checkCurrentRegion_main"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="20dp"
+                        android:text="충청남도 천안시 서북구"
+                        android:textColor="#000000"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
 
-                        <!-- 개별 의상 아이템 동적으로 추가 -->
-                    </LinearLayout>
+                    <ImageView
+                        android:id="@+id/currentWeatherView_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginTop="70dp"
+                        android:src="@drawable/baseline_wb_sunny_100dp_outline" />
+                </RelativeLayout>
+
+                <!-- "시간대별 날씨" -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/lightSkyblue">
+                    <TextView
+                        android:id="@+id/hourlyWeatherTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="시간대별 날씨"
+                        android:background="@color/lightSkyblue"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <!-- 시간대별 날씨 -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:background="@color/lightSkyblue">
+
+                    <LinearLayout
+                        android:id="@+id/hourlyWeatherScrollView_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
                 </HorizontalScrollView>
 
+                <!-- 옷 추천 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/skyblue"
+                    android:padding="10dp">
 
-            </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이런 옷은 어떠세요?"
+                        android:textColor="#000000"
+                        android:textSize="20sp" />
 
+                    <HorizontalScrollView
+                        android:id="@+id/clothesViewContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="10dp">
 
-        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/clothesLinearLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
-        <Toolbar
+        <!-- 하단 네비게이션 -->
+        <LinearLayout
+            android:id="@+id/navigationBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lightSkyblue">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/lightSkyblue"
+            android:padding="10dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginRight="20dp"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/navigationBarBtn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="리뷰API" />
 
-                <Button
-                    android:id="@+id/navigationBarBtn1"
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginHorizontal="12dp"
-                    android:text="리뷰APi test"></Button>
+            <Button
+                android:id="@+id/navigationBarBtn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="개별API" />
 
-                <Button
-                    android:id="@+id/navigationBarBtn2"
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginHorizontal="12dp"
-                    android:text="개별API test"></Button>
-
-                <Button
-                    android:id="@+id/navigationBarBtn3"
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginHorizontal="12dp"
-                    android:text="내 계정"></Button>
-
-                <!--
-
-                <ImageButton
-                    android:id="@+id/navigationBarBtn4"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="27dp"></ImageButton>
-
-                <ImageButton
-                    android:id="@+id/navigationBarBtn5"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="27dp"></ImageButton>
-
-                    -->
-
-            </RelativeLayout>
-
-        </Toolbar>
-
-    </LinearLayout>
+            <Button
+                android:id="@+id/navigationBarBtn3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="내 계정" />
+        </LinearLayout>
+    </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
