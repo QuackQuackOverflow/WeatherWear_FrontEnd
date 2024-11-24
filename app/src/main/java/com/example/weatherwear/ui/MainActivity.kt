@@ -74,6 +74,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent) // SettingsActivity 시작
         }
 
+//        val intent = Intent(this, DetailedWeatherActivity::class.java)
+//        intent.putExtra("weatherList", regionAndWeatherList as ArrayList)
+//        startActivity(intent)
+
         // DetailedWeatherActivity로 이동
         val toDetailedWeatherActivity: Button = findViewById(R.id.toDetailedWeatherActivity)
         toDetailedWeatherActivity.setOnClickListener {

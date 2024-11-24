@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="임의 nx, ny로 지역 및 날씨 데이터 요청" />
+        android:text="임의 nx, ny로 RWC 데이터 요청" />
 
     <Button
         android:id="@+id/buttonGetSampleData"

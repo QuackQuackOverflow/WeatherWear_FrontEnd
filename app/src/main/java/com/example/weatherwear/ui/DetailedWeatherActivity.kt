@@ -1,14 +1,13 @@
-// DetailedWeatherActivity.kt
-
 package com.example.weatherwear.ui
 
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
+import com.example.weatherwear.data.model.RegionAndWeather
+import com.example.weatherwear.helpers.DetailedWeatherHelper
 
 class DetailedWeatherActivity : AppCompatActivity() {
 
@@ -16,60 +15,17 @@ class DetailedWeatherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detailed_weather)
 
-        // 시간별 날씨 레이아웃을 생성하는 함수 호출
-        generateHourlyWeatherLayout()
-    }
+        val weatherList = intent.getSerializableExtra("weatherList") as? List<RegionAndWeather>
 
-    // 시간별 날씨 레이아웃을 동적으로 생성하는 함수
-    private fun generateHourlyWeatherLayout() {
-        // LinearLayout 참조
-        val hourlyWeatherContainer = findViewById<LinearLayout>(R.id.hourlyWeatherContainer)
+        val regionNameTextView: TextView = findViewById(R.id.regionName)
+        val scrollViewContent: LinearLayout = findViewById(R.id.scrollViewContent)
 
-        // 기본 아이콘 및 기온 설정
-        val defaultIcon = R.drawable.baseline_sunny_40dp_outline
-        val defaultTemperature = "0°C"
+        if (weatherList != null) {
+            // 첫 RegionAndWeather 객체의 지역명 설정
+            regionNameTextView.text = "${weatherList.first().regionName}의 상세 예보"
 
-        // 0시부터 23시까지 반복하여 레이아웃을 동적으로 생성
-        for (hour in 0..23) {
-            val hourLayout = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(10, 0, 10, 0)
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-            }
-
-            // 시간 텍스트뷰
-            val hourText = TextView(this).apply {
-                text = "${hour}시"
-                textSize = 20f
-                gravity = Gravity.CENTER
-            }
-
-            // 날씨 아이콘 이미지뷰
-            val weatherIcon = ImageView(this).apply {
-                setImageResource(defaultIcon)
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-            }
-
-            // 온도 텍스트뷰
-            val tempText = TextView(this).apply {
-                text = defaultTemperature
-                textSize = 20f
-                gravity = Gravity.CENTER
-            }
-
-            // hourLayout에 추가
-            hourLayout.addView(hourText)
-            hourLayout.addView(weatherIcon)
-            hourLayout.addView(tempText)
-
-            // hourlyWeatherContainer에 hourLayout 추가
-            hourlyWeatherContainer.addView(hourLayout)
+            // Helper를 통해 상세 날씨 정보 UI 동적 추가
+            DetailedWeatherHelper.addWeatherDetails(this, scrollViewContent, weatherList)
         }
     }
 }
