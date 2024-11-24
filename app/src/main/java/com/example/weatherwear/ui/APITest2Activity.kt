@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
-import com.example.weatherwear.data.model.ClothingSet
+import com.example.weatherwear.data.samples.SampleRWC
 import com.example.weatherwear.helpers.GetRWCHelper
 import com.google.android.gms.location.LocationServices
 
@@ -16,13 +16,14 @@ class APITest2Activity : AppCompatActivity() {
     // UI 요소
     private lateinit var resultTextView: TextView
     private lateinit var getRegionAndWeatherCustomButton: Button
+
+    // Helper 객체
+    private lateinit var getRWCHelper: GetRWCHelper
+
     /**
      * 샘플 데이터를 테스트하기 위한 버튼
      */
     private lateinit var getSampleDataButton: Button
-
-    // Helper 객체
-    private lateinit var getRWCHelper: GetRWCHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +42,7 @@ class APITest2Activity : AppCompatActivity() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getRWCHelper = GetRWCHelper(this, fusedLocationClient)
 
-        // 사용자 입력 nx, ny로 지역 및 날씨 정보 버튼 클릭
+        // 사용자 입력 GPS 기반 지역 및 날씨 정보 요청
         getRegionAndWeatherCustomButton.setOnClickListener {
             getRWCHelper.fetchRWCFromGPS { rwcResponse ->
                 if (rwcResponse != null) {
@@ -57,7 +58,7 @@ class APITest2Activity : AppCompatActivity() {
          * 샘플 데이터를 출력하는 버튼
          */
         getSampleDataButton.setOnClickListener {
-            val sampleRWCResponse = SampleRWC().createSampleRWCResponse()
+            val sampleRWCResponse = SampleRWC.createSampleRWCResponse()
             val resultText = buildRWCDisplayText(sampleRWCResponse)
             resultTextView.text = resultText
         }
@@ -67,7 +68,7 @@ class APITest2Activity : AppCompatActivity() {
     private fun buildRWCDisplayText(rwcResponse: RWCResponse): String {
         val builder = StringBuilder()
         builder.append("=== 지역 및 날씨 정보 ===\n")
-        builder.append(formatWeatherInfoList(rwcResponse.regionAndWeather)) // List에 맞게 수정
+        builder.append(formatWeatherInfoList(rwcResponse.regionAndWeather))
         builder.append("\n")
         builder.append("=== 추천 의상 정보 ===\n")
         builder.append(formatClothingInfo(rwcResponse.clothingSet))
@@ -104,7 +105,7 @@ class APITest2Activity : AppCompatActivity() {
     }
 
     // 추천 의상 정보를 출력하는 함수
-    private fun formatClothingInfo(clothingSet: ClothingSet): String {
+    private fun formatClothingInfo(clothingSet: com.example.weatherwear.data.model.ClothingSet): String {
         val builder = StringBuilder()
         builder.append("의상 Set ID: ${clothingSet.id}\n")
         clothingSet.recommendedClothings.forEachIndexed { index, clothing ->

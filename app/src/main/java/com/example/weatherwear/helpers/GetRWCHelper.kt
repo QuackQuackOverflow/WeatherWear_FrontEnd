@@ -30,40 +30,53 @@ class GetRWCHelper(
     }
 
     /**
-     * GPS를 통해 현재 NX, NY 값을 가져온 뒤 userType과 함께 getRWC를 호출
+     * GPS를 통해 NX, NY 값을 가져온 뒤 userType과 함께 백엔드에 요청
      */
     fun fetchRWCFromGPS(callback: (RWCResponse?) -> Unit) {
-        if (!checkLocationPermission()) {
+        // 위치 권한 확인
+        if (!hasLocationPermission()) {
             requestLocationPermission()
             return
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            location?.let {
-                val (nx, ny) = convertToGrid(it.latitude, it.longitude)
-                val userType = loadUserTypeFromPreferences()
-                if (userType != null) {
-                    fetchRWC(nx, ny, userType, callback)
-                } else {
-                    showToast("사용자 유형(userType)을 불러올 수 없습니다.")
+
+        try {
+            // 위치 정보 가져오기
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                location?.let {
+                    val (nx, ny) = convertToGrid(it.latitude, it.longitude)
+                    fetchRWCWithParams(nx, ny, callback)
+                } ?: run {
+                    showToast("위치 정보를 불러올 수 없습니다")
                     callback(null)
                 }
-            } ?: run {
-                showToast("위치 정보를 불러올 수 없습니다")
+            }.addOnFailureListener {
+                // 실패 핸들링
+                showToast("위치 정보를 가져오는 데 실패했습니다: ${it.message}")
                 callback(null)
             }
+        } catch (e: SecurityException) {
+            // 위치 권한과 관련된 보안 예외 처리
+            showToast("위치 권한이 없어 위치 정보를 가져올 수 없습니다.")
+            callback(null)
         }
     }
 
     /**
-     * NX, NY 좌표와 userType을 사용해 백엔드로부터 RWCResponse를 가져오는 함수
+     * NX, NY 값과 userType을 사용하여 RWC 데이터를 가져오는 함수
      */
-    fun fetchRWC(nx: Int, ny: Int, userType: String, callback: (RWCResponse?) -> Unit) {
+    fun fetchRWCWithParams(nx: Int, ny: Int, callback: (RWCResponse?) -> Unit) {
+        val userType = loadUserTypeFromPreferences()
+        if (userType == null) {
+            showToast("사용자 유형(userType)을 불러올 수 없습니다.")
+            callback(null)
+            return
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.getRWC(nx, ny, userType)
                 if (response.isSuccessful) {
                     val rwcResponse = response.body()
-                    Log.d("GetRWCHelper", "Success! Response body: $rwcResponse")
                     withContext(Dispatchers.Main) {
                         callback(rwcResponse)
                     }
@@ -75,7 +88,7 @@ class GetRWCHelper(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("GetRWCHelper", "Exception occurred during API call: ${e.message}")
+                Log.e("GetRWCHelper", "Exception occurred during API call: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     callback(null)
                 }
@@ -89,11 +102,9 @@ class GetRWCHelper(
     private fun loadUserTypeFromPreferences(): String? {
         val sharedPreferences = context.getSharedPreferences(PREF_LOGIN_KEY, Context.MODE_PRIVATE)
         val memberJson = sharedPreferences.getString(PREF_MEMBER_KEY, null)
-        return if (memberJson != null) {
-            val member = com.google.gson.Gson().fromJson(memberJson, com.example.weatherwear.data.model.Member::class.java)
+        return memberJson?.let {
+            val member = com.google.gson.Gson().fromJson(it, com.example.weatherwear.data.model.Member::class.java)
             member.userType
-        } else {
-            null
         }
     }
 
@@ -101,6 +112,7 @@ class GetRWCHelper(
      * 위도와 경도를 NX, NY 격자 좌표로 변환하는 함수
      */
     private fun convertToGrid(lat: Double, lon: Double): Pair<Int, Int> {
+        // 기존 좌표 변환 로직 유지
         val RE = 6371.00877
         val GRID = 5.0
         val SLAT1 = 30.0
@@ -137,22 +149,9 @@ class GetRWCHelper(
     }
 
     /**
-     * 위치 권한을 요청하는 함수
+     * 위치 권한 확인
      */
-    private fun requestLocationPermission() {
-        if (!checkLocationPermission()) {
-            ActivityCompat.requestPermissions(
-                context as androidx.appcompat.app.AppCompatActivity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_LOCATION_PERMISSION
-            )
-        }
-    }
-
-    /**
-     * 위치 권한을 확인하는 함수
-     */
-    private fun checkLocationPermission(): Boolean {
+    private fun hasLocationPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -160,7 +159,18 @@ class GetRWCHelper(
     }
 
     /**
-     * Toast 메시지를 간단히 보여주는 함수
+     * 위치 권한 요청
+     */
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            context as androidx.appcompat.app.AppCompatActivity,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            REQUEST_LOCATION_PERMISSION
+        )
+    }
+
+    /**
+     * Toast 메시지를 간단히 출력
      */
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
