@@ -1,7 +1,5 @@
 package com.example.weatherwear.data.api
 
-import RWCResponse
-import RegionAndWeather
 import com.example.weatherwear.data.model.*
 import retrofit2.Response
 import retrofit2.http.Body

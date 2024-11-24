@@ -1,7 +1,5 @@
 package com.example.weatherwear.data.model
 
-import android.provider.ContactsContract.CommonDataKinds.Email
-
 data class User(
     //val id : Int,
     val memberEmail: String,

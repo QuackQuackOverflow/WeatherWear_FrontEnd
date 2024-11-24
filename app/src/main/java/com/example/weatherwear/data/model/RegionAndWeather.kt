@@ -1,3 +1,5 @@
+package com.example.weatherwear.data.model
+
 import com.example.weatherwear.data.model.Weather
 
 //data class RWResponse(

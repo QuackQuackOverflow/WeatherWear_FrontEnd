@@ -1,7 +1,5 @@
 package com.example.weatherwear.helpers
 
-import RWCResponse
-import RegionAndWeather
 import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,6 +9,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.weatherwear.data.api.ApiService
+import com.example.weatherwear.data.model.RWCResponse
+import com.example.weatherwear.data.model.RegionAndWeather
 import com.example.weatherwear.util.RetrofitInstance
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson

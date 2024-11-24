@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.weatherwear.data.api.ApiService
-import com.example.weatherwear.data.model.ClothingSet
+import com.example.weatherwear.data.model.*
 import com.example.weatherwear.util.RetrofitInstance
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope

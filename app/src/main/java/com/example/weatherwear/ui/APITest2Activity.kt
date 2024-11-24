@@ -1,12 +1,11 @@
 package com.example.apitest
 
-import RWCResponse
-import RegionAndWeather
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
+import com.example.weatherwear.data.model.*
 import com.example.weatherwear.data.sample.SampleRWC
 import com.example.weatherwear.helpers.GetRWCHelper
 import com.google.android.gms.location.LocationServices

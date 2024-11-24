@@ -1,6 +1,5 @@
 package com.example.apitest
 
-import RWCResponse
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
