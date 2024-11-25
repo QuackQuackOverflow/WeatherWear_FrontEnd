@@ -84,7 +84,7 @@ class APITest2Activity : AppCompatActivity() {
     private fun fetchRegionAndWeather(nx: Int, ny: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.getRWC(nx, ny, "user")
+                val response = apiService.getRWC(nx, ny, "추위를 잘 타요")
                 if (response.isSuccessful) {
                     val rwcResponse = response.body()
                     withContext(Dispatchers.Main) {

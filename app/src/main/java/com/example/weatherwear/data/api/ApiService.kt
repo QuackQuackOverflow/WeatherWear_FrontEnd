@@ -29,7 +29,7 @@ interface ApiService {
     /**
      * Region 을 보내고 필요한 데이터를 받는 API
      */
-    @GET("api/weather")
+    @GET("api/clothing")
     suspend fun getRWC
                 (@Query("nx") nx: Int,
                  @Query("ny") ny: Int,
@@ -58,7 +58,5 @@ interface ApiService {
     suspend fun getClothingSet(
         @Query("userType") userType: String
     ): Response<ClothingSet>
-
-
 
 }
