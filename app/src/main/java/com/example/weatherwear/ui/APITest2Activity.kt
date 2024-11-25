@@ -5,9 +5,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
 import com.example.weatherwear.data.api.ApiService
+import com.example.weatherwear.data.api.getRWC
 import com.example.weatherwear.data.model.*
 import com.example.weatherwear.data.sample.SampleRWC
-import com.example.weatherwear.helpers.GetRWCHelper
 import com.example.weatherwear.util.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,25 +80,18 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 
-    // API를 통해 RegionAndWeather 데이터를 가져오는 함수
+    // API를 통해 RWCResponse 데이터를 가져오는 함수
     private fun fetchRegionAndWeather(nx: Int, ny: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.getRWC(nx, ny, "추위를 잘 타요")
-                if (response.isSuccessful) {
-                    val rwcResponse = response.body()
-                    withContext(Dispatchers.Main) {
-                        if (rwcResponse != null) {
-                            val resultText = buildRWCDisplayText(rwcResponse)
-                            resultTextView.text = resultText
-                        } else {
-                            resultTextView.text = "서버로부터 데이터를 가져올 수 없습니다."
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        resultTextView.text =
-                            "API 호출 실패: ${response.code()} - ${response.message()}"
+                // ApiService 확장 함수 호출
+                val rwcResponse = apiService.getRWC(nx, ny, "추위를 잘 타요")
+                withContext(Dispatchers.Main) {
+                    if (rwcResponse != null) {
+                        val resultText = buildRWCDisplayText(rwcResponse)
+                        resultTextView.text = resultText
+                    } else {
+                        resultTextView.text = "서버로부터 데이터를 가져올 수 없습니다."
                     }
                 }
             } catch (e: Exception) {
@@ -109,52 +102,51 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 
+
     // RWCResponse 텍스트 포맷팅
     private fun buildRWCDisplayText(rwcResponse: RWCResponse): String {
         val builder = StringBuilder()
-        builder.append("=== 지역 및 날씨 정보 ===\n")
-        builder.append(formatWeatherInfoList(rwcResponse.regionAndWeather))
-        builder.append("\n")
-        builder.append("=== 추천 의상 정보 ===\n")
-        builder.append(formatClothingInfo(rwcResponse.clothingSet))
+        rwcResponse.regionWeather?.let {
+            builder.append("=== 지역 및 날씨 정보 ===\n")
+            builder.append(formatRegionAndWeather(it))
+            builder.append("\n")
+        }
+        rwcResponse.clothingRecommendations?.let {
+            builder.append("=== 추천 의상 정보 ===\n")
+            builder.append(formatClothingInfo(it))
+        }
         return builder.toString()
     }
 
     // 지역 및 날씨 정보를 출력하는 함수
-    private fun formatWeatherInfoList(regionAndWeatherList: List<RegionAndWeather>): String {
+    private fun formatRegionAndWeather(regionAndWeather: RegionAndWeather): String {
         val builder = StringBuilder()
-        regionAndWeatherList.forEachIndexed { index, regionAndWeather ->
-            builder.append("지역 ${index + 1}:\n")
-            builder.append(formatWeatherInfo(regionAndWeather))
+        builder.append("지역: ${regionAndWeather.regionName}\n")
+        regionAndWeather.weather.forEach { weather ->
+            builder.append(" - 날짜: ${weather.forecastDate}\n")
+            builder.append(" - 시간: ${weather.forecastTime}\n")
+            builder.append(" - 1시간 기온: ${weather.temp} °C\n")
+            builder.append(" - 최저 기온: ${weather.minTemp ?: "정보 없음"} °C\n")
+            builder.append(" - 최고 기온: ${weather.maxTemp ?: "정보 없음"} °C\n")
+            builder.append(" - 강수량: ${weather.rainAmount ?: "정보 없음"} mm\n")
+            builder.append(" - 강수 확률: ${weather.rainProbability ?: "정보 없음"} %\n")
+            builder.append(" - 하늘 상태: ${weather.skyCondition ?: "정보 없음"}\n")
+            builder.append(" - 습도: ${weather.humid ?: "정보 없음"} %\n")
+            builder.append(" - 풍속: ${weather.windSpeed ?: "정보 없음"} m/s\n")
             builder.append("\n")
         }
         return builder.toString()
     }
 
-    // 단일 RegionAndWeather 날씨 정보를 출력하는 함수
-    private fun formatWeatherInfo(regionAndWeather: RegionAndWeather): String {
-        val builder = StringBuilder()
-        builder.append("지역: ${regionAndWeather.regionName}\n")
-        val weather = regionAndWeather.weather
-        builder.append(" - 날짜: ${weather.forecastDate}\n")
-        builder.append(" - 시간: ${weather.forecastTime}\n")
-        builder.append(" - 1시간 기온: ${weather.temp} °C\n")
-        builder.append(" - 최저 기온: ${weather.minTemp} °C\n")
-        builder.append(" - 최고 기온: ${weather.maxTemp} °C\n")
-        builder.append(" - 강수량: ${weather.rainAmount} mm\n")
-        builder.append(" - 강수 확률: ${weather.rainProbability} %\n")
-        builder.append(" - 하늘 상태: ${weather.skyCondition}\n")
-        builder.append(" - 습도: ${weather.humid} %\n")
-        builder.append(" - 풍속: ${weather.windSpeed} m/s\n")
-        return builder.toString()
-    }
-
     // 추천 의상 정보를 출력하는 함수
-    private fun formatClothingInfo(clothingSet: ClothingSet): String {
+    private fun formatClothingInfo(clothingRecommendations: List<ClothingRecommendation>): String {
         val builder = StringBuilder()
-        builder.append("의상 Set ID: ${clothingSet.id}\n")
-        clothingSet.recommendedClothings.forEachIndexed { index, clothing ->
-            builder.append("옷${index + 1}: ${clothing.name} (${clothing.type})\n")
+        clothingRecommendations.forEach { recommendation ->
+            builder.append("온도: ${recommendation.temperature}\n")
+            recommendation.recommendations.forEach { clothing ->
+                builder.append(" - ${clothing}\n")
+            }
+            builder.append("\n")
         }
         return builder.toString()
     }

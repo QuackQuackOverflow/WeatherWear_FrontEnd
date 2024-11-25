@@ -1,7 +1,6 @@
 package com.example.weatherwear.data.model
-import com.example.weatherwear.data.model.ClothingSet
 
 data class RWCResponse(
-    val regionAndWeather : List<RegionAndWeather>,  // 지역과 날씨
-    val clothingSet: ClothingSet        // 추천 의상 목록
+    val regionWeather: RegionAndWeather?,                      // 지역 및 날씨 정보 (첫 번째 Map)
+    val clothingRecommendations: List<ClothingRecommendation>? // 의상 추천 정보 (그 이후 Maps)
 )

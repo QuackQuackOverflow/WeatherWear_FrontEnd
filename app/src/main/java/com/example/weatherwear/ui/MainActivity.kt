@@ -56,11 +56,11 @@ class MainActivity : AppCompatActivity() {
         val navigationBarBtn2: Button = findViewById(R.id.navigationBarBtn2)
         val navigationBarBtn3: Button = findViewById(R.id.navigationBarBtn3)
 
-        // 버튼 1: ReviewPopup 호출
-        navigationBarBtn1.setOnClickListener {
-            val reviewPopup = ReviewPopup(this) // ReviewPopup 생성
-            reviewPopup.show() // Popup을 화면에 표시
-        }
+//        // 버튼 1: ReviewPopup 호출
+//        navigationBarBtn1.setOnClickListener {
+//            val reviewPopup = ReviewPopup(this) // ReviewPopup 생성
+//            reviewPopup.show() // Popup을 화면에 표시
+//        }
 
         // 버튼 2: APITest2Activity로 이동
         navigationBarBtn2.setOnClickListener {
@@ -73,10 +73,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent) // SettingsActivity 시작
         }
-
-//        val intent = Intent(this, DetailedWeatherActivity::class.java)
-//        intent.putExtra("weatherList", regionAndWeatherList as ArrayList)
-//        startActivity(intent)
 
         // DetailedWeatherActivity로 이동
         val toDetailedWeatherActivity: Button = findViewById(R.id.toDetailedWeatherActivity)
@@ -115,7 +111,7 @@ class MainActivity : AppCompatActivity() {
 
                 // 시간대별 날씨 정보를 UI에 반영
                 mainUIHelper.generateTimeWeatherLayout(
-                    rwcResponse.regionAndWeather, // 시간대별 RegionAndWeather 데이터
+                    rwcResponse, // RWCResponse 객체에서 시간대별 데이터
                     timeWeatherContainer          // 시간대별 날씨 LinearLayout
                 )
                 // 의상 추천 정보를 UI에 반영
@@ -148,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
         // 시간대별 날씨 정보 반영
         mainUIHelper.generateTimeWeatherLayout(
-            sampleRWCResponse.regionAndWeather,
+            sampleRWCResponse,
             timeWeatherContainer
         )
 

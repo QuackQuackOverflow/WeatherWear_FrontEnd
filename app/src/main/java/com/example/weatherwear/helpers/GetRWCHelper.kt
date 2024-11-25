@@ -2,13 +2,13 @@ package com.example.weatherwear.helpers
 
 import android.Manifest
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.weatherwear.data.api.ApiService
+import com.example.weatherwear.data.api.getRWC
 import com.example.weatherwear.data.model.RWCResponse
 import com.example.weatherwear.util.RetrofitInstance
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -74,22 +74,15 @@ class GetRWCHelper(
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.getRWC(nx, ny, userType)
-                if (response.isSuccessful) {
-                    val rwcResponse = response.body()
-                    withContext(Dispatchers.Main) {
-                        callback(rwcResponse)
-                    }
-                } else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("GetRWCHelper", "Error! HTTP code: ${response.code()}, error body: $errorBody")
-                    withContext(Dispatchers.Main) {
-                        callback(null)
-                    }
+                // ApiService의 확장 함수 getRWC 호출
+                val rwcResponse = apiService.getRWC(nx, ny, userType)
+                withContext(Dispatchers.Main) {
+                    callback(rwcResponse)
                 }
             } catch (e: Exception) {
-                Log.e("GetRWCHelper", "Exception occurred during API call: ${e.message}", e)
+                Log.e("GetRWCHelper", "예외 발생: ${e.message}", e)
                 withContext(Dispatchers.Main) {
+                    showToast("네트워크 오류가 발생했습니다.")
                     callback(null)
                 }
             }

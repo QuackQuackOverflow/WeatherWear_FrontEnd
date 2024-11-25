@@ -41,7 +41,7 @@ object SampleRWC {
         }
 
         // 샘플 추천 의상 세트 생성
-        val sampleClothingSet = ClothingSet(
+        val sampleClothingRecommendation = ClothingRecommendation(
             id = 1,
             recommendedClothings = List(6) { index ->
                 Clothing(name = "테스트용 옷${index + 1}", type = "상의")
@@ -51,7 +51,7 @@ object SampleRWC {
         // 최종 RWCResponse 생성
         return RWCResponse(
             regionAndWeather = weatherList,
-            clothingSet = sampleClothingSet
+            clothingSet = sampleClothingRecommendation
         )
     }
 }

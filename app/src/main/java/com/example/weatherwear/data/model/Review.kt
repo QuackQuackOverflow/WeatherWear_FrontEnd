@@ -1,6 +1,10 @@
 package com.example.weatherwear.data.model
 
 data class Review(
-    val clothingId: Int, // 평가받은 set의 ID(식별자)
-    val feedback: String    // "추웠어요", "더웠어요", "마음에 들어요"
+    val feedback: Int
+    /**
+     * 추웠어요 (-1)
+     * 마음에 들어요 (0)
+     * 더웠어요 (1)
+     */
 )

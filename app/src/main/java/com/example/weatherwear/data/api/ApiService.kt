@@ -23,6 +23,7 @@ interface ApiService {
      */
     @POST("api/members")
     suspend fun registerUser(@Body user: User): Response<User>
+
     @POST("api/members/login")
     suspend fun loginUser(@Body user: User): Response<Member>
 
@@ -30,16 +31,16 @@ interface ApiService {
      * Region 을 보내고 필요한 데이터를 받는 API
      */
     @GET("api/clothing")
-    suspend fun getRWC
-                (@Query("nx") nx: Int,
-                 @Query("ny") ny: Int,
-                 @Query("userType") userType: String
-    ): Response<RWCResponse>
+    suspend fun getRawRWC(
+        @Query("nx") nx: Int,
+        @Query("ny") ny: Int,
+        @Query("userType") userType: String
+    ): Response<List<Map<String, Any>>>
 
     @GET("api/weather")
-    suspend fun getRegionAndWeather
-                (@Query("nx") nx: Int,
-                 @Query("ny") ny: Int
+    suspend fun getRegionAndWeather(
+        @Query("nx") nx: Int,
+        @Query("ny") ny: Int
     ): Response<List<RegionAndWeather>>
 
     /**
@@ -57,6 +58,61 @@ interface ApiService {
     @GET("/")
     suspend fun getClothingSet(
         @Query("userType") userType: String
-    ): Response<ClothingSet>
+    ): Response<ClothingRecommendation>
+}
 
+// 확장 함수 정의
+suspend fun ApiService.getRWC(
+    nx: Int,
+    ny: Int,
+    userType: String
+): RWCResponse? {
+    val response = getRawRWC(nx, ny, userType) // ApiService의 기존 메서드 호출
+    if (response.isSuccessful) {
+        val rawResponse = response.body()
+        return rawResponse?.let { parseRWCResponse(it) }
+    }
+    return null
+}
+
+/**
+ * List<Map<String, Any>>를 RWCResponse로 변환
+ */
+private fun parseRWCResponse(response: List<Map<String, Any>>): RWCResponse? {
+    if (response.isEmpty()) return null
+
+    val regionWeatherMap = response[0]
+    val regionWeather = regionWeatherMap["regionName"]?.let { regionName ->
+        val weatherList = (regionWeatherMap["weather"] as? List<Map<String, Any>>)?.map { weatherMap ->
+            Weather(
+                id = weatherMap["id"] as? Int,
+                forecastDate = weatherMap["forecastDate"] as? String,
+                forecastTime = weatherMap["forecastTime"] as? String,
+                temp = weatherMap["temp"] as? Double,
+                minTemp = weatherMap["minTemp"] as? Double,
+                maxTemp = weatherMap["maxTemp"] as? Double,
+                rainAmount = weatherMap["rainAmount"] as? Double,
+                humid = weatherMap["humid"] as? Double,
+                windSpeed = weatherMap["windSpeed"] as? Double,
+                rainProbability = weatherMap["rainProbability"] as? Double,
+                rainType = weatherMap["rainType"] as? String,
+                skyCondition = weatherMap["skyCondition"] as? String,
+                lastUpdateTime = weatherMap["lastUpdateTime"] as? String
+            )
+        } ?: emptyList()
+
+        RegionAndWeather(regionName = regionName as String, weather = weatherList)
+    }
+
+    val clothingRecommendations = response.drop(1).mapNotNull { clothingMap ->
+        val temperature = clothingMap["temperature"] as? String
+        val recommendations = clothingMap["recommendations"] as? List<String>
+        if (temperature != null && recommendations != null) {
+            ClothingRecommendation(temperature = temperature, recommendations = recommendations)
+        } else {
+            null
+        }
+    }
+
+    return RWCResponse(regionWeather = regionWeather, clothingRecommendations = clothingRecommendations)
 }

@@ -26,7 +26,7 @@ class GetClothingHelper(
     /**
      * 의류 추천 데이터 가져오기
      */
-    fun fetchClothingSet(userType: String, callback: (ClothingSet?) -> Unit) {
+    fun fetchClothingSet(userType: String, callback: (ClothingRecommendation?) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.getClothingSet(userType)
@@ -68,18 +68,18 @@ class GetClothingHelper(
     /**
      * SharedPreferences에 의류 세트 데이터를 저장
      */
-    fun saveClothingSetToPreferences(clothingSet: ClothingSet) {
+    fun saveClothingSetToPreferences(clothingRecommendation: ClothingRecommendation) {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        sharedPreferences.saveAsJson(PREF_CLOTHING_SET_KEY, clothingSet, gson)
+        sharedPreferences.saveAsJson(PREF_CLOTHING_SET_KEY, clothingRecommendation, gson)
         showToast("Clothing set saved to preferences")
     }
 
     /**
      * SharedPreferences에서 의류 세트 데이터를 불러오기
      */
-    fun loadClothingSetFromPreferences(): ClothingSet? {
+    fun loadClothingSetFromPreferences(): ClothingRecommendation? {
         val sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return sharedPreferences.loadFromJson(PREF_CLOTHING_SET_KEY, ClothingSet::class.java, gson)
+        return sharedPreferences.loadFromJson(PREF_CLOTHING_SET_KEY, ClothingRecommendation::class.java, gson)
     }
 
     /**
