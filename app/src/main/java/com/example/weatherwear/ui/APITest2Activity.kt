@@ -1,5 +1,6 @@
 package com.example.apitest
 
+import android.net.http.HttpException
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ class APITest2Activity : AppCompatActivity() {
     private lateinit var getRegionAndWeatherCustomButton: Button
     private lateinit var editTextNx: EditText
     private lateinit var editTextNy: EditText
+    private lateinit var buttonSubmitReview: Button
 
     /**
      * 샘플 데이터를 테스트하기 위한 버튼
@@ -33,6 +35,8 @@ class APITest2Activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_apitest2)
+
+        buttonSubmitReview = findViewById(R.id.buttonSubmitReview)
 
         // UI 초기화
         resultTextView = findViewById(R.id.textViewResult)
@@ -69,6 +73,20 @@ class APITest2Activity : AppCompatActivity() {
             // API 호출
             fetchRegionAndWeather(nx, ny)
         }
+
+        // 샘플 리뷰 데이터 생성하여 전송
+        buttonSubmitReview.setOnClickListener {
+            // Review 객체 생성
+            val review = Review(
+                memberEmail = "jts3531",   // 회원 이메일
+                evaluationScore = -1       // 평가 점수
+            )
+
+            // Review 전송
+            submitReviewAndShowToast(review)
+        }
+
+
 
         /**
          * 샘플 데이터를 출력하는 버튼
@@ -142,6 +160,36 @@ class APITest2Activity : AppCompatActivity() {
         return builder.toString()
     }
 
+    private fun submitReviewAndShowToast(review: Review) {
+        // CoroutineScope를 사용하여 네트워크 요청 실행
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = apiService.submitReview(review)
+
+            // UI 업데이트를 위해 MainThread로 이동
+            runOnUiThread {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@APITest2Activity, "리뷰가 전송되었습니다!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@APITest2Activity, "리뷰 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // 추천 의상 정보를 출력하는 함수
+    private fun formatClothingInfo(clothingRecommendations: List<ClothingRecommendation>): String {
+        val builder = StringBuilder()
+        clothingRecommendations.forEach { recommendation ->
+            builder.append("온도: ${recommendation.temperature}\n")
+            recommendation.recommendations.forEach { clothing ->
+                builder.append(" - ${clothing}\n")
+            }
+            builder.append("\n")
+        }
+        return builder.toString()
+    }
+}
+
 //    // 강수 형태를 텍스트로 변환하는 함수
 //    private fun mapRainType(rainType: String?): String {
 //        return when (rainType) {
@@ -163,18 +211,3 @@ class APITest2Activity : AppCompatActivity() {
 //            else -> "정보 없음"
 //        }
 //    }
-
-
-    // 추천 의상 정보를 출력하는 함수
-    private fun formatClothingInfo(clothingRecommendations: List<ClothingRecommendation>): String {
-        val builder = StringBuilder()
-        clothingRecommendations.forEach { recommendation ->
-            builder.append("온도: ${recommendation.temperature}\n")
-            recommendation.recommendations.forEach { clothing ->
-                builder.append(" - ${clothing}\n")
-            }
-            builder.append("\n")
-        }
-        return builder.toString()
-    }
-}

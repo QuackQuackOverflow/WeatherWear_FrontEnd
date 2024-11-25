@@ -54,6 +54,14 @@
         android:layout_marginTop="8dp"
         android:text="의상 세트 가져오기" />
 
+    <!-- 버튼 4: ID, 리뷰내용, 날짜를 담아 리뷰요청 -->
+    <Button
+        android:id="@+id/buttonSubmitReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="리뷰 전송 (jts3531이랑 추웠어요(-1) )" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

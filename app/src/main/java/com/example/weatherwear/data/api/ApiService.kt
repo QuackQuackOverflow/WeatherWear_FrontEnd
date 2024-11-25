@@ -46,10 +46,9 @@ interface ApiService {
     /**
      * Review 관련 API
      */
-    @POST("/")
+    @POST("api/submit/evaluations")
     suspend fun submitReview(
-        @Query("userEmail") userEmail: String, // 쿼리 파라미터로 이메일 전송
-        @Body review: Review                   // 요청 본문으로 Review 데이터 전송
+        @Body review: Review
     ): Response<Void>
 
     /**
