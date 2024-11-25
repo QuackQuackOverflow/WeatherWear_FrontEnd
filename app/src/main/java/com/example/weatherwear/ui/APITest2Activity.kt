@@ -119,24 +119,51 @@ class APITest2Activity : AppCompatActivity() {
     }
 
     // 지역 및 날씨 정보를 출력하는 함수
+    // 지역 및 날씨 정보를 출력하는 함수
     private fun formatRegionAndWeather(regionAndWeather: RegionAndWeather): String {
         val builder = StringBuilder()
         builder.append("지역: ${regionAndWeather.regionName}\n")
+
         regionAndWeather.weather.forEach { weather ->
-            builder.append(" - 날짜: ${weather.forecastDate}\n")
-            builder.append(" - 시간: ${weather.forecastTime}\n")
-            builder.append(" - 1시간 기온: ${weather.temp} °C\n")
+            builder.append(" - 날짜: ${weather.forecastDate ?: "정보 없음"}\n")
+            builder.append(" - 시간: ${weather.forecastTime ?: "정보 없음"}\n")
+            builder.append(" - 1시간 기온: ${weather.temp ?: "정보 없음"} °C\n")
             builder.append(" - 최저 기온: ${weather.minTemp ?: "정보 없음"} °C\n")
             builder.append(" - 최고 기온: ${weather.maxTemp ?: "정보 없음"} °C\n")
             builder.append(" - 강수량: ${weather.rainAmount ?: "정보 없음"} mm\n")
             builder.append(" - 강수 확률: ${weather.rainProbability ?: "정보 없음"} %\n")
-            builder.append(" - 하늘 상태: ${weather.skyCondition ?: "정보 없음"}\n")
+            builder.append(" - 강수 형태: ${weather.rainType}\n")
+            builder.append(" - 하늘 상태: ${weather.skyCondition}\n")
             builder.append(" - 습도: ${weather.humid ?: "정보 없음"} %\n")
             builder.append(" - 풍속: ${weather.windSpeed ?: "정보 없음"} m/s\n")
+            builder.append(" - 마지막 업데이트: ${weather.lastUpdateTime ?: "정보 없음"}\n")
             builder.append("\n")
         }
         return builder.toString()
     }
+
+//    // 강수 형태를 텍스트로 변환하는 함수
+//    private fun mapRainType(rainType: String?): String {
+//        return when (rainType) {
+//            "0" -> "없음"
+//            "1" -> "비"
+//            "2" -> "비/눈"
+//            "3" -> "눈"
+//            "4" -> "소나기"
+//            else -> "정보 없음"
+//        }
+//    }
+//
+//    // 하늘 상태를 텍스트로 변환하는 함수
+//    private fun mapSkyCondition(skyCondition: String?): String {
+//        return when (skyCondition) {
+//            "1" -> "맑음"
+//            "3" -> "구름 많음"
+//            "4" -> "흐림"
+//            else -> "정보 없음"
+//        }
+//    }
+
 
     // 추천 의상 정보를 출력하는 함수
     private fun formatClothingInfo(clothingRecommendations: List<ClothingRecommendation>): String {

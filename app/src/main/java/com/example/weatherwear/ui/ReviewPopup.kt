@@ -27,23 +27,6 @@ import kotlinx.coroutines.launch
 //    // Clothing ID는 내부에서 설정
 //    private var clothingId: Int? = null
 //
-//    /**
-//     * 테스트용 ClothingSet 생성 함수
-//     */
-//    private fun createTestClothingSet(): ClothingRecommendation {
-//        return ClothingRecommendation(
-//            id = 1, // 테스트용 ID
-//            recommendedClothings = listOf(
-//                Clothing(name = "셔츠1", type = "상의"),
-//                Clothing(name = "바지1", type = "하의"),
-//                Clothing(name = "재킷1", type = "아우터"),
-//                Clothing(name = "셔츠2", type = "상의"),
-//                Clothing(name = "바지2", type = "하의"),
-//                Clothing(name = "재킷2", type = "아우터")
-//            )
-//        )
-//    }
-//
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_review_popup)
@@ -202,3 +185,20 @@ import kotlinx.coroutines.launch
 //        }
 //    }
 //}
+
+/**
+//     * 테스트용 ClothingSet 생성 함수
+//     */
+//    private fun createTestClothingSet(): ClothingRecommendation {
+//        return ClothingRecommendation(
+//            id = 1, // 테스트용 ID
+//            recommendedClothings = listOf(
+//                Clothing(name = "셔츠1", type = "상의"),
+//                Clothing(name = "바지1", type = "하의"),
+//                Clothing(name = "재킷1", type = "아우터"),
+//                Clothing(name = "셔츠2", type = "상의"),
+//                Clothing(name = "바지2", type = "하의"),
+//                Clothing(name = "재킷2", type = "아우터")
+//            )
+//        )
+//    }

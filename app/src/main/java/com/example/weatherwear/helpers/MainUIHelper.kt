@@ -33,7 +33,7 @@ class MainUIHelper(private val context: Context) {
         tempTextView: TextView,
         weatherIconView: ImageView
     ) {
-        val regionAndWeather = rwcResponse.regionWeather // regionWeather는 단일 RegionAndWeather 객체
+        val regionAndWeather = rwcResponse.regionWeather
         regionAndWeather?.let {
             // 지역 이름과 온도 업데이트
             regionTextView.text = it.regionName
@@ -183,6 +183,78 @@ class MainUIHelper(private val context: Context) {
             (120 * context.resources.displayMetrics.density).toInt()
         ).apply {
             setMargins(20, 0, 20, 0)
+        }
+    }
+
+    /**
+     * RWCResponse 데이터를 기반으로 의상 추천을 LinearLayout에 표시
+     * @param rwcResponse RWCResponse 객체
+     * @param container 의상을 표시할 LinearLayout
+     */
+    fun populateClothingRecommendations(
+        rwcResponse: RWCResponse,
+        container: LinearLayout
+    ) {
+        container.removeAllViews() // 기존 뷰 제거
+
+        rwcResponse.clothingRecommendations?.forEach { recommendation ->
+            recommendation.recommendations.forEach { clothingName ->
+                val itemLayout = createClothingItemLayout(clothingName) // 각 의상 이름 전달
+                container.addView(itemLayout)
+            }
+        }
+    }
+
+    /**
+     * 개별 의상 아이템을 위한 레이아웃 생성
+     * @param clothingName 의상 이름
+     * @return LinearLayout 아이템 레이아웃
+     */
+    private fun createClothingItemLayout(clothingName: String): LinearLayout {
+        return LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(
+                    (50 * context.resources.displayMetrics.density).toInt(),
+                    0,
+                    (50 * context.resources.displayMetrics.density).toInt(),
+                    0
+                )
+            }
+            gravity = android.view.Gravity.CENTER
+
+            // 의상 이름 TextView 추가
+            addView(createClothingTextView(clothingName))
+
+            // 의상 이미지 ImageView 추가
+            addView(createClothingImageView(clothingName))
+        }
+    }
+
+    /**
+     * 의상 이름 TextView 생성
+     */
+    private fun createClothingTextView(clothingName: String): TextView {
+        return TextView(context).apply {
+            text = clothingName
+            textSize = 16f
+            gravity = android.view.Gravity.CENTER
+        }
+    }
+
+    /**
+     * 의상 이미지 ImageView 생성
+     */
+    private fun createClothingImageView(clothingName: String): ImageView {
+        return ImageView(context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                (100 * context.resources.displayMetrics.density).toInt(),
+                (100 * context.resources.displayMetrics.density).toInt()
+            )
+            setImageResource(R.drawable.t_shirt_100dp) // 기본 이미지 리소스
         }
     }
 }

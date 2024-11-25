@@ -1,10 +1,7 @@
 package com.example.weatherwear.data.model
 
 data class Review(
-    val feedback: Int
-    /**
-     * 추웠어요 (-1)
-     * 마음에 들어요 (0)
-     * 더웠어요 (1)
-     */
+    val memberEmail: String,    // 회원 이메일
+    val evaluationScore: Int,   // 평가 점수 (-1, 0, 1)
+    val evaluationDate: String  // 평가 날짜 (YYYY-MM-DD)
 )

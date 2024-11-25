@@ -1,6 +1,9 @@
 package com.example.weatherwear.data.sample
 
-import com.example.weatherwear.data.model.*
+import com.example.weatherwear.data.model.ClothingRecommendation
+import com.example.weatherwear.data.model.RWCResponse
+import com.example.weatherwear.data.model.RegionAndWeather
+import com.example.weatherwear.data.model.Weather
 import kotlin.random.Random
 
 object SampleRWC {
@@ -9,49 +12,66 @@ object SampleRWC {
 
     // 샘플 RWCResponse 생성 함수
     fun createSampleRWCResponse(): RWCResponse {
-        // Weather 객체 48개를 생성
-        val weatherList = mutableListOf<RegionAndWeather>()
-        for (i in 1..48) {
-            val randomTemp = random.nextInt(0, 21) // 0~20 사이의 난수 온도
-            val randomSkyCondition = listOf(1, 3, 4).random().toString() // SKY 코드: 1(맑음), 3(구름많음), 4(흐림)
-            val randomRainType = random.nextInt(0, 5).toString() // PTY 코드: 0~4 (없음, 비, 비/눈, 눈, 소나기)
-            val hour = (i - 1) % 24
-            val forecastTime = String.format("%02d00", hour) // 00:00, 01:00 형태의 시간 생성
-            val forecastDate = if (i <= 24) "20241123" else "20241124" // 날짜는 24개씩 나누어 생성
+        // Weather 리스트 생성
+        val weatherList = mutableListOf<Weather>()
+        val regionName = "테스트 지역"
+
+        for (i in 1..72) {
+            val forecastHour = (i - 1) % 24
+            val forecastDate = when {
+                i <= 24 -> "20241125"
+                i <= 48 -> "20241126"
+                else -> "20241127"
+            }
+            val forecastTime = String.format("%02d00", forecastHour)
+
+            val randomTemp = random.nextInt(-5, 20).toDouble() // 온도 범위: -5°C ~ 20°C
+            val randomRainType = listOf("0", "1", "2", "3", "4").random() // 강수 유형
+            val randomSkyCondition = listOf("1", "3", "4").random() // 하늘 상태
+            val randomHumid = random.nextDouble(30.0, 90.0)
+            val randomWindSpeed = random.nextDouble(0.5, 5.0)
+            val randomRainProbability = random.nextDouble(0.0, 100.0)
+            val randomRainAmount = if (randomRainType == "0") 0.0 else random.nextDouble(0.0, 10.0)
 
             val weather = Weather(
+                id = null,
                 forecastDate = forecastDate,
                 forecastTime = forecastTime,
-                temp = randomTemp.toDouble(),
-                minTemp = (randomTemp - random.nextInt(1, 5)).toDouble(),
-                maxTemp = (randomTemp + random.nextInt(1, 5)).toDouble(),
-                rainAmount = random.nextDouble(0.0, 5.0),
-                rainProbability = random.nextDouble(0.0, 100.0),
-                rainType = randomRainType, // 난수로 생성된 PTY 코드
-                skyCondition = randomSkyCondition, // 난수로 생성된 SKY 코드
-                humid = random.nextDouble(30.0, 90.0),
-                windSpeed = random.nextDouble(0.5, 5.0)
+                temp = randomTemp,
+                minTemp = if (forecastHour == 0) randomTemp - random.nextInt(1, 5) else null,
+                maxTemp = if (forecastHour == 12) randomTemp + random.nextInt(1, 5) else null,
+                rainAmount = randomRainAmount,
+                humid = randomHumid,
+                windSpeed = randomWindSpeed,
+                rainProbability = randomRainProbability,
+                rainType = randomRainType,
+                skyCondition = randomSkyCondition,
+                lastUpdateTime = "20241125 1035"
             )
-
-            val regionAndWeather = RegionAndWeather(
-                regionName = "테스트용 지역 이름",
-                weather = weather
-            )
-            weatherList.add(regionAndWeather)
+            weatherList.add(weather)
         }
 
-        // 샘플 추천 의상 세트 생성
-        val sampleClothingRecommendation = ClothingRecommendation(
-            id = 1,
-            recommendedClothings = List(6) { index ->
-                Clothing(name = "테스트용 옷${index + 1}", type = "상의")
-            }
+        val regionAndWeather = RegionAndWeather(
+            regionName = regionName,
+            weather = weatherList // List<Weather>로 설정
+        )
+
+        // 의상 추천 리스트 생성
+        val clothingRecommendations = listOf(
+            ClothingRecommendation(
+                temperature = "10.0°C",
+                recommendations = listOf("하의 - 면바지", "아우터 - 재킷", "복합 - 레이어드 니트")
+            ),
+            ClothingRecommendation(
+                temperature = "0.0°C",
+                recommendations = listOf("복합 - 내복", "아우터 - 패딩", "복합 - 방한용품")
+            )
         )
 
         // 최종 RWCResponse 생성
         return RWCResponse(
-            regionAndWeather = weatherList,
-            clothingSet = sampleClothingRecommendation
+            regionWeather = regionAndWeather, // 단일 RegionAndWeather로 변경
+            clothingRecommendations = clothingRecommendations
         )
     }
 }

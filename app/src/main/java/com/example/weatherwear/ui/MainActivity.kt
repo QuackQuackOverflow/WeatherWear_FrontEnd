@@ -74,12 +74,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent) // SettingsActivity 시작
         }
 
-        // DetailedWeatherActivity로 이동
-        val toDetailedWeatherActivity: Button = findViewById(R.id.toDetailedWeatherActivity)
-        toDetailedWeatherActivity.setOnClickListener {
-            val intent = Intent(this, DetailedWeatherActivity::class.java)
-            startActivity(intent)
-        }
+//        // DetailedWeatherActivity로 이동
+//        val toDetailedWeatherActivity: Button = findViewById(R.id.toDetailedWeatherActivity)
+//        toDetailedWeatherActivity.setOnClickListener {
+//            val intent = Intent(this, DetailedWeatherActivity::class.java)
+//            startActivity(intent)
+//        }
 
         // SwipeRefreshLayout 리스너 추가
         swipeRefreshLayout.setOnRefreshListener {
