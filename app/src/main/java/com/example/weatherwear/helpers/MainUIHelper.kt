@@ -12,6 +12,7 @@ import com.example.weatherwear.data.model.RWCResponse
 import com.example.weatherwear.data.model.RegionAndWeather
 import com.example.weatherwear.data.model.Weather
 import com.example.weatherwear.ui.ClothingPopup
+import org.json.JSONArray
 
 /**
  * 메인 UI 업데이트를 관리하는 헬퍼 클래스
@@ -203,58 +204,58 @@ class MainUIHelper(private val context: Context) {
         }
     }
 
-    /**
-     * RWCResponse 데이터를 기반으로 의상 추천을 LinearLayout에 표시
-     * @param rwcResponse RWCResponse 객체
-     * @param container 의상을 표시할 LinearLayout
-     */
-    fun populateClothingRecommendations(
-        rwcResponse: RWCResponse,
-        container: LinearLayout
-    ) {
-        container.removeAllViews() // 기존 뷰 제거
+//    /**
+//     * RWCResponse 데이터를 기반으로 의상 추천을 LinearLayout에 표시
+//     * @param rwcResponse RWCResponse 객체
+//     * @param container 의상을 표시할 LinearLayout
+//     */
+//    fun populateClothingRecommendations(
+//        rwcResponse: RWCResponse,
+//        container: LinearLayout
+//    ) {
+//        container.removeAllViews() // 기존 뷰 제거
+//
+//        rwcResponse.clothingRecommendations?.forEach { recommendation ->
+//            // 각 의상 추천을 위한 레이아웃 생성
+//            val itemLayout = createClothingItemLayout(recommendation)
+//
+//            // 레이아웃 클릭 시 팝업 표시
+//            itemLayout.setOnClickListener {
+//                showClothingPopup(recommendation) // 의상 팝업 표시
+//            }
+//
+//            container.addView(itemLayout) // LinearLayout에 추가
+//        }
+//    }
 
-        rwcResponse.clothingRecommendations?.forEach { recommendation ->
-            // 각 의상 추천을 위한 레이아웃 생성
-            val itemLayout = createClothingItemLayout(recommendation)
-
-            // 레이아웃 클릭 시 팝업 표시
-            itemLayout.setOnClickListener {
-                showClothingPopup(recommendation) // 의상 팝업 표시
-            }
-
-            container.addView(itemLayout) // LinearLayout에 추가
-        }
-    }
-
-    /**
-     * 개별 의상 아이템을 위한 레이아웃 생성
-     */
-    private fun createClothingItemLayout(recommendation: ClothingRecommendation): LinearLayout {
-        return LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(
-                    (16 * context.resources.displayMetrics.density).toInt(),
-                    (8 * context.resources.displayMetrics.density).toInt(),
-                    (16 * context.resources.displayMetrics.density).toInt(),
-                    (8 * context.resources.displayMetrics.density).toInt()
-                )
-            }
-            gravity = android.view.Gravity.CENTER
-
-            // 의상 이미지 추가
-            val imageView = createClothingImageView("")
-            addView(imageView)
-
-            // 의상 온도 텍스트 추가
-            val textView = createClothingTextView(recommendation.temperature)
-            addView(textView)
-        }
-    }
+//    /**
+//     * 개별 의상 아이템을 위한 레이아웃 생성
+//     */
+//    private fun createClothingItemLayout(recommendation: ClothingRecommendation): LinearLayout {
+//        return LinearLayout(context).apply {
+//            orientation = LinearLayout.VERTICAL
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.WRAP_CONTENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(
+//                    (16 * context.resources.displayMetrics.density).toInt(),
+//                    (8 * context.resources.displayMetrics.density).toInt(),
+//                    (16 * context.resources.displayMetrics.density).toInt(),
+//                    (8 * context.resources.displayMetrics.density).toInt()
+//                )
+//            }
+//            gravity = android.view.Gravity.CENTER
+//
+//            // 의상 이미지 추가
+//            val imageView = createClothingImageView("")
+//            addView(imageView)
+//
+//            // 의상 온도 텍스트 추가
+//            val textView = createClothingTextView(recommendation.temperature)
+//            addView(textView)
+//        }
+//    }
 
 
     /**
@@ -284,6 +285,19 @@ class MainUIHelper(private val context: Context) {
     private fun showClothingPopup(recommendation: ClothingRecommendation) {
         val popup = ClothingPopup(context, recommendation)
         popup.show()
+    }
+
+    // ㅈ같이 생긴 옷차림 추천 String을 List<String>으로 변환
+    fun parseOptimizedClothing(jsonString: String): List<String> {
+        val list = mutableListOf<String>()
+        val jsonArray = JSONArray(jsonString) // JSON 배열로 변환
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            val type = jsonObject.getString("type") // "type" 값 가져오기
+            val item = jsonObject.getString("item") // "item" 값 가져오기
+            list.add("$type-$item") // "type-item" 형태로 리스트에 추가
+        }
+        return list
     }
 
 }

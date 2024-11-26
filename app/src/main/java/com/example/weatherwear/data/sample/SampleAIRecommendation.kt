@@ -13,17 +13,17 @@ object SampleAIRecommendation {
             LearnedRecommendation(
                 memberEmail = "user1@example.com",
                 temperature = 10.0,
-                optimizedClothing = """["자켓", "청바지", "스카프"]"""
+                optimizedClothing = "[{\"type\":\"아우터\",\"item\":\"코트\"},{\"type\":\"상의\",\"item\":\"맨투맨\"},{\"type\":\"하의\",\"item\":\"청바지\"}]"
             ),
             LearnedRecommendation(
                 memberEmail = "user2@example.com",
                 temperature = 5.0,
-                optimizedClothing = """["패딩", "기모 바지", "목도리"]"""
+                optimizedClothing = "[{\"type\":\"아우터\",\"item\":\"코트\"},{\"type\":\"상의\",\"item\":\"맨투맨\"},{\"type\":\"하의\",\"item\":\"청바지\"}]"
             ),
             LearnedRecommendation(
                 memberEmail = "user3@example.com",
                 temperature = -2.0,
-                optimizedClothing = """["두꺼운 패딩", "기모 내복", "장갑", "털모자"]"""
+                optimizedClothing = "[{\"type\":\"아우터\",\"item\":\"코트\"},{\"type\":\"상의\",\"item\":\"맨투맨\"},{\"type\":\"하의\",\"item\":\"청바지\"}]"
             )
         )
     }

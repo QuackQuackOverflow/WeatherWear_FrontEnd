@@ -2,6 +2,7 @@ package com.example.weatherwear.ui
 
 import android.app.Dialog
 import android.content.Context
+import android.view.Gravity
 import android.widget.*
 import com.example.weatherwear.R
 import com.example.weatherwear.data.model.ClothingRecommendation
@@ -17,7 +18,7 @@ class ClothingPopup(
 
         // 제목 업데이트
         val titleTextView: TextView = findViewById(R.id.titleClothingPopup)
-        titleTextView.text = "${recommendation.temperature}°C 기준 옷차림 추천"
+        titleTextView.text = "${recommendation.temperature} 기준 옷차림 추천"
 
         // 추천 리스트를 동적으로 추가
         val clothingContainer: LinearLayout = findViewById(R.id.clothingContainer)
@@ -45,12 +46,15 @@ class ClothingPopup(
             ).apply {
                 setMargins(16, 16, 16, 16)
             }
+            gravity = Gravity.CENTER_VERTICAL // 아이템을 수평 정렬
         }
 
         // 이미지 추가 (기본 티셔츠 이미지)
         val imageView = ImageView(context).apply {
             setImageResource(R.drawable.t_shirt_100dp)
-            layoutParams = LinearLayout.LayoutParams(100, 100)
+            layoutParams = LinearLayout.LayoutParams(500, 500).apply { // 크기를 적절히 조정
+                gravity = Gravity.CENTER_VERTICAL // 수직 정렬
+            }
             scaleType = ImageView.ScaleType.CENTER_INSIDE
         }
         itemLayout.addView(imageView)
@@ -58,19 +62,22 @@ class ClothingPopup(
         // 텍스트 추가 (추천 의류 이름)
         val textView = TextView(context).apply {
             text = clothingItem
-            textSize = 16f
+            textSize = 20f
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 setMargins(16, 0, 0, 0)
+                gravity = Gravity.CENTER_VERTICAL // 수직 정렬
             }
         }
         itemLayout.addView(textView)
 
+
         // 항목 추가
         container.addView(itemLayout)
     }
+
 
     /**
      * `SharedPreferences`에 저장

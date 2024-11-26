@@ -2,203 +2,200 @@ package com.example.weatherwear.ui
 
 import android.app.Dialog
 import android.content.Context
-import android.os.Bundle
-import android.util.Log
+import android.content.SharedPreferences
 import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.example.weatherwear.R
 import com.example.weatherwear.data.api.ApiService
-import com.example.weatherwear.data.model.Clothing
-import com.example.weatherwear.data.model.ClothingRecommendation
 import com.example.weatherwear.data.model.Review
 import com.example.weatherwear.util.RetrofitInstance
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
 
-//class ReviewPopup(context: Context) : Dialog(context) {
-//
-//    // Clothing ID는 내부에서 설정
-//    private var clothingId: Int? = null
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_review_popup)
-//
-//        // SharedPreferences에서 userEmail 가져오기
-//        val loginPrefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-//        val userEmail = loginPrefs.getString("memberEmail", null)
-//
-//        /**
-//         * 테스트용 ClothingSet 저장 및 SharedPreferences에서 가져오기
-//         */
-//        val testClothingSet = createTestClothingSet() // 테스트 데이터 생성
-//        saveClothingSetToPreferences(testClothingSet) // SharedPreferences에 저장
-//
-//        val clothingSet = getClothingSetFromPreferences() // SharedPreferences에서 가져오기
-//        if (clothingSet == null) {
-//            Toast.makeText(context, "저장된 의류 데이터가 없습니다.", Toast.LENGTH_SHORT).show()
-//            dismiss() // 팝업 닫기
-//            return
-//        }
-//
-//        // UI 초기화
-//        clothingId = clothingSet.id
-//        populateClothingUI(clothingSet)
-//
-//        // Retrofit API 서비스 생성
-//        val apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
-//
-//        // 버튼 참조 및 이벤트 설정
-//        findViewById<Button>(R.id.btn_cold).setOnClickListener {
-//            sendReview(apiService, userEmail, clothingId, "추웠어요")
-//        }
-//        findViewById<Button>(R.id.btn_hot).setOnClickListener {
-//            sendReview(apiService, userEmail, clothingId, "더웠어요")
-//        }
-//        findViewById<Button>(R.id.btn_good).setOnClickListener {
-//            sendReview(apiService, userEmail, clothingId, "마음에 들어요")
-//        }
-//    }
-//
-//    /**
-//     * SharedPreferences에 ClothingSet 저장
-//     */
-//    private fun saveClothingSetToPreferences(clothingRecommendation: ClothingRecommendation) {
-//        val clothingPrefs = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
-//        val editor = clothingPrefs.edit()
-//        val gson = Gson()
-//        val clothingSetJson = gson.toJson(clothingRecommendation) // ClothingSet 객체를 JSON 문자열로 변환
-//        editor.putString("clothingSet", clothingSetJson)
-//        editor.apply()
-//        Log.d("ReviewPopup", "ClothingSet이 SharedPreferences에 저장되었습니다.")
-//    }
-//
-//    /**
-//     * SharedPreferences에서 ClothingSet 가져오기
-//     */
-//    private fun getClothingSetFromPreferences(): ClothingRecommendation? {
-//        val clothingPrefs = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
-//        val clothingSetJson = clothingPrefs.getString("clothingSet", null)
-//
-//        if (clothingSetJson.isNullOrEmpty()) {
-//            Log.e("ReviewPopup", "ClothingPrefs에 저장된 데이터가 없습니다.")
-//            return null
-//        }
-//
-//        return try {
-//            Gson().fromJson(clothingSetJson, ClothingRecommendation::class.java)
-//        } catch (e: Exception) {
-//            Log.e("ReviewPopup", "ClothingSet JSON 파싱 실패: ${e.message}")
-//            null
-//        }
-//    }
-//
-//    /**
-//     * UI에 의류 데이터를 동적으로 추가하는 함수
-//     */
-//    private fun populateClothingUI(clothingRecommendation: ClothingRecommendation) {
-//        val container = findViewById<LinearLayout>(R.id.clothingContainer)
-//        container.removeAllViews() // 기존 UI 제거
-//
-//        clothingRecommendation.recommendedClothings.forEach { clothing ->
-//            // 동적 레이아웃 생성
-//            val itemLayout = LinearLayout(context).apply {
-//                layoutParams = LinearLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.WRAP_CONTENT, // 콘텐츠 너비에 맞게
-//                    ViewGroup.LayoutParams.WRAP_CONTENT // 콘텐츠 높이에 맞게
-//                ).apply {
-//                    setMargins(16, 16, 16, 16) // 마진 설정
-//                }
-//                orientation = LinearLayout.HORIZONTAL // 가로 정렬
-//                gravity = Gravity.CENTER // 중앙 정렬
-//            }
-//
-//            // ImageView 생성
-//            val clothingImage = ImageView(context).apply {
-//                layoutParams = LinearLayout.LayoutParams(400, 400).apply {
-//                    setMargins(0, 0, 0, 0) // 이미지와 텍스트 간격 설정
-//                }
-//                setImageResource(R.drawable.t_shirt_100dp) // 기본 이미지 설정
-//                setBackgroundColor(resources.getColor(R.color.superLightGray)) // 배경색 설정
-//            }
-//
-//            // TextView 생성
-//            val clothingName = TextView(context).apply {
-//                layoutParams = LinearLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.WRAP_CONTENT,
-//                    ViewGroup.LayoutParams.WRAP_CONTENT
-//                ).apply {
-//                    setMargins(150, 0, 150, 0) // 좌우 마진 설정
-//                }
-//                text = clothing.name
-//                textSize = 30f
-//                gravity = Gravity.CENTER // 텍스트를 TextView 중앙에 정렬
-//                setTextColor(resources.getColor(R.color.black)) // 텍스트 색상 설정
-//            }
-//
-//            // 아이템 레이아웃에 추가
-//            itemLayout.addView(clothingImage) // 왼쪽에 이미지
-//            itemLayout.addView(clothingName) // 오른쪽에 텍스트
-//
-//            // 컨테이너에 추가
-//            container.addView(itemLayout)
-//        }
-//
-//        // 컨테이너의 부모 레이아웃 정렬 확인
-//        container.gravity = Gravity.CENTER_HORIZONTAL // 아이템 전체를 가로 중앙 정렬
-//    }
-//
-//    /**
-//     * 리뷰 전송 함수
-//     */
-//    private fun sendReview(apiService: ApiService, userEmail: String?, clothingId: Int?, feedback: String) {
-//        if (userEmail == null || clothingId == null) {
-//            Toast.makeText(context, "리뷰 전송에 필요한 정보가 없습니다.", Toast.LENGTH_SHORT).show()
-//            return
-//        }
-//
-//        val review = Review(clothingId = clothingId, feedback = feedback)
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val response = apiService.submitReview(userEmail, review)
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    if (response.isSuccessful) {
-//                        Toast.makeText(context, "리뷰가 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show()
-//                        dismiss() // 팝업 닫기
-//                    } else {
-//                        Toast.makeText(context, "리뷰 전송 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    Toast.makeText(context, "네트워크 오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//                Log.e("ReviewPopup", "리뷰 전송 중 오류 발생: ${e.message}")
-//            }
-//        }
-//    }
-//
-//    /**
-//     * 테스트용 ClothingSet 생성 함수
-//     */
-//    private fun createTestClothingSet(): ClothingRecommendation {
-//        return ClothingRecommendation(
-//            id = 1, // 테스트용 ID
-//            recommendedClothings = listOf(
-//                Clothing(name = "셔츠1", type = "상의"),
-//                Clothing(name = "바지1", type = "하의"),
-//                Clothing(name = "재킷1", type = "아우터"),
-//                Clothing(name = "셔츠2", type = "상의"),
-//                Clothing(name = "바지2", type = "하의"),
-//                Clothing(name = "재킷2", type = "아우터")
-//            )
-//        )
-//    }
-//}
+class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences) : Dialog(context) {
+
+    private lateinit var clothingContainer: LinearLayout
+    private lateinit var btnCold: Button
+    private lateinit var btnHot: Button
+    private lateinit var btnGood: Button
+    private lateinit var tempTextView: TextView
+    private val apiService: ApiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
+
+    init {
+        setContentView(R.layout.activity_review_popup)
+
+        clothingContainer = findViewById(R.id.clothingContainer)
+        btnCold = findViewById(R.id.btn_cold)
+        btnHot = findViewById(R.id.btn_hot)
+        btnGood = findViewById(R.id.btn_good)
+        tempTextView = findViewById(R.id.tempTextView)
+
+        // ClothingPrefs에서 데이터 로드
+        loadClothingRecommendations()
+
+        // 버튼 이벤트 설정
+        setupButtonListeners()
+    }
+
+    private fun loadClothingRecommendations() {
+        val allEntries = clothingPrefs.all
+        if (allEntries.isNotEmpty()) {
+            // SharedPreferences의 모든 데이터를 순회
+            allEntries.forEach { (key, value) ->
+                try {
+                    // key가 숫자 형태인지 확인
+                    if (key.toDoubleOrNull() != null) {
+                        displayClothingRecommendationsForKey(key, value.toString())
+                    }
+                } catch (e: Exception) {
+                    handleLoadingError(e) // JSON 파싱 실패 시 처리
+                    return
+                }
+            }
+        } else {
+            handleEmptyPreferences() // 데이터가 없을 경우 처리
+        }
+    }
+
+    /**
+     * 특정 키(온도)에 대한 의상 데이터를 UI에 표시
+     */
+    private fun displayClothingRecommendationsForKey(key: String, value: String) {
+        // key 값에서 "°C"가 이미 포함되어 있는지 확인
+        val displayKey = if (key.contains("°C")) key else "$key°C"
+
+        // 온도를 사용해 제목 설정
+        tempTextView.text = "$displayKey 기준 옷차림 추천"
+
+        // value를 JSON 배열로 처리
+        try {
+            val clothingArray = JSONArray(value) // JSON 배열로 변환
+            for (i in 0 until clothingArray.length()) {
+                val clothingItemText = clothingArray.getString(i) // JSON 배열에서 문자열 가져오기
+                addClothingItemToContainer(clothingItemText) // UI에 추가
+            }
+        } catch (e: Exception) {
+            handleLoadingError(e) // JSON 파싱 실패 시 처리
+        }
+    }
+
+    /**
+     * 의상 데이터를 LinearLayout에 추가
+     */
+    private fun addClothingItemToContainer(clothingItemText: String) {
+        val itemLayout = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(16, 16, 16, 16)
+            }
+            gravity = Gravity.CENTER_VERTICAL // 아이템을 수평 정렬
+        }
+
+        // 이미지 추가 (기본 티셔츠 이미지)
+        val imageView = ImageView(context).apply {
+            setImageResource(R.drawable.t_shirt_100dp)
+            layoutParams = LinearLayout.LayoutParams(500, 500).apply { // 크기를 적절히 조정
+                gravity = Gravity.CENTER_VERTICAL // 수직 정렬
+            }
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+        }
+        itemLayout.addView(imageView)
+
+        // 텍스트 추가 (추천 의류 이름)
+        val textView = TextView(context).apply {
+            text = clothingItemText
+            textSize = 20f
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(16, 0, 0, 0)
+                gravity = Gravity.CENTER_VERTICAL // 수직 정렬
+            }
+        }
+        itemLayout.addView(textView)
+
+        // 항목 추가
+        clothingContainer.addView(itemLayout)
+    }
+
+    /**
+     * SharedPreferences 데이터가 없을 경우 처리
+     */
+    private fun handleEmptyPreferences() {
+        Toast.makeText(context, "선택됐던 옷이 없습니다!", Toast.LENGTH_SHORT).show()
+        dismiss() // 팝업 닫기
+    }
+
+    /**
+     * JSON 파싱 실패 시 처리
+     */
+    private fun handleLoadingError(e: Exception) {
+        Toast.makeText(context, "옷차림 데이터를 불러오는 중 문제가 발생했습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+        dismiss() // 팝업 닫기
+    }
+
+    private fun setupButtonListeners() {
+        btnCold.setOnClickListener { submitReview(-1) }
+        btnHot.setOnClickListener { submitReview(1) }
+        btnGood.setOnClickListener { submitReview(0) }
+    }
+
+    private fun submitReview(score: Int) {
+        val allEntries = clothingPrefs.all
+        if (allEntries.isNotEmpty()) {
+            val memberEmail = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+                .getString("memberEmail", null)
+            if (memberEmail == null) {
+                Toast.makeText(context, "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            allEntries.forEach { (key, _) ->
+                val temp = key.toDoubleOrNull()
+                if (temp != null) {
+                    val review = Review(
+                        memberEmail = memberEmail,
+                        evaluationScore = score,
+                        temp = temp
+                    )
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            val response = apiService.submitReview(review)
+                            withContext(Dispatchers.Main) {
+                                if (response.isSuccessful) {
+                                    Toast.makeText(context, "리뷰가 전송되었습니다!", Toast.LENGTH_SHORT).show()
+                                    clearClothingPrefs()
+                                    dismiss()
+                                } else {
+                                    Toast.makeText(context, "리뷰 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } catch (e: Exception) {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "에러 발생: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "온도 정보를 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Toast.makeText(context, "선택됐던 옷이 없습니다!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun clearClothingPrefs() {
+        val editor = clothingPrefs.edit()
+        editor.clear() // 모든 데이터 삭제
+        editor.apply()
+    }
+}

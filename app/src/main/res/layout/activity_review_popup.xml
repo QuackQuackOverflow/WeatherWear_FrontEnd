@@ -37,6 +37,7 @@
         <!-- 스크롤 가능한 의류 컨테이너 -->
 
         <TextView
+            android:id="@+id/tempTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
