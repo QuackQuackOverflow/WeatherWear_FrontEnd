@@ -7,9 +7,11 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.example.weatherwear.R
+import com.example.weatherwear.data.model.ClothingRecommendation
 import com.example.weatherwear.data.model.RWCResponse
 import com.example.weatherwear.data.model.RegionAndWeather
 import com.example.weatherwear.data.model.Weather
+import com.example.weatherwear.ui.ClothingPopup
 
 /**
  * 메인 UI 업데이트를 관리하는 헬퍼 클래스
@@ -48,6 +50,20 @@ class MainUIHelper(private val context: Context) {
                     currentWeather.skyCondition ?: "1",
                     currentWeatherIconSize
                 )
+
+                // 특정 ID를 가진 ImageView에만 속성을 추가 (currentWeatherView_Main)
+                if (weatherIconView.id == R.id.currentWeatherView_main) {
+                    val layoutParams = RelativeLayout.LayoutParams(
+                        (currentWeatherIconSize * context.resources.displayMetrics.density).toInt(),
+                        (currentWeatherIconSize * context.resources.displayMetrics.density).toInt()
+                    ).apply {
+                        addRule(RelativeLayout.ALIGN_PARENT_END) // android:layout_alignParentEnd="true"
+                        topMargin = (70 * context.resources.displayMetrics.density).toInt() // android:layout_marginTop="70dp"
+                        marginEnd = (30 * context.resources.displayMetrics.density).toInt() // android:layout_marginEnd="30dp"
+                    }
+                    weatherIconView.layoutParams = layoutParams
+                }
+
             } else {
                 tempTextView.text = "온도 정보 없음"
                 weatherIconView.setImageResource(R.drawable.baseline_question_mark_50dp_outline)
@@ -59,6 +75,7 @@ class MainUIHelper(private val context: Context) {
             weatherIconView.setImageResource(R.drawable.baseline_question_mark_50dp_outline)
         }
     }
+
 
     /**
      * 시간대별 날씨 정보를 UI에 반영
@@ -198,19 +215,22 @@ class MainUIHelper(private val context: Context) {
         container.removeAllViews() // 기존 뷰 제거
 
         rwcResponse.clothingRecommendations?.forEach { recommendation ->
-            recommendation.recommendations.forEach { clothingName ->
-                val itemLayout = createClothingItemLayout(clothingName) // 각 의상 이름 전달
-                container.addView(itemLayout)
+            // 각 의상 추천을 위한 레이아웃 생성
+            val itemLayout = createClothingItemLayout(recommendation)
+
+            // 레이아웃 클릭 시 팝업 표시
+            itemLayout.setOnClickListener {
+                showClothingPopup(recommendation) // 의상 팝업 표시
             }
+
+            container.addView(itemLayout) // LinearLayout에 추가
         }
     }
 
     /**
      * 개별 의상 아이템을 위한 레이아웃 생성
-     * @param clothingName 의상 이름
-     * @return LinearLayout 아이템 레이아웃
      */
-    private fun createClothingItemLayout(clothingName: String): LinearLayout {
+    private fun createClothingItemLayout(recommendation: ClothingRecommendation): LinearLayout {
         return LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             layoutParams = LinearLayout.LayoutParams(
@@ -218,21 +238,24 @@ class MainUIHelper(private val context: Context) {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 setMargins(
-                    (50 * context.resources.displayMetrics.density).toInt(),
-                    0,
-                    (50 * context.resources.displayMetrics.density).toInt(),
-                    0
+                    (16 * context.resources.displayMetrics.density).toInt(),
+                    (8 * context.resources.displayMetrics.density).toInt(),
+                    (16 * context.resources.displayMetrics.density).toInt(),
+                    (8 * context.resources.displayMetrics.density).toInt()
                 )
             }
             gravity = android.view.Gravity.CENTER
 
-            // 의상 이름 TextView 추가
-            addView(createClothingTextView(clothingName))
+            // 의상 이미지 추가
+            val imageView = createClothingImageView("")
+            addView(imageView)
 
-            // 의상 이미지 ImageView 추가
-            addView(createClothingImageView(clothingName))
+            // 의상 온도 텍스트 추가
+            val textView = createClothingTextView(recommendation.temperature)
+            addView(textView)
         }
     }
+
 
     /**
      * 의상 이름 TextView 생성
@@ -257,4 +280,10 @@ class MainUIHelper(private val context: Context) {
             setImageResource(R.drawable.t_shirt_100dp) // 기본 이미지 리소스
         }
     }
+
+    private fun showClothingPopup(recommendation: ClothingRecommendation) {
+        val popup = ClothingPopup(context, recommendation)
+        popup.show()
+    }
+
 }

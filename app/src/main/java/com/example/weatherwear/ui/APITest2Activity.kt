@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 
 class APITest2Activity : AppCompatActivity() {
 
@@ -134,7 +135,6 @@ class APITest2Activity : AppCompatActivity() {
         }
     }
 
-
     // RWCResponse 텍스트 포맷팅
     private fun buildRWCDisplayText(rwcResponse: RWCResponse): String {
         val builder = StringBuilder()
@@ -213,7 +213,9 @@ class APITest2Activity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val recommendations = response.body()
                         if (recommendations != null) {
-                            resultTextView.text = recommendations.joinToString("\n") { it.toString() }
+                            // buildAIRecommendationDisplayText를 호출하여 결과를 포맷팅
+                            val formattedText = buildAIRecommendationDisplayText(recommendations)
+                            resultTextView.text = formattedText
                         } else {
                             resultTextView.text = "추천 데이터를 가져올 수 없습니다."
                         }
@@ -234,13 +236,40 @@ class APITest2Activity : AppCompatActivity() {
         val builder = StringBuilder()
         builder.append("=== AI 기반 추천 결과 ===\n")
         recommendations.forEach { recommendation ->
+            // 회원 이메일 및 온도 출력
             builder.append("회원 이메일: ${recommendation.memberEmail}\n")
             builder.append("온도: ${recommendation.temperature} °C\n")
-            builder.append("추천 의상: ${recommendation.optimizedClothing}\n\n")
+
+            // JSON 문자열을 List<String>으로 변환
+            val optimizedClothingsToList = parseOptimizedClothing(recommendation.optimizedClothing.toString())
+
+            // 추천 의상 출력
+            builder.append("추천 의상:\n")
+            optimizedClothingsToList.forEach { clothing ->
+                builder.append("$clothing\n") // 각 항목 출력
+            }
+            builder.append("\n")
         }
         return builder.toString()
     }
 
+
+    /**
+     * JSON 형태의 String을 List<String>으로 변환
+     * @param jsonString JSON 문자열
+     * @return List<String> 변환된 리스트
+     */
+    fun parseOptimizedClothing(jsonString: String): List<String> {
+        val list = mutableListOf<String>()
+        val jsonArray = JSONArray(jsonString) // JSON 배열로 변환
+        for (i in 0 until jsonArray.length()) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            val type = jsonObject.getString("type") // "type" 값 가져오기
+            val item = jsonObject.getString("item") // "item" 값 가져오기
+            list.add("$type-$item") // "type-item" 형태로 리스트에 추가
+        }
+        return list
+    }
 
 }
 

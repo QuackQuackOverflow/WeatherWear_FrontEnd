@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.apitest.APITest2Activity
 import com.example.weatherwear.R
+import com.example.weatherwear.data.model.ClothingRecommendation
 import com.example.weatherwear.data.model.RWCResponse
 import com.example.weatherwear.data.sample.SampleRWC
 import com.example.weatherwear.helpers.GetRWCHelper
@@ -15,7 +16,7 @@ import com.google.android.gms.location.LocationServices
 
 class MainActivity : AppCompatActivity() {
 
-    // Activity에서 다룰 UI요소 선언
+    // UI 요소
     private lateinit var checkCurrentRegionMain: TextView
     private lateinit var currentTempViewMain: TextView
     private lateinit var currentWeatherViewMain: ImageView
@@ -23,23 +24,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var clothesLinearLayout: LinearLayout
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    // Activity에서 다룰 Helper클래스들
+    // Helper 클래스 및 데이터
     private lateinit var getRWCHelper: GetRWCHelper
     private lateinit var mainUIHelper: MainUIHelper
+    private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
 
-    // RWCResponse 데이터 객체를 클래스 변수로 선언
-    private var rwcResponse: RWCResponse? = null
-
-    /**
-     * 샘플 데이터를 사용할지 여부를 결정하는 변수
-     */
-    private var useSample: Boolean = true // true면 샘플 데이터를 사용, false면 서버 데이터를 사용
+    private var useSample: Boolean = true // 샘플 데이터 사용 여부
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // UI 요소 초기화
+        // UI 초기화
         checkCurrentRegionMain = findViewById(R.id.checkCurrentRegion_main)
         currentTempViewMain = findViewById(R.id.currentTempView_main)
         currentWeatherViewMain = findViewById(R.id.currentWeatherView_main)
@@ -50,115 +46,124 @@ class MainActivity : AppCompatActivity() {
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         getRWCHelper = GetRWCHelper(this, fusedLocationClient)
-        mainUIHelper = MainUIHelper(this) // MainUIHelper 초기화
+        mainUIHelper = MainUIHelper(this)
 
-        // RWC 데이터를 가져와서 UI에 반영
         refreshWeatherData()
 
-        // Navigation Bar 버튼 초기화 및 클릭 이벤트 추가
-        val navigationBarBtn1: Button = findViewById(R.id.navigationBarBtn1)
+        // 버튼 이벤트 추가
         val navigationBarBtn2: Button = findViewById(R.id.navigationBarBtn2)
-        val navigationBarBtn3: Button = findViewById(R.id.navigationBarBtn3)
-
-        // 버튼 2: APITest2Activity로 이동
         navigationBarBtn2.setOnClickListener {
             val intent = Intent(this, APITest2Activity::class.java)
-            startActivity(intent) // APITest2Activity 시작
+            startActivity(intent)
         }
 
-        // 버튼 3: SettingsActivity로 이동
+        val navigationBarBtn3: Button = findViewById(R.id.navigationBarBtn3)
         navigationBarBtn3.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent) // SettingsActivity 시작
+            startActivity(intent)
         }
 
-        // SwipeRefreshLayout 리스너 추가
         swipeRefreshLayout.setOnRefreshListener {
-            refreshWeatherData() // 새로고침 동작
+            refreshWeatherData()
         }
     }
 
     /**
-     * RWC 데이터를 가져와 UI에 반영하는 함수
-     * 1. 현재 날씨 정보 업데이트
-     * 2. 시간대별 날씨 정보 생성
-     * 3. 의상 추천 정보 생성
+     * RWC 데이터를 가져와 UI에 반영
      */
     private fun fetchAndUpdateUI() {
-        // useSample 값에 따라 메시지 설정
-        val message = if (useSample) {"샘플 RWC 불러오는 중" } else { "서버에서 데이터 불러오는 중" }
+        val message = if (useSample) "샘플 RWC 불러오는 중" else "서버에서 데이터 불러오는 중"
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
-        // GPS 기반으로 RWC 데이터를 가져옴
         getRWCHelper.fetchRWCFromGPS { response ->
             if (response != null) {
-                rwcResponse = response // 데이터를 클래스 변수에 저장
-                // 현재 날씨 정보를 UI에 반영
-                mainUIHelper.updateCurrentWeatherUI(
-                    rwcResponse!!,
-                    checkCurrentRegionMain,    // 지역 이름 TextView
-                    currentTempViewMain,       // 현재 온도 TextView
-                    currentWeatherViewMain     // 현재 날씨 아이콘 ImageView
-                )
-
-                // 시간대별 날씨 정보를 UI에 반영
-                mainUIHelper.generateTimeWeatherLayout(
-                    rwcResponse!!, // RWCResponse 객체에서 시간대별 데이터
-                    timeWeatherContainer          // 시간대별 날씨 LinearLayout
-                )
-                // 의상 추천 정보를 UI에 반영
-                mainUIHelper.populateClothingRecommendations(
-                    rwcResponse!!,                 // RWCResponse 데이터
-                    clothesLinearLayout          // 의상 추천 HorizontalScrollView 내부 LinearLayout
-                )
+                rwcResponse = response
+                updateUI(response)
             } else {
-                // RWC 데이터를 가져오지 못했을 경우 사용자에게 메시지 표시
                 Toast.makeText(this, "RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
-            // SwipeRefreshLayout 로딩 해제
             swipeRefreshLayout.isRefreshing = false
         }
     }
 
     /**
-     * 샘플 데이터를 사용하여 UI 테스트
+     * UI 업데이트
      */
-    private fun testWithSampleData() {
-        val sampleRWCResponse = SampleRWC.createSampleRWCResponse() // 샘플 데이터 생성
-        rwcResponse = sampleRWCResponse // 샘플 데이터를 클래스 변수에 저장
-
-        // 현재 날씨 정보 반영
+    private fun updateUI(response: RWCResponse) {
         mainUIHelper.updateCurrentWeatherUI(
-            rwcResponse!!,
-            checkCurrentRegionMain,
-            currentTempViewMain,
-            currentWeatherViewMain
+            response, checkCurrentRegionMain, currentTempViewMain, currentWeatherViewMain
         )
-
-        // 시간대별 날씨 정보 반영
-        mainUIHelper.generateTimeWeatherLayout(
-            rwcResponse!!,
-            timeWeatherContainer
-        )
-
-        // 의상 추천 정보 반영
-        mainUIHelper.populateClothingRecommendations(
-            rwcResponse!!,
-            clothesLinearLayout
-        )
-
-        // SwipeRefreshLayout 로딩 해제
-        swipeRefreshLayout.isRefreshing = false
+        mainUIHelper.generateTimeWeatherLayout(response, timeWeatherContainer)
+        response.clothingRecommendations?.let { populateClothingRecommendations(it) }
     }
 
     /**
-     * 화면 새로고침을 통해 데이터를 다시 불러오고 UI에 반영
+     * 의상 추천 정보 표시
      */
+    private fun populateClothingRecommendations(recommendations: List<ClothingRecommendation>) {
+        clothesLinearLayout.removeAllViews()
+
+        recommendations.forEach { recommendation ->
+            // ImageButton 생성
+            val imageButton = ImageButton(this).apply {
+                setImageResource(R.drawable.t_shirt_100dp) // 올바른 리소스 이름 사용
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply { setMargins(8, 8, 8, 8) }
+                setPadding(16, 16, 16, 16)
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
+            }
+
+            // 클릭 이벤트 추가
+            imageButton.setOnClickListener {
+                showClothingPopup(recommendation)
+            }
+
+            // TextView 생성
+            val textView = TextView(this).apply {
+                // TextView에 온도를 직접 설정 (문자열 리소스 없이)
+                text = recommendation.temperature
+                textSize = 14f
+                gravity = android.view.Gravity.CENTER
+            }
+
+            // LinearLayout으로 묶음
+            val container = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                gravity = android.view.Gravity.CENTER
+                addView(imageButton)
+                addView(textView)
+            }
+
+            // 부모 Layout에 추가
+            clothesLinearLayout.addView(container)
+        }
+    }
+
+    /**
+     * ClothingPopup 표시
+     */
+    private fun showClothingPopup(recommendation: ClothingRecommendation) {
+        val popup = ClothingPopup(this, recommendation)
+        popup.show()
+    }
+
+    /**
+     * 샘플 데이터 사용
+     */
+    private fun testWithSampleData() {
+        val sampleRWCResponse = SampleRWC.createSampleRWCResponse()
+        rwcResponse = sampleRWCResponse
+        updateUI(sampleRWCResponse)
+        swipeRefreshLayout.isRefreshing = false
+    }
+
     private fun refreshWeatherData() {
         if (useSample) {
-            testWithSampleData() // 샘플 데이터를 사용한 테스트
+            testWithSampleData()
         } else {
-            fetchAndUpdateUI() // 서버에서 데이터 다시 불러오기
+            fetchAndUpdateUI()
         }
     }
 }
