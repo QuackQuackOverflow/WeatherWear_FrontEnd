@@ -79,9 +79,9 @@ class APITest2Activity : AppCompatActivity() {
             // Review 객체 생성
             val review = Review(
                 memberEmail = "jts3531",   // 회원 이메일
-                evaluationScore = -1       // 평가 점수
+                evaluationScore = -1,      // 평가 점수
+                temp = 5.0                 // 어떤 기온에 그 옷을 입었는지
             )
-
             // Review 전송
             submitReviewAndShowToast(review)
         }

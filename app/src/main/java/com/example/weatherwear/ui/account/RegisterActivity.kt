@@ -34,8 +34,8 @@ class RegisterActivity : AppCompatActivity() {
         val loadingProgressBar = findViewById<ProgressBar>(R.id.loadingProgressBar)
         val createAccountButton = findViewById<Button>(R.id.createAccountButton)
 
-        // 기본값 설정: "추위를 잘 타요"가 기본 선택
-        coldRadioButton.isChecked = true
+        // 기본값 설정: "평균"이 기본 선택
+        averageRadioButton.isChecked = true
 
         // "계정 생성" 버튼 클릭 시 이벤트 처리
         createAccountButton.setOnClickListener {

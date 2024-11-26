@@ -46,7 +46,7 @@ interface ApiService {
     /**
      * Review 관련 API
      */
-    @POST("api/submit/evaluations")
+    @POST("api/evaluations/submit")
     suspend fun submitReview(
         @Body review: Review
     ): Response<Void>
