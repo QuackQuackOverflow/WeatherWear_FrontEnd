@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity() {
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
     private var useSample: Boolean = false // 샘플 데이터 사용 여부
 
+    /**
+     * 죽겠어요
+     */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
