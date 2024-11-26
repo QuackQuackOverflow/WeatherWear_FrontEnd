@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -50,6 +51,14 @@ interface ApiService {
     suspend fun submitReview(
         @Body review: Review
     ): Response<Void>
+
+    /**
+     * AI기반 옷차림 추천 요청 API
+     */
+    @GET("api/recommendations/{memberEmail}")
+    suspend fun getAIRecommendation(
+        @Path("memberEmail") memberEmail: String
+    ): Response<List<LearnedRecommendation>>
 
     /**
      * userType을 보내고 ClothingSet을 반환받는 API
@@ -115,3 +124,5 @@ private fun parseRWCResponse(response: List<Map<String, Any>>): RWCResponse? {
 
     return RWCResponse(regionWeather = regionWeather, clothingRecommendations = clothingRecommendations)
 }
+
+

@@ -8,6 +8,7 @@ import com.example.weatherwear.R
 import com.example.weatherwear.data.api.ApiService
 import com.example.weatherwear.data.api.getRWC
 import com.example.weatherwear.data.model.*
+import com.example.weatherwear.data.sample.SampleAIRecommendation
 import com.example.weatherwear.data.sample.SampleRWC
 import com.example.weatherwear.util.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,8 @@ class APITest2Activity : AppCompatActivity() {
     private lateinit var editTextNx: EditText
     private lateinit var editTextNy: EditText
     private lateinit var buttonSubmitReview: Button
+    private lateinit var btnTestAIRecommendation : Button
+    private lateinit var btnTestAIRecommendationWithSample : Button
 
     /**
      * 샘플 데이터를 테스트하기 위한 버튼
@@ -43,15 +46,17 @@ class APITest2Activity : AppCompatActivity() {
         getRegionAndWeatherCustomButton = findViewById(R.id.buttonGetRegionAndWeather_Custom)
         editTextNx = findViewById(R.id.editTextNx)
         editTextNy = findViewById(R.id.editTextNy)
+        btnTestAIRecommendation = findViewById(R.id.btn_testAIrecommendation)
+        // AI 추천 샘플 데이터 버튼 초기화
+        btnTestAIRecommendationWithSample = findViewById(R.id.btn_testAIrecommendationWithSample)
+
 
         /**
          * 샘플 데이터를 위한 버튼 초기화
          */
         getSampleDataButton = findViewById(R.id.buttonGetSampleData)
-
         // API 초기화
         apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
-
         // 사용자 입력 GPS 기반 지역 및 날씨 정보 요청
         getRegionAndWeatherCustomButton.setOnClickListener {
             val nxText = editTextNx.text.toString()
@@ -73,7 +78,6 @@ class APITest2Activity : AppCompatActivity() {
             // API 호출
             fetchRegionAndWeather(nx, ny)
         }
-
         // 샘플 리뷰 데이터 생성하여 전송
         buttonSubmitReview.setOnClickListener {
             // Review 객체 생성
@@ -85,7 +89,11 @@ class APITest2Activity : AppCompatActivity() {
             // Review 전송
             submitReviewAndShowToast(review)
         }
-
+        // AI추천 버튼 ( 파라미터 : jts3531 )
+        btnTestAIRecommendation.setOnClickListener {
+            val memberEmail = "jts3531" // 테스트용 이메일
+            fetchAIRecommendations(memberEmail)
+        }
 
 
         /**
@@ -94,6 +102,12 @@ class APITest2Activity : AppCompatActivity() {
         getSampleDataButton.setOnClickListener {
             val sampleRWCResponse = SampleRWC.createSampleRWCResponse()
             val resultText = buildRWCDisplayText(sampleRWCResponse)
+            resultTextView.text = resultText
+        }
+        // AI 추천 샘플 데이터 버튼 클릭 리스너
+        btnTestAIRecommendationWithSample.setOnClickListener {
+            val sampleRecommendations = SampleAIRecommendation.createSampleRecommendations()
+            val resultText = buildAIRecommendationDisplayText(sampleRecommendations)
             resultTextView.text = resultText
         }
     }
@@ -137,7 +151,6 @@ class APITest2Activity : AppCompatActivity() {
     }
 
     // 지역 및 날씨 정보를 출력하는 함수
-    // 지역 및 날씨 정보를 출력하는 함수
     private fun formatRegionAndWeather(regionAndWeather: RegionAndWeather): String {
         val builder = StringBuilder()
         builder.append("지역: ${regionAndWeather.regionName}\n")
@@ -170,7 +183,8 @@ class APITest2Activity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     Toast.makeText(this@APITest2Activity, "리뷰가 전송되었습니다!", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this@APITest2Activity, "리뷰 전송에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@APITest2Activity, "리뷰 전송에 실패했습니다.", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -188,6 +202,46 @@ class APITest2Activity : AppCompatActivity() {
         }
         return builder.toString()
     }
+
+    // AI옷추천 기능 테스트 버튼 (API요청)
+    private fun fetchAIRecommendations(memberEmail: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // API 호출
+                val response = apiService.getAIRecommendation(memberEmail)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val recommendations = response.body()
+                        if (recommendations != null) {
+                            resultTextView.text = recommendations.joinToString("\n") { it.toString() }
+                        } else {
+                            resultTextView.text = "추천 데이터를 가져올 수 없습니다."
+                        }
+                    } else {
+                        resultTextView.text = "API 호출 실패: ${response.code()}"
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    resultTextView.text = "에러 발생: ${e.message}"
+                }
+            }
+        }
+    }
+
+    // AI 기반 추천 결과 출력
+    private fun buildAIRecommendationDisplayText(recommendations: List<LearnedRecommendation>): String {
+        val builder = StringBuilder()
+        builder.append("=== AI 기반 추천 결과 ===\n")
+        recommendations.forEach { recommendation ->
+            builder.append("회원 이메일: ${recommendation.memberEmail}\n")
+            builder.append("온도: ${recommendation.temperature} °C\n")
+            builder.append("추천 의상: ${recommendation.optimizedClothing}\n\n")
+        }
+        return builder.toString()
+    }
+
+
 }
 
 //    // 강수 형태를 텍스트로 변환하는 함수

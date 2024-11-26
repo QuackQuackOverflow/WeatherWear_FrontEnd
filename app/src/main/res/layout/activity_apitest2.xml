@@ -70,6 +70,14 @@
         android:layout_marginTop="8dp"
         android:text="AI기반 옷차림 추천 테스트 \n( 파라미터 : jts3531 )" />
 
+    <!-- 버튼 6 : AI기반 옷차림 추천 출력 테스트 (샘플사용) -->
+    <Button
+        android:id="@+id/btn_testAIrecommendationWithSample"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="AI기반 옷차림 추천 출력 테스트 (샘플사용)" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
