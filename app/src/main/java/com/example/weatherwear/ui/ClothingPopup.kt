@@ -79,8 +79,10 @@ class ClothingPopup(
         val prefs = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
         val editor = prefs.edit()
 
-        // 온도를 Double로 변환
-        val temperature = recommendation.temperature.toDoubleOrNull()
+        // 온도에서 °C 제거 후 Double로 변환
+        val temperatureString = recommendation.temperature.replace("°C", "").trim() // °C 제거
+        val temperature = temperatureString.toDoubleOrNull() // 숫자로 변환
+
         if (temperature != null) {
             // 기존 저장된 옷차림 데이터를 불러옴
             val existingData = prefs.getString(temperature.toString(), null)
@@ -104,4 +106,5 @@ class ClothingPopup(
             Toast.makeText(context, "온도 정보를 저장하는 데 문제가 발생했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
 }
