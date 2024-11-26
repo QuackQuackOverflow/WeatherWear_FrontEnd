@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="추천된 옷들은 어땠나요?"
+                android:text="옷차림 추천은 어땠나요?"
                 android:textSize="22sp"
                 android:textColor="@color/white" />
 

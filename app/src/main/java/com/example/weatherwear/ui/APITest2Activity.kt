@@ -103,7 +103,7 @@ class APITest2Activity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // ApiService 확장 함수 호출
-                val rwcResponse = apiService.getRWC(nx, ny, "추위를 잘 타요")
+                val rwcResponse = apiService.getRWC(nx, ny, "coldSensitive")
                 withContext(Dispatchers.Main) {
                     if (rwcResponse != null) {
                         val resultText = buildRWCDisplayText(rwcResponse)

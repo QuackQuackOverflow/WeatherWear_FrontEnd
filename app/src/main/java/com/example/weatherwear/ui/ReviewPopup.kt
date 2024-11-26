@@ -184,9 +184,8 @@ import kotlinx.coroutines.launch
 //            }
 //        }
 //    }
-//}
-
-/**
+//
+//    /**
 //     * 테스트용 ClothingSet 생성 함수
 //     */
 //    private fun createTestClothingSet(): ClothingRecommendation {
@@ -202,3 +201,4 @@ import kotlinx.coroutines.launch
 //            )
 //        )
 //    }
+//}
