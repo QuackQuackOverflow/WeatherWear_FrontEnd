@@ -149,12 +149,31 @@
                     android:background="@color/skyblue"
                     android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="이런 옷은 어떠세요?"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
+                    <!--"이런 옷은 어떠세요?",AI기반 추천 버튼-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="이런 옷은 어떠세요?"
+                            android:textColor="#000000"
+                            android:textSize="20sp" />
+
+                        <Button
+                            android:id="@+id/btn_requestAIrecommendation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="AI기반 옷차림 추천">
+
+                        </Button>
+
+                    </RelativeLayout>
+
+
 
                     <HorizontalScrollView
                         android:id="@+id/clothesViewContainer"

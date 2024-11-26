@@ -25,42 +25,51 @@
                 android:text="옷차림 추천은 어땠나요?"
                 android:textSize="22sp"
                 android:textColor="@color/white" />
-
         </RelativeLayout>
-
     </Toolbar>
 
     <!-- 옷 추천 리스트 -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/lightSkyblue"
-        android:layout_height="500dp">
+        android:layout_height="550dp"
+        android:background="@color/lightSkyblue">
 
-        <!-- 수직 스크롤 뷰 -->
+        <!-- 스크롤 가능한 의류 컨테이너 -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="(temp)기준 옷차림 추천"
+            android:textSize="20sp"></TextView>
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:layout_marginTop="30dp"
+            android:layout_height="360dp"
+            android:layout_marginTop="60dp"
             android:layout_marginBottom="10dp">
 
-            <!-- 동적으로 추가될 컨테이너 -->
             <LinearLayout
                 android:id="@+id/clothingContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical" />
+
         </ScrollView>
 
-        <!-- Bottom buttons for user feedback -->
+        <!-- 하단 버튼 -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
+            <!-- 추웠어요/더웠어요 버튼 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,7 +78,9 @@
                 <Button
                     android:id="@+id/btn_cold"
                     android:layout_width="130dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
+                    android:minWidth="130dp"
+                    android:maxHeight="40dp"
                     android:layout_marginHorizontal="15dp"
                     android:background="@color/skyblue"
                     android:text="추웠어요"
@@ -78,24 +89,28 @@
                 <Button
                     android:id="@+id/btn_hot"
                     android:layout_width="130dp"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
+                    android:minWidth="130dp"
+                    android:maxHeight="40dp"
                     android:layout_marginHorizontal="15dp"
                     android:background="@color/hotRed"
                     android:text="더웠어요"
                     android:textSize="20sp" />
             </LinearLayout>
 
+            <!-- 마음에 들어요 버튼 -->
             <Button
                 android:id="@+id/btn_good"
                 android:layout_width="290dp"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
+                android:minWidth="290dp"
+                android:maxHeight="40dp"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/superLightGray"
                 android:text="마음에 들어요"
                 android:textSize="20sp" />
         </LinearLayout>
-
     </RelativeLayout>
-
 </LinearLayout>

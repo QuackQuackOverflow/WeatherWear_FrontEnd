@@ -62,6 +62,14 @@
         android:layout_marginTop="8dp"
         android:text="리뷰 전송 (jts3531이랑 추웠어요(-1) )" />
 
+    <!-- 버튼 5: ID, 리뷰내용, 날짜를 담아 리뷰요청 -->
+    <Button
+        android:id="@+id/btn_testAIrecommendation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="AI기반 옷차림 추천 테스트 \n( 파라미터 : jts3531 )" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
