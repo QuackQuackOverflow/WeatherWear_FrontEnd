@@ -41,7 +41,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainUIHelper: MainUIHelper
     private lateinit var apiService: ApiService
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
-    private var useSample: Boolean = false // 샘플 데이터 사용 여부
+    private var useSample: Boolean = true // 샘플 데이터 사용 여부
+
+    private val ImageSize = 400
 
     /**
      * 죽겠어요
@@ -155,8 +157,8 @@ class MainActivity : AppCompatActivity() {
             val imageButton = ImageButton(this).apply {
                 setImageResource(R.drawable.t_shirt_100dp) // 올바른 리소스 이름 사용
                 layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    ImageSize,
+                    ImageSize
                 ).apply { setMargins(8, 8, 8, 8) }
                 setPadding(16, 16, 16, 16)
                 scaleType = ImageView.ScaleType.CENTER_INSIDE
@@ -171,7 +173,7 @@ class MainActivity : AppCompatActivity() {
             val textView = TextView(this).apply {
                 // TextView에 온도를 직접 설정 (문자열 리소스 없이)
                 text = recommendation.temperature
-                textSize = 14f
+                textSize = 20f
                 gravity = android.view.Gravity.CENTER
             }
 

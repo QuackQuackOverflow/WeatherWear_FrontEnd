@@ -154,7 +154,7 @@ class MainUIHelper(private val context: Context) {
             // 시간 텍스트 추가
             val hourText = TextView(context).apply {
                 text = "${forecastTime.substring(0, 2)}시"
-                textSize = 16f
+                textSize = 18f
                 gravity = android.view.Gravity.CENTER
             }
             addView(hourText, RelativeLayout.LayoutParams(
@@ -179,7 +179,7 @@ class MainUIHelper(private val context: Context) {
             // 온도 텍스트 추가
             val tempText = TextView(context).apply {
                 text = "${weather.temp?.toInt() ?: "?"}°"
-                textSize = 16f
+                textSize = 20f
                 gravity = android.view.Gravity.CENTER
             }
             addView(tempText, RelativeLayout.LayoutParams(
@@ -198,7 +198,7 @@ class MainUIHelper(private val context: Context) {
     private fun createHourLayoutParams(): LinearLayout.LayoutParams {
         return LinearLayout.LayoutParams(
             (60 * context.resources.displayMetrics.density).toInt(),
-            (120 * context.resources.displayMetrics.density).toInt()
+            (100 * context.resources.displayMetrics.density).toInt()
         ).apply {
             setMargins(20, 0, 20, 0)
         }
