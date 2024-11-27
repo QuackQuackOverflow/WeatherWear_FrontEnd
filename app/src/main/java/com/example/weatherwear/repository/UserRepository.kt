@@ -19,7 +19,7 @@ class UserRepository {
     }
 
     // 서버에 회원가입 요청을 보내는 함수
-    suspend fun registerUser(user: User): Response<User> {
+    suspend fun registerUser(user: User): Response<Void> {
         return api.registerUser(user)
     }
 

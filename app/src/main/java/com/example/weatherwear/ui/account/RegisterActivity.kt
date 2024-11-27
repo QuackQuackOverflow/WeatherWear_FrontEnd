@@ -112,7 +112,7 @@ class RegisterActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(
                                 this@RegisterActivity,
-                                "회원가입 성공 (하지만 서버 응답 없음)",
+                                "회원가입 성공",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

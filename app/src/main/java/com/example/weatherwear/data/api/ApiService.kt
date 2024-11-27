@@ -23,7 +23,7 @@ interface ApiService {
      * 계정 관련 API
      */
     @POST("api/members")
-    suspend fun registerUser(@Body user: User): Response<User>
+    suspend fun registerUser(@Body user: User): Response<Void>
 
     @POST("api/members/login")
     suspend fun loginUser(@Body user: User): Response<Member>
