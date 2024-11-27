@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import com.example.weatherwear.data.api.ApiService
 import com.example.weatherwear.data.api.getRWC
 import com.example.weatherwear.data.model.RWCResponse
+import com.example.weatherwear.ui.MainActivity
 import com.example.weatherwear.util.RetrofitInstance
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,7 @@ class GetRWCHelper(
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 100
-        private const val PREF_LOGIN_KEY = "loginPrefs"
+        private const val PREF_LOGIN_KEY = "LoginPrefs"
         private const val PREF_MEMBER_KEY = "member"
     }
 
@@ -94,12 +95,15 @@ class GetRWCHelper(
      */
     private fun loadUserTypeFromPreferences(): String? {
         val sharedPreferences = context.getSharedPreferences(PREF_LOGIN_KEY, Context.MODE_PRIVATE)
-        val memberJson = sharedPreferences.getString(PREF_MEMBER_KEY, null)
-        return memberJson?.let {
-            val member = com.google.gson.Gson().fromJson(it, com.example.weatherwear.data.model.Member::class.java)
-            member.userType
+        val userType = sharedPreferences.getString("userType", null)
+
+        if (userType == null) {
+            Log.e("GetRWCHelper", "userType이 SharedPreferences에 저장되지 않았습니다.")
         }
+
+        return userType
     }
+
 
     /**
      * 위도와 경도를 NX, NY 격자 좌표로 변환하는 함수

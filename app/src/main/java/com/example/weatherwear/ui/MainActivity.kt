@@ -41,7 +41,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainUIHelper: MainUIHelper
     private lateinit var apiService: ApiService
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
-    private var useSample: Boolean = true // 샘플 데이터 사용 여부
+
+    /** 샘플 데이터 사용 시 */
+    private val useSample: Boolean = false // 샘플 데이터 사용 여부
+    /** 고정 nx ny 사용 시 */
+    private val useStaticPosition : Boolean = true
+    private val staticNx : Int = 63
+    private val staticNy : Int = 111
 
     private val ImageSize = 400
 
@@ -121,19 +127,44 @@ class MainActivity : AppCompatActivity() {
      * RWC 데이터를 가져와 UI에 반영
      */
     private fun fetchAndUpdateUI() {
-        val message = if (useSample) "샘플 RWC 불러오는 중" else "서버에서 데이터 불러오는 중"
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-
-        getRWCHelper.fetchRWCFromGPS { response ->
-            if (response != null) {
-                rwcResponse = response
-                updateUI(response)
-            } else {
-                Toast.makeText(this, "RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }
+        // 최상위 조건: useSample 여부
+        if (useSample) {
+            // 샘플 데이터 사용
+            val sampleRWCResponse = SampleRWC.createSampleRWCResponse()
+            rwcResponse = sampleRWCResponse
+            updateUI(sampleRWCResponse)
             swipeRefreshLayout.isRefreshing = false
+            Toast.makeText(this, "샘플 RWC 데이터를 불러왔습니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            val message = if (useStaticPosition) "고정 위치에서 RWC 데이터 불러오는 중" else "GPS에서 RWC 데이터 불러오는 중"
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+            if (useStaticPosition) {
+                // 고정 nx, ny 값을 사용하는 경우
+                getRWCHelper.fetchRWCWithParams(staticNx, staticNy) { response ->
+                    if (response != null) {
+                        rwcResponse = response
+                        updateUI(response)
+                    } else {
+                        Toast.makeText(this, "고정 위치의 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    swipeRefreshLayout.isRefreshing = false
+                }
+            } else {
+                // GPS를 통해 nx, ny 값을 가져오는 경우
+                getRWCHelper.fetchRWCFromGPS { response ->
+                    if (response != null) {
+                        rwcResponse = response
+                        updateUI(response)
+                    } else {
+                        Toast.makeText(this, "GPS 기반 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    swipeRefreshLayout.isRefreshing = false
+                }
+            }
         }
     }
+
 
     /**
      * UI 업데이트
