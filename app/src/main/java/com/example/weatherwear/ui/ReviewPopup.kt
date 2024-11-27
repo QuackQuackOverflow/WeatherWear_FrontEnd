@@ -92,9 +92,10 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(16, 16, 16, 16)
+                setMargins(75, 20, 75, 20)
             }
             gravity = Gravity.CENTER_VERTICAL // 아이템을 수평 정렬
+            setBackgroundColor(context.resources.getColor(R.color.midLightSkyblue, null)) // 배경색 설정
         }
 
         // 이미지 추가 (기본 티셔츠 이미지)
@@ -109,20 +110,31 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
 
         // 텍스트 추가 (추천 의류 이름)
         val textView = TextView(context).apply {
-            text = clothingItemText
+            text = formatClothingText(clothingItemText)
             textSize = 20f
+            gravity = Gravity.CENTER
             layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                400,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                setMargins(16, 0, 0, 0)
+                setPadding(0,0,80,0)
+                setMargins(8, 0, 8, 0)
                 gravity = Gravity.CENTER_VERTICAL // 수직 정렬
             }
         }
         itemLayout.addView(textView)
 
+
+
         // 항목 추가
         clothingContainer.addView(itemLayout)
+    }
+
+    /**
+     * "아우터 - 패딩" -> "아우터\n패딩"으로 변환하는 함수
+     */
+    private fun formatClothingText(clothingText: String): String {
+        return clothingText.replace(" - ", "\n\n")
     }
 
     /**

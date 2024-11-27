@@ -35,3 +35,27 @@ package com.example.weatherwear.ui
  *     @GET("api/weather")
  *     suspend fun getClothingSet(@Query("nx") nx: Int, @Query("ny") ny: Int): Response<ClothingSet>
  */
+
+//// navigationBarBtn1 이벤트
+//val navigationBarBtn1: Button = findViewById(R.id.navigationBarBtn1)
+//navigationBarBtn1.setOnClickListener {
+//    // SharedPreferences 객체를 가져옴
+//    val clothingPrefs = getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+//    // ReviewPopup 생성 및 호출
+//    val reviewPopup = ReviewPopup(this, clothingPrefs)
+//    reviewPopup.show()
+//}
+//
+//// navigationBarBtn2 이벤트
+//val navigationBarBtn2: Button = findViewById(R.id.navigationBarBtn2)
+//navigationBarBtn2.setOnClickListener {
+//    val intent = Intent(this, APITest2Activity::class.java)
+//    startActivity(intent)
+//}
+//
+//// navigationBarBtn3 이벤트
+//val navigationBarBtn3: Button = findViewById(R.id.navigationBarBtn3)
+//navigationBarBtn3.setOnClickListener {
+//    val intent = Intent(this, SettingsActivity::class.java)
+//    startActivity(intent)
+//}

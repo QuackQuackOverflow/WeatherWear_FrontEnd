@@ -45,12 +45,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
 
-    /** 샘플 데이터 사용 시 */
-    private val useSample: Boolean = false       // 샘플 데이터 사용 여부
+    companion object {
+        var useSample : Boolean = false
+    }
+
     /** 고정 nx ny 사용 시 */
-    private val useStaticPosition : Boolean = true
-    private val staticNx : Int = 63
-    private val staticNy : Int = 111
+    private val useStaticPosition: Boolean = true
+    private val staticNx: Int = 63
+    private val staticNy: Int = 111
 
     private val ImageSize = 400
 
@@ -71,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         btnRequestAIRecommendation = findViewById(R.id.btn_requestAIrecommendation)
         btnToDetailedWeatherActivity = findViewById(R.id.toDetailedWeatherActivity)
+        val menuButton: ImageButton = findViewById(R.id.menuButton)
 
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -79,30 +82,6 @@ class MainActivity : AppCompatActivity() {
         apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)
 
         refreshWeatherData()
-
-        // navigationBarBtn1 이벤트
-        val navigationBarBtn1: Button = findViewById(R.id.navigationBarBtn1)
-        navigationBarBtn1.setOnClickListener {
-            // SharedPreferences 객체를 가져옴
-            val clothingPrefs = getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
-            // ReviewPopup 생성 및 호출
-            val reviewPopup = ReviewPopup(this, clothingPrefs)
-            reviewPopup.show()
-        }
-
-        // navigationBarBtn2 이벤트
-        val navigationBarBtn2: Button = findViewById(R.id.navigationBarBtn2)
-        navigationBarBtn2.setOnClickListener {
-            val intent = Intent(this, APITest2Activity::class.java)
-            startActivity(intent)
-        }
-
-        // navigationBarBtn3 이벤트
-        val navigationBarBtn3: Button = findViewById(R.id.navigationBarBtn3)
-        navigationBarBtn3.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
 
         // AI 추천 요청 버튼 이벤트
         btnRequestAIRecommendation.setOnClickListener {
@@ -124,6 +103,43 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // 메뉴 버튼 클릭 이벤트
+        menuButton.setOnClickListener {
+            // PopupMenu 생성
+            val popupMenu = PopupMenu(this, menuButton)
+            popupMenu.menuInflater.inflate(R.menu.menu_main, popupMenu.menu)
+
+            // 메뉴 항목 클릭 이벤트 처리
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.review -> {
+                        // 리뷰 남기기
+                        val clothingPrefs =
+                            getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+                        val reviewPopup = ReviewPopup(this, clothingPrefs)
+                        reviewPopup.show()
+                        true
+                    }
+
+                    R.id.settings -> {
+                        // 설정 이동
+                        val intent = Intent(this, SettingsActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+
+                    R.id.developer -> {
+                        // 개발자용 이동
+                        val intent = Intent(this, APITest2Activity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            popupMenu.show() // 팝업 메뉴 표시
+        }
 
 
     }
@@ -154,7 +170,8 @@ class MainActivity : AppCompatActivity() {
             swipeRefreshLayout.isRefreshing = false
             Toast.makeText(this, "샘플 RWC 데이터를 불러왔습니다.", Toast.LENGTH_SHORT).show()
         } else {
-            val message = if (useStaticPosition) "고정 위치에서 RWC 데이터 불러오는 중" else "GPS에서 RWC 데이터 불러오는 중"
+            val message =
+                if (useStaticPosition) "고정 위치에서 RWC 데이터 불러오는 중" else "GPS에서 RWC 데이터 불러오는 중"
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
             if (useStaticPosition) {
@@ -164,7 +181,8 @@ class MainActivity : AppCompatActivity() {
                         rwcResponse = response
                         updateUI(response)
                     } else {
-                        Toast.makeText(this, "고정 위치의 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "고정 위치의 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     swipeRefreshLayout.isRefreshing = false
                 }
@@ -175,7 +193,8 @@ class MainActivity : AppCompatActivity() {
                         rwcResponse = response
                         updateUI(response)
                     } else {
-                        Toast.makeText(this, "GPS 기반 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "GPS 기반 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     swipeRefreshLayout.isRefreshing = false
                 }
@@ -279,3 +298,5 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+
+

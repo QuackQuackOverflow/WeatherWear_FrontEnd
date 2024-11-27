@@ -39,20 +39,8 @@
         android:text="샘플 데이터 출력" />
 
     <!-- 버튼 2: 지역이름, 날씨만 가져오기 -->
-    <Button
-        android:id="@+id/buttonGetRegionAndWeather"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="지역 및 날씨 데이터 요청" />
 
     <!-- 버튼 3: userType을 전송하고 의상 세트 가져오기 -->
-    <Button
-        android:id="@+id/buttonGetClothingSet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="의상 세트 가져오기" />
 
     <!-- 버튼 4: ID, 리뷰내용, 날짜를 담아 리뷰요청 -->
     <Button
@@ -77,6 +65,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="AI기반 옷차림 추천 출력 테스트 (샘플사용)" />
+
+    <!-- 버튼 6 : useSample 스위치  -->
+    <Button
+        android:id="@+id/btn_switchSampleMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="샘플 데이터 스위치" />
 
     <ScrollView
         android:layout_width="match_parent"

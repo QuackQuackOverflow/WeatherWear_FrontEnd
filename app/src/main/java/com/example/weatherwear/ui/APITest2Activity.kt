@@ -10,6 +10,7 @@ import com.example.weatherwear.data.api.getRWC
 import com.example.weatherwear.data.model.*
 import com.example.weatherwear.data.sample.SampleAIRecommendation
 import com.example.weatherwear.data.sample.SampleRWC
+import com.example.weatherwear.ui.MainActivity
 import com.example.weatherwear.util.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +52,21 @@ class APITest2Activity : AppCompatActivity() {
         // AI 추천 샘플 데이터 버튼 초기화
         btnTestAIRecommendationWithSample = findViewById(R.id.btn_testAIrecommendationWithSample)
 
+        /**
+         * useSample을 스위칭하기 위한 버튼
+         */
+        val useSampleButton = findViewById<Button>(R.id.btn_switchSampleMode)
+        useSampleButton.setOnClickListener {
+            // MainActivity의 useSample 값을 토글
+            MainActivity.useSample = !MainActivity.useSample
+
+            // 상태에 따라 버튼 텍스트 변경
+            if (MainActivity.useSample) {
+                Toast.makeText(this, "샘플 데이터를 활성화했습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "샘플 데이터를 비활성화했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         /**
          * 샘플 데이터를 위한 버튼 초기화
