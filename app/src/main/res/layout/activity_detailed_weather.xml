@@ -1,37 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:orientation="vertical">
 
-    <!-- 상단바 -->
-    <LinearLayout
+    <!-- 상단 툴바 텍스트뷰 -->
+    <TextView
+        android:id="@+id/toolbarTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/skyblue"
-        android:padding="10dp">
+        android:background="@color/deppSkyblue"
+        android:text="regionName 상세 날씨"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/regionName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역의 상세 예보"
-            android:textColor="#181818"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <!-- 스크롤 뷰 -->
+    <!-- ScrollView -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/lightSkyblue">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/scrollViewContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical">
+
+            <!-- ScrollView 내 요소 1 : 날씨 정보 RelativeLayout -->
+            <RelativeLayout
+                android:id="@+id/weatherInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:background="@color/lightSkyblue">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="현재 날씨"
+                    android:textColor="#000000"
+                    android:textSize="25sp">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/currentTempView_detailed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginTop="80dp"
+                    android:text=""
+                    android:textColor="@android:color/black"
+                    android:textSize="75sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/currentWeatherView_detailed"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="30dp"
+                    android:src="@drawable/baseline_question_mark_50dp_outline" />
+            </RelativeLayout>
+
+            <!-- ScrollView 내 요소 2 : 상세 날씨 정보 LinearLayout -->
+            <LinearLayout
+                android:id="@+id/detailedWeatherContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/skyblue"
+                android:padding="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시간대별 기온"
+                    android:textColor="#000000"
+                    android:textSize="22sp">
+                </TextView>
+
+                <!-- 시간대별 기온 -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
+                    android:padding="15dp"
+                    android:background="@color/lightSkyblue">
+
+                    <LinearLayout
+                        android:id="@+id/hourlyTempScrollView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시간대별 강수량"
+                    android:textColor="#000000"
+                    android:textSize="22sp">
+                </TextView>
+
+                <!-- 시간대별 강수량 -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
+                    android:padding="15dp"
+                    android:background="@color/lightSkyblue">
+
+                    <LinearLayout
+                        android:id="@+id/hourlyRainAmountScrollView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시간대별 습도"
+                    android:textColor="#000000"
+                    android:textSize="22sp">
+                </TextView>
+
+                <!-- 시간대별 습도 -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
+                    android:padding="15dp"
+                    android:background="@color/lightSkyblue">
+
+                    <LinearLayout
+                        android:id="@+id/hourlyHumidScrollView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시간대별 풍속"
+                    android:textColor="#000000"
+                    android:textSize="22sp">
+                </TextView>
+
+                <!-- 시간대별 풍속 -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
+                    android:padding="15dp"
+                    android:background="@color/lightSkyblue">
+
+                    <LinearLayout
+                        android:id="@+id/hourlyWindspeedScrollView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

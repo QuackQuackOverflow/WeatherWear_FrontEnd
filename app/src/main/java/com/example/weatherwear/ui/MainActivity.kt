@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var clothesLinearLayout: LinearLayout
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var btnRequestAIRecommendation: Button
+    private lateinit var btnToDetailedWeatherActivity: Button
 
     // Helper 클래스 및 데이터
     private lateinit var getRWCHelper: GetRWCHelper
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         clothesLinearLayout = findViewById(R.id.clothesLinearLayout)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         btnRequestAIRecommendation = findViewById(R.id.btn_requestAIrecommendation)
+        btnToDetailedWeatherActivity = findViewById(R.id.toDetailedWeatherActivity)
 
         // Helper 초기화
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -110,6 +112,20 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             refreshWeatherData()
         }
+
+        btnToDetailedWeatherActivity.setOnClickListener {
+            rwcResponse?.regionWeather?.let { regionWeather ->
+                val intent = Intent(this, DetailedWeatherActivity::class.java).apply {
+                    putExtra("regionWeather", regionWeather) // Serializable 객체 전달
+                }
+                startActivity(intent)
+            } ?: run {
+                Toast.makeText(this, "상세 날씨 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
     }
 
 

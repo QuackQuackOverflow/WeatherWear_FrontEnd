@@ -1,5 +1,7 @@
 package com.example.weatherwear.data.model
 
+import java.io.Serializable
+
 data class Weather(
     val id : Int?,                   // 식별자
     val forecastDate : String?,      // 예보 날짜
@@ -14,4 +16,4 @@ data class Weather(
     val rainType: String?,           // 강수형태 (PTY)
     val skyCondition: String?,        // 하늘상태 (SKY)
     val lastUpdateTime: String?      // 마지막 업데이트 시간
-)
+) : Serializable

@@ -20,8 +20,8 @@ import org.json.JSONArray
 class MainUIHelper(private val context: Context) {
 
     // 아이콘 크기를 관리하는 변수
-    private val currentWeatherIconSize = 140 // 현재 날씨 아이콘 크기 (dp)
-    private val hourlyWeatherIconSize = 45  // 시간대별 날씨 아이콘 크기 (dp)
+    public val currentWeatherIconSize = 140 // 현재 날씨 아이콘 크기 (dp)
+    public val hourlyWeatherIconSize = 45  // 시간대별 날씨 아이콘 크기 (dp)
 
     /**
      * 현재 날씨 정보를 UI에 반영

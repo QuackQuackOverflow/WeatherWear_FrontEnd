@@ -61,22 +61,30 @@ class ClothingPopup(
 
         // 텍스트 추가 (추천 의류 이름)
         val textView = TextView(context).apply {
-            text = clothingItem
+            // 변환 함수 적용
+            text = formatClothingText(clothingItem)
             textSize = 20f
+            gravity = Gravity.CENTER // 텍스트 중앙 정렬
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 setMargins(16, 0, 0, 0)
-                gravity = Gravity.CENTER_VERTICAL // 수직 정렬
             }
         }
         itemLayout.addView(textView)
 
-
         // 항목 추가
         container.addView(itemLayout)
     }
+
+    /**
+     * "아우터 - 패딩" -> "아우터\n패딩"으로 변환하는 함수
+     */
+    private fun formatClothingText(clothingText: String): String {
+        return clothingText.replace(" - ", "\n")
+    }
+
 
 
     /**
