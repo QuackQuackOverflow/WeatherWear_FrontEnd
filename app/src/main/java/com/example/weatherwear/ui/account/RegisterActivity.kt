@@ -46,9 +46,9 @@ class RegisterActivity : AppCompatActivity() {
 
             // 온도 선호도 결정
             val temperaturePreference = when {
-                coldRadioButton.isChecked -> "cold"
+                coldRadioButton.isChecked -> "coldSensitive"
                 averageRadioButton.isChecked -> "average"
-                hotRadioButton.isChecked -> "hot"
+                hotRadioButton.isChecked -> "hotSensitive"
                 else -> "average" // 기본값
             }
 
