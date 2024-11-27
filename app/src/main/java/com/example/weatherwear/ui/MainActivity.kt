@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
 
     /** 샘플 데이터 사용 시 */
-    private val useSample: Boolean = false // 샘플 데이터 사용 여부
+    private val useSample: Boolean = true // 샘플 데이터 사용 여부
     /** 고정 nx ny 사용 시 */
     private val useStaticPosition : Boolean = true
     private val staticNx : Int = 63

@@ -32,14 +32,16 @@ object SampleRWC {
             val randomWindSpeed = random.nextDouble(0.5, 5.0)
             val randomRainProbability = random.nextDouble(0.0, 100.0)
             val randomRainAmount = if (randomRainType == "0") 0.0 else random.nextDouble(0.0, 10.0)
+            val minimalTemp = random.nextDouble(15.0, 20.0)
+            val maximalTemp = random.nextDouble(0.0, 10.0)
 
             val weather = Weather(
                 id = null,
                 forecastDate = forecastDate,
                 forecastTime = forecastTime,
                 temp = randomTemp,
-                minTemp = if (forecastHour == 0) randomTemp - random.nextInt(1, 5) else null,
-                maxTemp = if (forecastHour == 12) randomTemp + random.nextInt(1, 5) else null,
+                minTemp = minimalTemp,
+                maxTemp = maximalTemp,
                 rainAmount = randomRainAmount,
                 humid = randomHumid,
                 windSpeed = randomWindSpeed,
