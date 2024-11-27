@@ -3,6 +3,7 @@ package com.example.weatherwear.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -12,6 +13,7 @@ import com.example.weatherwear.data.api.ApiService
 import com.example.weatherwear.data.model.ClothingRecommendation
 import com.example.weatherwear.data.model.LearnedRecommendation
 import com.example.weatherwear.data.model.RWCResponse
+import com.example.weatherwear.data.model.RegionAndWeather
 import com.example.weatherwear.data.sample.SampleAIRecommendation
 import com.example.weatherwear.data.sample.SampleRWC
 import com.example.weatherwear.helpers.GetRWCHelper
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
 
     /** 샘플 데이터 사용 시 */
-    private val useSample: Boolean = true // 샘플 데이터 사용 여부
+    private val useSample: Boolean = false       // 샘플 데이터 사용 여부
     /** 고정 nx ny 사용 시 */
     private val useStaticPosition : Boolean = true
     private val staticNx : Int = 63
@@ -170,12 +172,24 @@ class MainActivity : AppCompatActivity() {
      * UI 업데이트
      */
     private fun updateUI(response: RWCResponse) {
+        // 현재 날씨 UI 업데이트
         mainUIHelper.updateCurrentWeatherUI(
             response, checkCurrentRegionMain, currentTempViewMain, currentWeatherViewMain
         )
+
+        // 시간대별 날씨 UI 생성
         mainUIHelper.generateTimeWeatherLayout(response, timeWeatherContainer)
+
+        // 의상 추천 정보 업데이트
         response.clothingRecommendations?.let { populateClothingRecommendations(it) }
+
+        // forecastDate별 요약 정보 추가
+        val forecastSummaryContainer = findViewById<LinearLayout>(R.id.forecastSummaryContainer)
+        response.regionWeather?.let { regionAndWeather ->
+            mainUIHelper.addForecastSummary(regionAndWeather, forecastSummaryContainer)
+        }
     }
+
 
     /**
      * 의상 추천 정보 표시
@@ -246,4 +260,6 @@ class MainActivity : AppCompatActivity() {
             fetchAndUpdateUI()
         }
     }
+
+
 }

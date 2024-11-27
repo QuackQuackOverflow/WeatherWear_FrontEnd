@@ -189,6 +189,16 @@
                     </HorizontalScrollView>
                 </LinearLayout>
 
+                <!-- forecastDate별 요약 정보를 표시할 컨테이너 -->
+                <LinearLayout
+                    android:id="@+id/forecastSummaryContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@color/lightSkyblue" />
+
+
             </LinearLayout>
 
 

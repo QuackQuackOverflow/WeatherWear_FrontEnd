@@ -59,8 +59,10 @@ class MainUIHelper(private val context: Context) {
                         (currentWeatherIconSize * context.resources.displayMetrics.density).toInt()
                     ).apply {
                         addRule(RelativeLayout.ALIGN_PARENT_END) // android:layout_alignParentEnd="true"
-                        topMargin = (70 * context.resources.displayMetrics.density).toInt() // android:layout_marginTop="70dp"
-                        marginEnd = (30 * context.resources.displayMetrics.density).toInt() // android:layout_marginEnd="30dp"
+                        topMargin =
+                            (70 * context.resources.displayMetrics.density).toInt() // android:layout_marginTop="70dp"
+                        marginEnd =
+                            (30 * context.resources.displayMetrics.density).toInt() // android:layout_marginEnd="30dp"
                     }
                     weatherIconView.layoutParams = layoutParams
                 }
@@ -128,7 +130,7 @@ class MainUIHelper(private val context: Context) {
     /**
      * 날씨 조건에 따른 아이콘 리소스를 반환
      */
-    private fun getWeatherIconResource(rainType: String, skyCondition: String): Int {
+    public fun getWeatherIconResource(rainType: String, skyCondition: String): Int {
         return when (rainType) {
             "1" -> R.drawable.weathericon_rainy_24dp
             "2" -> R.drawable.weathericon_rainyandsnowy_24dp
@@ -167,7 +169,12 @@ class MainUIHelper(private val context: Context) {
 
             // 날씨 아이콘 추가
             val weatherIcon = ImageView(context).apply {
-                setWeatherIcon(this, weather.rainType ?: "0", weather.skyCondition ?: "1", hourlyWeatherIconSize)
+                setWeatherIcon(
+                    this,
+                    weather.rainType ?: "0",
+                    weather.skyCondition ?: "1",
+                    hourlyWeatherIconSize
+                )
             }
             addView(weatherIcon, RelativeLayout.LayoutParams(
                 (hourlyWeatherIconSize * context.resources.displayMetrics.density).toInt(),
@@ -299,5 +306,91 @@ class MainUIHelper(private val context: Context) {
         }
         return list
     }
+
+    /**
+     * RegionAndWeather 데이터를 받아 날짜별 요약 정보를 추가
+     */
+    fun addForecastSummary(regionAndWeather: RegionAndWeather, container: LinearLayout) {
+        container.removeAllViews() // 기존 뷰 제거
+
+        // 날씨 데이터 그룹화 (forecastDate 기준)
+        val groupedByDate = regionAndWeather.weather.groupBy { it.forecastDate }
+
+        groupedByDate.forEach { (date, weatherList) ->
+            if (date == null || weatherList.isEmpty()) return@forEach
+
+            // 가장 자주 등장하는 rainType 또는 skyCondition을 결정
+            val commonRainType = weatherList.groupingBy { it.rainType }
+                .eachCount().maxByOrNull { it.value }?.key ?: "0"
+            val commonSkyCondition = weatherList.groupingBy { it.skyCondition }
+                .eachCount().maxByOrNull { it.value }?.key ?: "1"
+
+            // 해당 날짜의 minTemp와 maxTemp 찾기 (예보 시간이 1200인 경우)
+            val noonWeather = weatherList.firstOrNull { it.forecastTime == "1200" }
+            val minTemp = noonWeather?.minTemp?.toInt() ?: "?"
+            val maxTemp = noonWeather?.maxTemp?.toInt() ?: "?"
+
+            // RelativeLayout 생성
+            val relativeLayout = RelativeLayout(context).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(8, 16, 8, 16) // 수직 마진 16으로 설정
+                }
+                setBackgroundColor(context.getColor(R.color.skyblue)) // skyblue로 배경 설정
+            }
+
+            // 날짜 TextView
+            val dateTextView = TextView(context).apply {
+                text = "${date.substring(4, 6)}-${date.substring(6, 8)}" // "20241127" -> "11-27"
+                textSize = 20f
+                setTextColor(context.getColor(android.R.color.black))
+                id = View.generateViewId()
+            }
+            relativeLayout.addView(dateTextView, RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                addRule(RelativeLayout.ALIGN_PARENT_START)
+                addRule(RelativeLayout.CENTER_VERTICAL) // 수직으로 중앙 정렬
+                setMargins(16, 0, 0, 0) // 좌측 마진만 유지
+            })
+
+            // 날씨 이미지
+            val weatherImageView = ImageView(context).apply {
+                setImageResource(getWeatherIconResource(commonRainType, commonSkyCondition))
+                id = View.generateViewId()
+            }
+            relativeLayout.addView(weatherImageView, RelativeLayout.LayoutParams(
+                100, 100 // 크기 설정
+            ).apply {
+                addRule(RelativeLayout.ALIGN_PARENT_LEFT)   // 수평으로 중앙 정렬
+                addRule(RelativeLayout.CENTER_VERTICAL)     // 수직으로 중앙 정렬
+                setMargins(200, 0, 0, 0) // 왼쪽 여백 200 설정
+            })
+
+            // 기온 TextView
+            val tempTextView = TextView(context).apply {
+                text = "$minTemp°C / $maxTemp°C"
+                textSize = 16f
+                setTextColor(context.getColor(android.R.color.black))
+                id = View.generateViewId()
+            }
+            relativeLayout.addView(tempTextView, RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                addRule(RelativeLayout.ALIGN_PARENT_END)
+                addRule(RelativeLayout.CENTER_VERTICAL) // 수직으로 중앙 정렬
+                setMargins(16, 0, 16, 0) // 좌우 마진만 설정
+            })
+
+
+            // LinearLayout에 추가
+            container.addView(relativeLayout)
+        }
+    }
+
 
 }
