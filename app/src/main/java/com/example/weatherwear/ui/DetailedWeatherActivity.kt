@@ -1,6 +1,7 @@
 package com.example.weatherwear.ui
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -65,14 +66,71 @@ class DetailedWeatherActivity : AppCompatActivity() {
         hourlyHumidScrollView.removeAllViews()
         hourlyWindspeedScrollView.removeAllViews()
 
+        var currentDate: String? = null
+
         // 각 Weather 데이터를 추가
-        regionAndWeather.weather.forEach { weather ->
-            addWeatherDataToScrollView(hourlyTempScrollView, formatTime(weather.forecastTime), "${weather.temp?.toInt() ?: "?"}°C")
-            addWeatherDataToScrollView(hourlyRainAmountScrollView, formatTime(weather.forecastTime), "${weather.rainAmount?.toInt() ?: "?"}mm")
-            addWeatherDataToScrollView(hourlyHumidScrollView, formatTime(weather.forecastTime), "${weather.humid?.toInt() ?: "?"}%")
-            addWeatherDataToScrollView(hourlyWindspeedScrollView, formatTime(weather.forecastTime), "${String.format("%.1f", weather.windSpeed ?: 0.0)}m/s")
+        regionAndWeather.weather.forEachIndexed { index, weather ->
+            val formattedTime = formatTime(weather.forecastTime)
+            val formattedDate = formatDate(weather.forecastDate)
+
+            // 날짜가 변경된 경우 회색 배경의 날짜 표시 RelativeLayout 추가
+            if (currentDate != weather.forecastDate) {
+                currentDate = weather.forecastDate
+                addDateHeaderToScrollView(hourlyTempScrollView, formattedDate)
+                addDateHeaderToScrollView(hourlyRainAmountScrollView, formattedDate)
+                addDateHeaderToScrollView(hourlyHumidScrollView, formattedDate)
+                addDateHeaderToScrollView(hourlyWindspeedScrollView, formattedDate)
+            }
+
+            // 시간별 데이터를 추가
+            addWeatherDataToScrollView(hourlyTempScrollView, formattedTime, "${weather.temp?.toInt() ?: "?"}°C")
+            addWeatherDataToScrollView(hourlyRainAmountScrollView, formattedTime, "${weather.rainAmount?.toInt() ?: "?"}mm")
+            addWeatherDataToScrollView(hourlyHumidScrollView, formattedTime, "${weather.humid?.toInt() ?: "?"}%")
+            addWeatherDataToScrollView(hourlyWindspeedScrollView, formattedTime, "${String.format("%.1f", weather.windSpeed ?: 0.0)}m/s")
         }
     }
+
+    /**
+     * ScrollView에 날짜 헤더를 추가하는 함수
+     */
+    private fun addDateHeaderToScrollView(container: LinearLayout, date: String) {
+        val dateLayout = RelativeLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                (80 * resources.displayMetrics.density).toInt(), // width in dp
+                (80 * resources.displayMetrics.density).toInt()  // height in dp
+            ).apply {
+                setMargins(8, -5, 8, 8)
+            }
+            setBackgroundColor(resources.getColor(R.color.cloudGray, null))
+        }
+
+        val dateTextView = TextView(this).apply {
+            text = date
+            textSize = 18f
+            setTextColor(resources.getColor(R.color.black, null))
+            gravity = Gravity.CENTER
+            layoutParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                addRule(RelativeLayout.CENTER_IN_PARENT)
+            }
+        }
+        dateLayout.addView(dateTextView)
+        container.addView(dateLayout)
+    }
+
+    /**
+     * 날짜 문자열을 "20241129" -> "11월\n29일"로 변환
+     */
+    private fun formatDate(date: String?): String {
+        if (date.isNullOrEmpty() || date.length != 8) return "?"
+        val month = date.substring(4, 6).toIntOrNull() ?: return "?"
+        val day = date.substring(6, 8).toIntOrNull() ?: return "?"
+        return "${month}월\n${day}일"
+    }
+
+
 
     /**
      * ScrollView에 데이터를 추가하는 유틸리티 함수

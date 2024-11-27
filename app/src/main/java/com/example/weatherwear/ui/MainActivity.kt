@@ -233,9 +233,15 @@ class MainActivity : AppCompatActivity() {
         clothesLinearLayout.removeAllViews()
 
         recommendations.forEach { recommendation ->
+            // 첫 번째 옷 이름 추출 및 리소스 매핑
+            val firstClothingName = recommendation.recommendations.firstOrNull()?.let { clothingName ->
+                val extractedName = extractClothingName(clothingName)
+                getClothingImageResource(extractedName)
+            } ?: R.drawable.t_shirt_100dp // 기본 이미지
+
             // ImageButton 생성
             val imageButton = ImageButton(this).apply {
-                setImageResource(R.drawable.t_shirt_100dp) // 올바른 리소스 이름 사용
+                setImageResource(firstClothingName) // 추출한 리소스 사용
                 layoutParams = LinearLayout.LayoutParams(
                     ImageSize,
                     ImageSize
@@ -269,6 +275,72 @@ class MainActivity : AppCompatActivity() {
             clothesLinearLayout.addView(container)
         }
     }
+
+    /**
+     * 옷 이름에서 주요 항목 추출 ("상의 - 티셔츠" -> "티셔츠")
+     */
+    private fun extractClothingName(fullName: String): String {
+        return fullName.substringAfterLast("-").trim()
+    }
+
+    /**
+     * 옷 이름에 따른 이미지 리소스를 반환
+     */
+    private fun getClothingImageResource(clothingName: String): Int {
+        val resourceName = when (clothingName) {
+            "민소매" -> "1_sleeveless"
+            "반팔 티셔츠" -> "2_short_sleeve_tshirt"
+            "반바지" -> "3_shorts"
+            "짧은 치마" -> "4_short_skirt"
+            "민소매 원피스" -> "5_sleeveless_dress"
+            "린넨 재질 옷" -> "6_linen_clothing"
+            "얇은 셔츠" -> "7_light_shirt"
+            "얇은 긴팔 티셔츠" -> "8_light_long_sleeve_tshirt"
+            "면바지" -> "9_cotton_pants"
+            "얇은 가디건" -> "10_light_cardigan"
+            "긴팔 티셔츠" -> "11_long_sleeve_tshirt"
+            "셔츠" -> "12_shirt"
+            "블라우스" -> "13_blouse"
+            "후드티" -> "14_hoodie"
+            "슬랙스" -> "15_slacks"
+            "청바지" -> "16_jeans"
+            "얇은 니트" -> "17_light_knit"
+            "얇은 재킷" -> "18_light_jacket"
+            "바람막이" -> "19_windbreaker"
+            "맨투맨" -> "20_sweatshirt"
+            "스키니진" -> "21_skinny_jeans"
+            "재킷" -> "22_jacket"
+            "가디건" -> "23_cardigan"
+            "야상" -> "24_field_jacket"
+            "스웨트 셔츠" -> "25_sweat_shirt"
+            "기모 후드티" -> "26_fleece_hoodie"
+            "스타킹" -> "27_stockings"
+            "니트" -> "28_knit_sweater"
+            "점퍼" -> "29_jumper"
+            "트렌치 코트" -> "30_trench_coat"
+            "레이어드 니트" -> "31_layered_knit"
+            "코트" -> "32_coat"
+            "가죽 재킷" -> "33_leather_jacket"
+            "레깅스" -> "34_leggings"
+            "두꺼운 바지" -> "35_thick_pants"
+            "기모 바지" -> "36_fleece_pants"
+            "기모 스타킹" -> "37_fleece_stockings"
+            "스카프" -> "38_scarf"
+            "플리스" -> "39_fleece"
+            "내복" -> "40_thermal_underwear"
+            "패딩" -> "41_padded_jacket"
+            "두꺼운 코트" -> "42_heavy_coat"
+            "누빔" -> "43_quilted_clothing"
+            "목도리" -> "44_muffler"
+            "장갑" -> "45_gloves"
+            "방한용품" -> "46_winter_accessories"
+            else -> "default_image" // 기본 이미지
+        }
+
+        // 리소스 이름을 기반으로 리소스 ID 반환
+        return resources.getIdentifier("clothing_$resourceName", "drawable", packageName)
+    }
+
 
     /**
      * ClothingPopup 표시

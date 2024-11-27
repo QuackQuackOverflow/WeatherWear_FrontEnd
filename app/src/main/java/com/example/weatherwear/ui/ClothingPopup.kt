@@ -30,6 +30,7 @@ class ClothingPopup(
         val selectButton: Button = findViewById(R.id.btn_selectThis)
         selectButton.setOnClickListener {
             saveToClothingPrefs(recommendation)
+            dismiss()
         }
     }
 
@@ -159,22 +160,17 @@ class ClothingPopup(
         val prefs = context.getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
         val editor = prefs.edit()
 
+        // 기존 데이터를 모두 삭제
+        editor.clear()
+        editor.apply()
+
         // 온도에서 °C 제거 후 Double로 변환
         val temperatureString = recommendation.temperature.replace("°C", "").trim() // °C 제거
         val temperature = temperatureString.toDoubleOrNull() // 숫자로 변환
 
         if (temperature != null) {
-            // 기존 저장된 옷차림 데이터를 불러옴
-            val existingData = prefs.getString(temperature.toString(), null)
-            val clothingList = if (existingData != null) {
-                val jsonArray = JSONArray(existingData)
-                recommendation.recommendations.forEach { item ->
-                    if (!jsonArray.toString().contains(item)) jsonArray.put(item) // 중복 방지
-                }
-                jsonArray
-            } else {
-                JSONArray(recommendation.recommendations)
-            }
+            // 새로운 데이터를 JSON 배열로 생성
+            val clothingList = JSONArray(recommendation.recommendations)
 
             // SharedPreferences에 저장
             editor.putString(temperature.toString(), clothingList.toString())
@@ -185,4 +181,5 @@ class ClothingPopup(
             Toast.makeText(context, "온도 정보를 저장하는 데 문제가 발생했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
 }
