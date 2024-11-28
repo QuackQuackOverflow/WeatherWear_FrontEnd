@@ -2,6 +2,7 @@ package com.example.weatherwear.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var btnRequestAIRecommendation: Button
     private lateinit var btnToDetailedWeatherActivity: Button
+    private lateinit var progressBar: ProgressBar
 
     // Helper 클래스 및 데이터
     private lateinit var getRWCHelper: GetRWCHelper
@@ -73,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         btnRequestAIRecommendation = findViewById(R.id.btn_requestAIrecommendation)
         btnToDetailedWeatherActivity = findViewById(R.id.toDetailedWeatherActivity)
+        progressBar = findViewById(R.id.progressBar)
         val menuButton: ImageButton = findViewById(R.id.menuButton)
 
         // Helper 초기화
@@ -161,46 +164,53 @@ class MainActivity : AppCompatActivity() {
      * RWC 데이터를 가져와 UI에 반영
      */
     private fun fetchAndUpdateUI() {
-        // 최상위 조건: useSample 여부
+        progressBar.visibility = View.VISIBLE // ProgressBar 표시
+
         if (useSample) {
             // 샘플 데이터 사용
             val sampleRWCResponse = SampleRWC.createSampleRWCResponse()
             rwcResponse = sampleRWCResponse
             updateUI(sampleRWCResponse)
             swipeRefreshLayout.isRefreshing = false
+            progressBar.visibility = View.GONE // ProgressBar 숨기기
             Toast.makeText(this, "샘플 RWC 데이터를 불러왔습니다.", Toast.LENGTH_SHORT).show()
         } else {
             val message =
-                if (useStaticPosition) "고정 위치에서 RWC 데이터 불러오는 중" else "GPS에서 RWC 데이터 불러오는 중"
+                if (useStaticPosition) "날씨 데이터 불러오는 중" else "GPS에서 RWC 데이터 불러오는 중"
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
             if (useStaticPosition) {
                 // 고정 nx, ny 값을 사용하는 경우
                 getRWCHelper.fetchRWCWithParams(staticNx, staticNy) { response ->
-                    if (response != null) {
-                        rwcResponse = response
-                        updateUI(response)
-                    } else {
-                        Toast.makeText(this, "고정 위치의 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT)
-                            .show()
+                    runOnUiThread {
+                        progressBar.visibility = View.GONE // ProgressBar 숨기기
+                        if (response != null) {
+                            rwcResponse = response
+                            updateUI(response)
+                        } else {
+                            Toast.makeText(this, "날씨 데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        swipeRefreshLayout.isRefreshing = false
                     }
-                    swipeRefreshLayout.isRefreshing = false
                 }
             } else {
                 // GPS를 통해 nx, ny 값을 가져오는 경우
                 getRWCHelper.fetchRWCFromGPS { response ->
-                    if (response != null) {
-                        rwcResponse = response
-                        updateUI(response)
-                    } else {
-                        Toast.makeText(this, "GPS 기반 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT)
-                            .show()
+                    runOnUiThread {
+                        progressBar.visibility = View.GONE // ProgressBar 숨기기
+                        if (response != null) {
+                            rwcResponse = response
+                            updateUI(response)
+                        } else {
+                            Toast.makeText(this, "GPS 기반 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        swipeRefreshLayout.isRefreshing = false
                     }
-                    swipeRefreshLayout.isRefreshing = false
                 }
             }
         }
     }
+
 
 
     /**
@@ -233,21 +243,28 @@ class MainActivity : AppCompatActivity() {
         clothesLinearLayout.removeAllViews()
 
         recommendations.forEach { recommendation ->
-            // 첫 번째 옷 이름 추출 및 리소스 매핑
-            val firstClothingName = recommendation.recommendations.firstOrNull()?.let { clothingName ->
-                val extractedName = extractClothingName(clothingName)
+            // 리스트에서 난수를 생성하여 임의의 옷 이름 추출
+            val randomClothingName = recommendation.recommendations.takeIf { it.isNotEmpty() }?.let { clothingList ->
+                val randomIndex = (0 until clothingList.size).random() // 0부터 리스트 크기 - 1까지의 난수 생성
+                val extractedName = extractClothingName(clothingList[randomIndex])
                 getClothingImageResource(extractedName)
             } ?: R.drawable.t_shirt_100dp // 기본 이미지
 
             // ImageButton 생성
             val imageButton = ImageButton(this).apply {
-                setImageResource(firstClothingName) // 추출한 리소스 사용
+                setImageResource(randomClothingName) // 난수로 선택된 리소스 사용
                 layoutParams = LinearLayout.LayoutParams(
                     ImageSize,
                     ImageSize
                 ).apply { setMargins(8, 8, 8, 8) }
                 setPadding(16, 16, 16, 16)
                 scaleType = ImageView.ScaleType.CENTER_INSIDE
+
+                // 둥근 모서리를 가진 배경 설정 (배경색 lightGray)
+                background = GradientDrawable().apply {
+                    setColor(context.getColor(R.color.superLightGray)) // 배경색 설정
+                    cornerRadius = 16 * context.resources.displayMetrics.density // Corner radius in dp
+                }
             }
 
             // 클릭 이벤트 추가
@@ -257,7 +274,6 @@ class MainActivity : AppCompatActivity() {
 
             // TextView 생성
             val textView = TextView(this).apply {
-                // TextView에 온도를 직접 설정 (문자열 리소스 없이)
                 text = recommendation.temperature
                 textSize = 20f
                 gravity = android.view.Gravity.CENTER
@@ -269,12 +285,22 @@ class MainActivity : AppCompatActivity() {
                 gravity = android.view.Gravity.CENTER
                 addView(imageButton)
                 addView(textView)
+
+                // 부모 레이아웃에 적용할 마진 설정
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 0, 16, 0) // 좌우 16dp 마진
+                }
             }
 
             // 부모 Layout에 추가
             clothesLinearLayout.addView(container)
         }
     }
+
+
 
     /**
      * 옷 이름에서 주요 항목 추출 ("상의 - 티셔츠" -> "티셔츠")
@@ -334,7 +360,7 @@ class MainActivity : AppCompatActivity() {
             "목도리" -> "44_muffler"
             "장갑" -> "45_gloves"
             "방한용품" -> "46_winter_accessories"
-            else -> "default_image" // 기본 이미지
+            else -> return resources.getIdentifier("t_shirt_100dp", "drawable", packageName) // 기본 이미지
         }
 
         // 리소스 이름을 기반으로 리소스 ID 반환

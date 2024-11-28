@@ -289,24 +289,4 @@ class APITest2Activity : AppCompatActivity() {
 
 }
 
-//    // 강수 형태를 텍스트로 변환하는 함수
-//    private fun mapRainType(rainType: String?): String {
-//        return when (rainType) {
-//            "0" -> "없음"
-//            "1" -> "비"
-//            "2" -> "비/눈"
-//            "3" -> "눈"
-//            "4" -> "소나기"
-//            else -> "정보 없음"
-//        }
-//    }
-//
-//    // 하늘 상태를 텍스트로 변환하는 함수
-//    private fun mapSkyCondition(skyCondition: String?): String {
-//        return when (skyCondition) {
-//            "1" -> "맑음"
-//            "3" -> "구름 많음"
-//            "4" -> "흐림"
-//            else -> "정보 없음"
-//        }
-//    }
+

@@ -71,13 +71,21 @@
                     android:layout_height="250dp"
                     android:background="@color/lightSkyblue">
 
+                    <!--로딩-->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
+
                     <Button
                         android:id="@+id/toDetailedWeatherActivity"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#00ff0000"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:layout_gravity="center_horizontal" />
+                        android:background="#00ff0000" />
 
                     <TextView
                         android:id="@+id/currentTempView_main"
@@ -126,6 +134,8 @@
                         android:textSize="20sp" />
                 </LinearLayout>
 
+
+
                 <!-- 시간대별 날씨 -->
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -151,7 +161,7 @@
                     <!--"이런 옷은 어떠세요?",AI기반 추천 버튼-->
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="50dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -163,12 +173,13 @@
 
                         <Button
                             android:id="@+id/btn_requestAIrecommendation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="140dp"
+                            android:layout_height="40dp"
                             android:layout_alignParentRight="true"
-                            android:text="AI기반 옷차림 추천">
+                            android:layout_marginRight="0dp"
+                            android:background="@drawable/rounded_button_background"
+                            android:text="개인 맞춤 옷차림 추천" />
 
-                        </Button>
 
                     </RelativeLayout>
 

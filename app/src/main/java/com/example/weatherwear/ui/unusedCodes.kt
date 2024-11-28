@@ -59,3 +59,78 @@ package com.example.weatherwear.ui
 //    val intent = Intent(this, SettingsActivity::class.java)
 //    startActivity(intent)
 //}
+
+//    /**
+//     * RWCResponse 데이터를 기반으로 의상 추천을 LinearLayout에 표시
+//     * @param rwcResponse RWCResponse 객체
+//     * @param container 의상을 표시할 LinearLayout
+//     */
+//    fun populateClothingRecommendations(
+//        rwcResponse: RWCResponse,
+//        container: LinearLayout
+//    ) {
+//        container.removeAllViews() // 기존 뷰 제거
+//
+//        rwcResponse.clothingRecommendations?.forEach { recommendation ->
+//            // 각 의상 추천을 위한 레이아웃 생성
+//            val itemLayout = createClothingItemLayout(recommendation)
+//
+//            // 레이아웃 클릭 시 팝업 표시
+//            itemLayout.setOnClickListener {
+//                showClothingPopup(recommendation) // 의상 팝업 표시
+//            }
+//
+//            container.addView(itemLayout) // LinearLayout에 추가
+//        }
+//    }
+
+//    /**
+//     * 개별 의상 아이템을 위한 레이아웃 생성
+//     */
+//    private fun createClothingItemLayout(recommendation: ClothingRecommendation): LinearLayout {
+//        return LinearLayout(context).apply {
+//            orientation = LinearLayout.VERTICAL
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.WRAP_CONTENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply {
+//                setMargins(
+//                    (16 * context.resources.displayMetrics.density).toInt(),
+//                    (8 * context.resources.displayMetrics.density).toInt(),
+//                    (16 * context.resources.displayMetrics.density).toInt(),
+//                    (8 * context.resources.displayMetrics.density).toInt()
+//                )
+//            }
+//            gravity = android.view.Gravity.CENTER
+//
+//            // 의상 이미지 추가
+//            val imageView = createClothingImageView("")
+//            addView(imageView)
+//
+//            // 의상 온도 텍스트 추가
+//            val textView = createClothingTextView(recommendation.temperature)
+//            addView(textView)
+//        }
+//    }
+
+//    // 강수 형태를 텍스트로 변환하는 함수
+//    private fun mapRainType(rainType: String?): String {
+//        return when (rainType) {
+//            "0" -> "없음"
+//            "1" -> "비"
+//            "2" -> "비/눈"
+//            "3" -> "눈"
+//            "4" -> "소나기"
+//            else -> "정보 없음"
+//        }
+//    }
+//
+//    // 하늘 상태를 텍스트로 변환하는 함수
+//    private fun mapSkyCondition(skyCondition: String?): String {
+//        return when (skyCondition) {
+//            "1" -> "맑음"
+//            "3" -> "구름 많음"
+//            "4" -> "흐림"
+//            else -> "정보 없음"
+//        }
+//    }

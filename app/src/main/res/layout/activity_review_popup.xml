@@ -1,10 +1,10 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:background="@drawable/rounded_button_background"
     android:orientation="vertical"
     tools:context=".ui.ReviewPopup">
 
@@ -23,8 +23,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="옷차림 추천은 어땠나요?"
-                android:textSize="22sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="22sp" />
         </RelativeLayout>
     </Toolbar>
 
@@ -44,7 +44,7 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="(temp)기준 옷차림 추천"
-            android:textSize="20sp"></TextView>
+            android:textSize="20sp" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -73,17 +73,17 @@
             <!-- 추웠어요/더웠어요 버튼 -->
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_cold"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
-                    android:minWidth="130dp"
-                    android:maxHeight="40dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/skyblue"
+                    android:background="@drawable/rounded_button_background_skyblue"
+                    android:maxHeight="40dp"
+                    android:minWidth="130dp"
                     android:text="추웠어요"
                     android:textSize="20sp" />
 
@@ -91,10 +91,10 @@
                     android:id="@+id/btn_hot"
                     android:layout_width="130dp"
                     android:layout_height="40dp"
-                    android:minWidth="130dp"
-                    android:maxHeight="40dp"
                     android:layout_marginHorizontal="15dp"
-                    android:background="@color/hotRed"
+                    android:background="@drawable/rounded_button_background_hotred"
+                    android:maxHeight="40dp"
+                    android:minWidth="130dp"
                     android:text="더웠어요"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -104,12 +104,12 @@
                 android:id="@+id/btn_good"
                 android:layout_width="290dp"
                 android:layout_height="40dp"
-                android:minWidth="290dp"
-                android:maxHeight="40dp"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/superLightGray"
+                android:background="@drawable/rounded_button_background"
+                android:maxHeight="40dp"
+                android:minWidth="290dp"
                 android:text="마음에 들어요"
                 android:textSize="20sp" />
         </LinearLayout>

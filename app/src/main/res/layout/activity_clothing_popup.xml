@@ -1,10 +1,10 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:background="@drawable/rounded_button_background"
     android:orientation="vertical"
     tools:context=".ui.ClothingPopup">
 
@@ -24,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text=" 기온(xx)기반 옷차림 추천"
-                android:textSize="22sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="22sp" />
 
         </RelativeLayout>
 
@@ -34,8 +34,8 @@
     <!-- 옷 추천 리스트 -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/lightSkyblue"
-        android:layout_height="500dp">
+        android:layout_height="500dp"
+        android:background="@color/lightSkyblue">
 
         <!-- 수직 스크롤 뷰 -->
         <ScrollView
@@ -49,8 +49,8 @@
                 android:id="@+id/clothingContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical" />
         </ScrollView>
 
         <!-- Bottom buttons for user feedback -->
@@ -62,14 +62,13 @@
             android:layout_marginBottom="15dp"
             android:orientation="vertical">
 
-
             <Button
                 android:id="@+id/btn_selectThis"
                 android:layout_width="290dp"
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginVertical="5dp"
-                android:background="@color/superLightGray"
+                android:background="@drawable/rounded_button_background"
                 android:text="이렇게 입을게요!"
                 android:textSize="20sp" />
         </LinearLayout>

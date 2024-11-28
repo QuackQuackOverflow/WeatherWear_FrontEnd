@@ -3,6 +3,7 @@ package com.example.weatherwear.ui
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import android.widget.*
 import com.example.weatherwear.R
@@ -89,7 +90,12 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
                 setMargins(75, 20, 75, 20)
             }
             gravity = Gravity.CENTER_VERTICAL // 아이템을 수평 정렬
-            setBackgroundColor(context.resources.getColor(R.color.midLightSkyblue, null)) // 배경색 설정
+
+            // 둥근 모서리를 가진 배경 설정
+            background = GradientDrawable().apply {
+                setColor(context.resources.getColor(R.color.midLightSkyblue, null)) // 배경색 설정
+                cornerRadius = 16 * context.resources.displayMetrics.density // Corner radius 설정 (16dp)
+            }
         }
 
         // 이미지 추가 (추천 의류 이름에 따라 매핑)
@@ -100,6 +106,12 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
                 gravity = Gravity.CENTER_VERTICAL // 수직 정렬
             }
             scaleType = ImageView.ScaleType.CENTER_INSIDE
+
+            // 이미지에 둥근 모서리를 추가
+            background = GradientDrawable().apply {
+                setColor(context.resources.getColor(R.color.superLightGray, null)) // 배경색 설정 (superLightGray)
+                cornerRadius = 16 * context.resources.displayMetrics.density // Corner radius 설정 (16dp)
+            }
         }
         itemLayout.addView(imageView)
 
@@ -122,6 +134,7 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
         // 항목 추가
         clothingContainer.addView(itemLayout)
     }
+
 
     private fun formatClothingText(clothingText: String): String {
         return clothingText.replace(" - ", "\n\n")

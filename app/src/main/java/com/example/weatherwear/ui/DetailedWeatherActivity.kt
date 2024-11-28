@@ -1,5 +1,6 @@
 package com.example.weatherwear.ui
 
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -83,42 +84,134 @@ class DetailedWeatherActivity : AppCompatActivity() {
             }
 
             // 시간별 데이터를 추가
-            addWeatherDataToScrollView(hourlyTempScrollView, formattedTime, "${weather.temp?.toInt() ?: "?"}°C")
-            addWeatherDataToScrollView(hourlyRainAmountScrollView, formattedTime, "${weather.rainAmount?.toInt() ?: "?"}mm")
-            addWeatherDataToScrollView(hourlyHumidScrollView, formattedTime, "${weather.humid?.toInt() ?: "?"}%")
-            addWeatherDataToScrollView(hourlyWindspeedScrollView, formattedTime, "${String.format("%.1f", weather.windSpeed ?: 0.0)}m/s")
+            addWeatherDataToScrollView(hourlyTempScrollView, formattedTime, "${weather.temp?.toInt() ?: "?"}°C", weather, addIcon = true)
+            addWeatherDataToScrollView(hourlyRainAmountScrollView, formattedTime, "${weather.rainAmount?.toInt() ?: "?"}mm", weather, addIcon = false)
+            addWeatherDataToScrollView(hourlyHumidScrollView, formattedTime, "${weather.humid?.toInt() ?: "?"}%", weather, addIcon = false)
+            addWeatherDataToScrollView(hourlyWindspeedScrollView, formattedTime, "${String.format("%.1f", weather.windSpeed ?: 0.0)}m/s", weather, addIcon = false)
         }
     }
 
     /**
      * ScrollView에 날짜 헤더를 추가하는 함수
      */
-    private fun addDateHeaderToScrollView(container: LinearLayout, date: String) {
+    private fun addDateHeaderToScrollView(container: LinearLayout, date: String, matchIconHeight: Boolean = false) {
         val dateLayout = RelativeLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
-                (80 * resources.displayMetrics.density).toInt(), // width in dp
-                (80 * resources.displayMetrics.density).toInt()  // height in dp
+                LinearLayout.LayoutParams.MATCH_PARENT, // 폭은 전체 화면에 맞춤
+                if (matchIconHeight) (100 * resources.displayMetrics.density).toInt() else (80 * resources.displayMetrics.density).toInt() // 높이 조정
             ).apply {
-                setMargins(8, -5, 8, 8)
+                setMargins(
+                    (16 * resources.displayMetrics.density).toInt(), // 좌측 마진 16dp
+                    8, // 상단 마진 8dp
+                    (16 * resources.displayMetrics.density).toInt(), // 우측 마진 16dp
+                    8 // 하단 마진 8dp
+                )
             }
-            setBackgroundColor(resources.getColor(R.color.cloudGray, null))
+
+            // 둥근 모서리 배경색 설정
+            background = GradientDrawable().apply {
+                setColor(resources.getColor(R.color.lightSkyblue, null)) // 배경색 lightSkyblue로 설정
+                cornerRadius = 16 * resources.displayMetrics.density // 둥근 모서리 반경 16dp
+            }
         }
 
         val dateTextView = TextView(this).apply {
-            text = date
-            textSize = 18f
-            setTextColor(resources.getColor(R.color.black, null))
-            gravity = Gravity.CENTER
+            text = date // 헤더 날짜 텍스트
+            textSize = 18f // 텍스트 크기
+            setTextColor(resources.getColor(R.color.black, null)) // 텍스트 색상 black
+            gravity = Gravity.CENTER // 텍스트 중앙 정렬
             layoutParams = RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                addRule(RelativeLayout.CENTER_IN_PARENT)
+                addRule(RelativeLayout.CENTER_HORIZONTAL) // 수평 가운데 정렬
+                addRule(RelativeLayout.CENTER_VERTICAL) // 수직 가운데 정렬
             }
         }
+
+        // 텍스트 뷰를 레이아웃에 추가
         dateLayout.addView(dateTextView)
+
+        // 전체 헤더를 컨테이너에 추가
         container.addView(dateLayout)
     }
+
+
+    /**
+     * ScrollView에 데이터를 추가하는 유틸리티 함수
+     */
+    private fun addWeatherDataToScrollView(container: LinearLayout, time: String, data: String, weather: Weather, addIcon: Boolean = false) {
+        val itemLayout = RelativeLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                (80 * resources.displayMetrics.density).toInt(), // width in dp
+                if (addIcon) (100 * resources.displayMetrics.density).toInt() else (80 * resources.displayMetrics.density).toInt() // 아이콘 포함 시 높이 증가
+            ).apply {
+                setMargins(8, 8, 8, 8)
+            }
+
+            // 둥근 모서리를 가진 배경 설정
+            background = GradientDrawable().apply {
+                setColor(resources.getColor(R.color.hourlyTempViewSkyblue, null)) // 배경색 설정
+                cornerRadius = 16 * resources.displayMetrics.density // 둥근 모서리 반경 설정 (16dp)
+            }
+        }
+
+        // 시간 텍스트
+        val timeTextView = TextView(this).apply {
+            id = View.generateViewId()
+            text = time
+            textSize = 16f
+            gravity = Gravity.CENTER
+            setPadding(8, 8, 8, 4)
+        }
+
+        // 데이터 텍스트
+        val dataTextView = TextView(this).apply {
+            id = View.generateViewId()
+            text = data
+            textSize = 16f
+            gravity = Gravity.CENTER
+            setPadding(8, 4, 8, 8)
+        }
+
+        // 시간 텍스트 추가 (상단)
+        val timeLayoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            addRule(RelativeLayout.ALIGN_PARENT_TOP)
+            addRule(RelativeLayout.CENTER_HORIZONTAL)
+        }
+        itemLayout.addView(timeTextView, timeLayoutParams)
+
+        // 날씨 아이콘 추가 (중앙, 조건부)
+        if (addIcon) {
+            val weatherIconView = ImageView(this).apply {
+                id = View.generateViewId()
+                layoutParams = RelativeLayout.LayoutParams(
+                    (40 * resources.displayMetrics.density).toInt(),
+                    (40 * resources.displayMetrics.density).toInt()
+                ).apply {
+                    addRule(RelativeLayout.CENTER_IN_PARENT)
+                }
+                setImageResource(getWeatherIconResource(weather.rainType ?: "0", weather.skyCondition ?: "1"))
+            }
+            itemLayout.addView(weatherIconView)
+        }
+
+        // 데이터 텍스트 추가 (하단)
+        val dataLayoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+            addRule(RelativeLayout.CENTER_HORIZONTAL)
+        }
+        itemLayout.addView(dataTextView, dataLayoutParams)
+
+        container.addView(itemLayout)
+    }
+
 
     /**
      * 날짜 문자열을 "20241129" -> "11월\n29일"로 변환
@@ -130,37 +223,56 @@ class DetailedWeatherActivity : AppCompatActivity() {
         return "${month}월\n${day}일"
     }
 
-
-
     /**
      * ScrollView에 데이터를 추가하는 유틸리티 함수
      */
-    private fun addWeatherDataToScrollView(container: LinearLayout, time: String, data: String) {
+    private fun addWeatherDataToScrollView(container: LinearLayout, time: String, data: String, weather: Weather) {
         val itemLayout = RelativeLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
                 (80 * resources.displayMetrics.density).toInt(), // width in dp
-                (80 * resources.displayMetrics.density).toInt()  // height in dp
+                (100 * resources.displayMetrics.density).toInt()  // height in dp (아이콘 포함으로 높이 증가)
             ).apply {
                 setMargins(8, 8, 8, 8)
             }
-            setBackgroundColor(resources.getColor(R.color.hourlyTempViewSkyblue, null))
+
+            // 둥근 모서리를 가진 배경 설정
+            background = GradientDrawable().apply {
+                setColor(resources.getColor(R.color.hourlyTempViewSkyblue, null)) // 배경색 설정
+                cornerRadius = 16 * resources.displayMetrics.density // 둥근 모서리 반경 설정 (16dp)
+            }
         }
 
+        // 시간 텍스트
         val timeTextView = TextView(this).apply {
-            id = View.generateViewId() // Generate unique ID for constraint
+            id = View.generateViewId()
             text = time
-            textSize = 20f
+            textSize = 16f
+            gravity = Gravity.CENTER
             setPadding(8, 8, 8, 4)
         }
 
+        // 날씨 아이콘
+        val weatherIconView = ImageView(this).apply {
+            id = View.generateViewId()
+            layoutParams = RelativeLayout.LayoutParams(
+                (40 * resources.displayMetrics.density).toInt(),
+                (40 * resources.displayMetrics.density).toInt()
+            ).apply {
+                addRule(RelativeLayout.CENTER_IN_PARENT)
+            }
+            setImageResource(getWeatherIconResource(weather.rainType ?: "0", weather.skyCondition ?: "1"))
+        }
+
+        // 데이터 텍스트
         val dataTextView = TextView(this).apply {
-            id = View.generateViewId() // Generate unique ID for constraint
+            id = View.generateViewId()
             text = data
-            textSize = 20f
+            textSize = 16f
+            gravity = Gravity.CENTER
             setPadding(8, 4, 8, 8)
         }
 
-        // Add timeTextView to the top
+        // 시간 텍스트 추가 (상단)
         val timeLayoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -170,7 +282,10 @@ class DetailedWeatherActivity : AppCompatActivity() {
         }
         itemLayout.addView(timeTextView, timeLayoutParams)
 
-        // Add dataTextView to the bottom
+        // 날씨 아이콘 추가 (중앙)
+        itemLayout.addView(weatherIconView)
+
+        // 데이터 텍스트 추가 (하단)
         val dataLayoutParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
