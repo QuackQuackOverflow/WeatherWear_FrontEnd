@@ -146,8 +146,6 @@ class MainActivity : AppCompatActivity() {
             popupMenu.show() // 팝업 메뉴 표시
         }
 
-
-
     }
 
 
@@ -302,8 +300,6 @@ class MainActivity : AppCompatActivity() {
             clothesLinearLayout.addView(container)
         }
     }
-
-
 
     /**
      * 옷 이름에서 주요 항목 추출 ("상의 - 티셔츠" -> "티셔츠")

@@ -146,7 +146,7 @@ class DetailedWeatherActivity : AppCompatActivity() {
                 (80 * resources.displayMetrics.density).toInt(), // width in dp
                 if (addIcon) (100 * resources.displayMetrics.density).toInt() else (80 * resources.displayMetrics.density).toInt() // 아이콘 포함 시 높이 증가
             ).apply {
-                setMargins(8, 8, 8, 8)
+                setMargins(18, 8, 18, 8)
             }
 
             // 둥근 모서리를 가진 배경 설정
