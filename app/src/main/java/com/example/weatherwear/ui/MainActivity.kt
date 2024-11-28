@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
     private var rwcResponse: RWCResponse? = null // 현재 RWC 데이터 저장
 
+    // 샘플 데이터 사용 끝
     companion object {
         var useSample : Boolean = false
     }
@@ -57,10 +58,6 @@ class MainActivity : AppCompatActivity() {
     private val staticNy: Int = 111
 
     private val ImageSize = 400
-
-    /**
-     * 죽겠어요
-     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
