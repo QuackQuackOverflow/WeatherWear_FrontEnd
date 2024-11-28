@@ -152,7 +152,7 @@ class ClothingPopup(
             "목도리" -> "44_muffler"
             "장갑" -> "45_gloves"
             "방한용품" -> "46_winter_accessories"
-            else -> "default_image" // 기본 이미지
+            else -> return context.resources.getIdentifier("t_shirt_100dp", "drawable", context.packageName)
         }
 
         // 리소스 이름을 기반으로 리소스 ID 반환

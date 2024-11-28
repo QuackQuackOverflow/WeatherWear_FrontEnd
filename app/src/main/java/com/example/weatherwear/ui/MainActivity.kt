@@ -117,10 +117,15 @@ class MainActivity : AppCompatActivity() {
                 when (item.itemId) {
                     R.id.review -> {
                         // 리뷰 남기기
-                        val clothingPrefs =
-                            getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
-                        val reviewPopup = ReviewPopup(this, clothingPrefs)
-                        reviewPopup.show()
+                        val clothingPrefs = getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+
+                        // ClothingPrefs가 비어 있는지 확인
+                        if (clothingPrefs.all.isNullOrEmpty()) {
+                            Toast.makeText(this, "선택됐던 옷이 없습니다!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val reviewPopup = ReviewPopup(this, clothingPrefs)
+                            reviewPopup.show()
+                        }
                         true
                     }
 
@@ -143,6 +148,7 @@ class MainActivity : AppCompatActivity() {
             }
             popupMenu.show() // 팝업 메뉴 표시
         }
+
 
 
     }

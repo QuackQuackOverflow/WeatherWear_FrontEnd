@@ -2,7 +2,6 @@ package com.example.weatherwear.ui
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -10,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherwear.R
 import com.example.weatherwear.ui.account.LoginActivity
+import LoginHelper
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -17,29 +17,35 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // loginedData에서 사용자 정보 가져오기 (기본 값은 알 수 없음)
-        val loginedData = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val userName = loginedData.getString("memberName", "알 수 없음") ?: "알 수 없음"
-        val userEmail = loginedData.getString("memberEmail", "알 수 없음") ?: "알 수 없음"
-        val userType = loginedData.getString("userType", "알 수 없음") ?: "알 수 없음"
+        // LoginHelper 인스턴스 생성
+        val loginHelper = LoginHelper(this)
 
-        // 체질 정보를 명확한 한국어로 변환
-        val userTypeDisplay = when (userType.lowercase()) {
-            "hotSensitive" -> "더위를 잘 탐"
-            "coldSensitive" -> "추위를 잘 탐"
-            "average" -> "평범한 체온 체질"
-            else -> "알 수 없음"
-        }
+        // LoginHelper에서 사용자 정보 가져오기
+        val loginData = loginHelper.getLoginInfo()
 
         // 사용자 정보를 UI에 반영
-        findViewById<TextView>(R.id.userName).text = "이름: $userName"
-        findViewById<TextView>(R.id.userEmail).text = "아이디: $userEmail"
-        findViewById<TextView>(R.id.userType).text = "체질: $userTypeDisplay"
+        if (loginData != null) {
+            val userTypeDisplay = when (loginData.userType?.lowercase()) {
+                "hotsensitive" -> "더위를 잘 탐"
+                "coldsensitive" -> "추위를 잘 탐"
+                "average" -> "평범한 체온 체질"
+                else -> "알 수 없음"
+            }
+
+            findViewById<TextView>(R.id.userName).text = "이름: ${loginData.name ?: "알 수 없음"}"
+            findViewById<TextView>(R.id.userEmail).text = "아이디: ${loginData.email}"
+            findViewById<TextView>(R.id.userType).text = "체질: $userTypeDisplay"
+        } else {
+            // 사용자 정보가 없는 경우 처리
+            findViewById<TextView>(R.id.userName).text = "이름: 알 수 없음"
+            findViewById<TextView>(R.id.userEmail).text = "아이디: 알 수 없음"
+            findViewById<TextView>(R.id.userType).text = "체질: 알 수 없음"
+        }
 
         // 로그아웃 버튼 이벤트 설정
         val buttonLogout: Button = findViewById(R.id.buttonLogout)
         buttonLogout.setOnClickListener {
-            clearLoginInfo(loginedData)
+            loginHelper.clearLoginInfo() // 로그인 정보 초기화
             Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
 
             // LoginActivity로 이동
@@ -48,18 +54,5 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
             finish() // 현재 Activity 종료
         }
-
-    }
-
-    /**
-     * SharedPreferences에 저장된 로그인 정보 초기화
-     */
-    private fun clearLoginInfo(loginPrefs: SharedPreferences) {
-        val editor = loginPrefs.edit()
-        editor.putString("memberEmail", "") // 이메일 초기화
-        editor.putString("memberPassword", "") // 비밀번호 초기화
-        editor.putString("memberName", "") // 이름 초기화
-        editor.putString("userType", "") // 사용자 체질 타입 초기화
-        editor.apply() // 변경 사항 저장
     }
 }

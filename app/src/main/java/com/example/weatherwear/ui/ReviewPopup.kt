@@ -1,5 +1,6 @@
 package com.example.weatherwear.ui
 
+import LoginHelper
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -135,7 +136,6 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
         clothingContainer.addView(itemLayout)
     }
 
-
     private fun formatClothingText(clothingText: String): String {
         return clothingText.replace(" - ", "\n\n")
     }
@@ -192,12 +192,13 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
             "목도리" -> "44_muffler"
             "장갑" -> "45_gloves"
             "방한용품" -> "46_winter_accessories"
-            else -> "default_image" // 기본 이미지
+            else -> return context.resources.getIdentifier("t_shirt_100dp", "drawable", context.packageName) // 기본 이미지
         }
 
         // 리소스 이름을 기반으로 리소스 ID 반환
         return context.resources.getIdentifier("clothing_$resourceName", "drawable", context.packageName)
     }
+
 
     private fun handleEmptyPreferences() {
         Toast.makeText(context, "선택됐던 옷이 없습니다!", Toast.LENGTH_SHORT).show()
@@ -218,9 +219,10 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
     private fun submitReview(score: Int) {
         val allEntries = clothingPrefs.all
         if (allEntries.isNotEmpty()) {
-            val memberEmail = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-                .getString("memberEmail", null)
-            if (memberEmail == null) {
+            val loginHelper = LoginHelper(context)
+            val loginData = loginHelper.getLoginInfo()
+
+            if (loginData == null) {
                 Toast.makeText(context, "회원 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                 return
             }
@@ -229,7 +231,7 @@ class ReviewPopup(context: Context, private val clothingPrefs: SharedPreferences
                 val temp = key.toDoubleOrNull()
                 if (temp != null) {
                     val review = Review(
-                        memberEmail = memberEmail,
+                        memberEmail = loginData.email,
                         evaluationScore = score,
                         temp = temp
                     )
