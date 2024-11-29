@@ -57,7 +57,8 @@ interface ApiService {
      */
     @GET("api/recommendations/{memberEmail}")
     suspend fun getAIRecommendation(
-        @Path("memberEmail") memberEmail: String
+        @Path("memberEmail") memberEmail: String,
+        @Query("temperature") temperature: Double
     ): Response<List<LearnedRecommendation>>
 
     /**

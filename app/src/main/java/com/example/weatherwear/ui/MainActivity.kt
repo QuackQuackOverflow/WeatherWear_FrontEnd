@@ -25,7 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.example.weatherwear.helpers.requestAIRecommendation
+import com.example.weatherwear.helpers.requestAIRecommendationInHelper
 import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
@@ -150,15 +150,24 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun requestAIRecommendation() {
-        requestAIRecommendation(
+        val temperature = rwcResponse?.regionWeather?.weather?.firstOrNull()?.temp // 온도 데이터 추출
+
+        if (temperature == null) {
+            Toast.makeText(this, "온도 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        requestAIRecommendationInHelper(
             context = this,
             useSample = useSample,
             mainUIHelper = mainUIHelper,
             apiService = apiService,
-            clothesLinearLayout = clothesLinearLayout
-        ) { recommendations ->
-            populateClothingRecommendations(recommendations)
-        }
+            clothesLinearLayout = clothesLinearLayout,
+            populateClothingRecommendations = { recommendations ->
+                populateClothingRecommendations(recommendations)
+            },
+            temperature = temperature // 추출한 온도를 전달
+        )
     }
 
     /**

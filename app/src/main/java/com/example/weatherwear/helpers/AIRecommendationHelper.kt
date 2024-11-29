@@ -19,13 +19,14 @@ import com.example.weatherwear.helpers.* // LoginHelper import 추가
 /**
  * AI 추천 요청 헬퍼 함수
  */
-fun requestAIRecommendation(
+fun requestAIRecommendationInHelper(
     context: Context,
     useSample: Boolean,
     mainUIHelper: MainUIHelper,
     apiService: ApiService,
     clothesLinearLayout: LinearLayout,
-    populateClothingRecommendations: (List<ClothingRecommendation>) -> Unit
+    populateClothingRecommendations: (List<ClothingRecommendation>) -> Unit,
+    temperature: Double? = null // 기본값 설정
 ) {
     if (useSample) {
         // 샘플 데이터 사용
@@ -34,7 +35,6 @@ fun requestAIRecommendation(
             transformToClothingRecommendations(sampleRecommendations, mainUIHelper)
         populateClothingRecommendations(finalFromOfAIRecommendation)
     } else {
-        // 실제 AI 추천 데이터 가져오기
         val loginHelper = LoginHelper(context) // LoginHelper 초기화
         val loginData = loginHelper.getLoginInfo() // 복호화된 로그인 정보 가져오기
 
@@ -43,9 +43,14 @@ fun requestAIRecommendation(
             return
         }
 
+        if (temperature == null) {
+            Toast.makeText(context, "유효한 온도 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.getAIRecommendation(loginData.email) // 복호화된 이메일 사용
+                val response = apiService.getAIRecommendation(loginData.email, temperature) // 이메일과 온도 전달
                 if (response.isSuccessful) {
                     val aiRecommendations = response.body()
                     aiRecommendations?.let {
