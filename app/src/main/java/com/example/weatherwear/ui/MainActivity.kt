@@ -175,6 +175,7 @@ class MainActivity : AppCompatActivity() {
             swipeRefreshLayout.isRefreshing = false
             progressBar.visibility = View.GONE // ProgressBar 숨기기
             Toast.makeText(this, "샘플 RWC 데이터를 불러왔습니다.", Toast.LENGTH_SHORT).show()
+            checkAndShowReviewPopup() // 추가된 기능
         } else {
             val message =
                 if (useStaticPosition) "날씨 데이터 불러오는 중" else "GPS에서 RWC 데이터 불러오는 중"
@@ -192,6 +193,7 @@ class MainActivity : AppCompatActivity() {
                             Toast.makeText(this, "날씨 데이터를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
                         }
                         swipeRefreshLayout.isRefreshing = false
+                        checkAndShowReviewPopup() // 추가된 기능
                     }
                 }
             } else {
@@ -206,12 +208,12 @@ class MainActivity : AppCompatActivity() {
                             Toast.makeText(this, "GPS 기반 RWC 데이터를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
                         }
                         swipeRefreshLayout.isRefreshing = false
+                        checkAndShowReviewPopup() // 추가된 기능
                     }
                 }
             }
         }
     }
-
 
 
     /**
@@ -234,6 +236,9 @@ class MainActivity : AppCompatActivity() {
         response.regionWeather?.let { regionAndWeather ->
             mainUIHelper.addForecastSummary(regionAndWeather, forecastSummaryContainer)
         }
+
+        // 앱 실행 시 ReviewPopup 딱 한 번 표시
+        checkAndShowReviewPopup()
     }
 
 
@@ -385,6 +390,9 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.isRefreshing = false
     }
 
+    /**
+     * 새로고침 데이터 처리
+     */
     private fun refreshWeatherData() {
         if (useSample) {
             testWithSampleData()
@@ -393,6 +401,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 앱 실행 시 최초 ReviewPopup 표시 여부를 확인하고, 딱 한 번만 표시
+     */
+    private fun checkAndShowReviewPopup() {
+        val preferences = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val hasShownReviewPopup = preferences.getBoolean("HasShownReviewPopup", false)
+
+        // 이미 표시했다면 종료
+        if (hasShownReviewPopup) return
+
+        val clothingPrefs = getSharedPreferences("ClothingPrefs", Context.MODE_PRIVATE)
+        if (!clothingPrefs.all.isNullOrEmpty()) {
+            val reviewPopup = ReviewPopup(this, clothingPrefs)
+            reviewPopup.show()
+
+            // ReviewPopup을 표시한 상태를 기록
+            preferences.edit().putBoolean("HasShownReviewPopup", true).apply()
+        }
+    }
 
 }
 

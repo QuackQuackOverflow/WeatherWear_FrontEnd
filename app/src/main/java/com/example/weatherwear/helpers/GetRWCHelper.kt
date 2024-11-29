@@ -109,38 +109,53 @@ class GetRWCHelper(
      * 위도와 경도를 NX, NY 격자 좌표로 변환하는 함수
      */
     private fun convertToGrid(lat: Double, lon: Double): Pair<Int, Int> {
-        // 기존 좌표 변환 로직 유지
-        val RE = 6371.00877
-        val GRID = 5.0
-        val SLAT1 = 30.0
-        val SLAT2 = 60.0
-        val OLON = 126.0
-        val OLAT = 38.0
-        val XO = 43.0
-        val YO = 136.0
 
+        val RE = 6371.00877 // 지구 반경 (단위: km)
+        val GRID = 5.0      // 격자 간격 (단위: km)
+        val SLAT1 = 30.0    // 표준 위도 1 (단위: 도)
+        val SLAT2 = 60.0    // 표준 위도 2 (단위: 도)
+        val OLON = 126.0    // 기준점 경도 (단위: 도)
+        val OLAT = 38.0     // 기준점 위도 (단위: 도)
+        val XO = 43.0       // 기준점 X 좌표
+        val YO = 136.0      // 기준점 Y 좌표
+
+        // 각도를 라디안으로 변환하는 상수
         val DEGRAD = Math.PI / 180.0
+        // 격자 크기를 기준으로 지구 반경을 재조정
         val re = RE / GRID
+        // 표준 위도 1을 라디안으로 변환
         val slat1 = SLAT1 * DEGRAD
+        // 표준 위도 2를 라디안으로 변환
         val slat2 = SLAT2 * DEGRAD
+        // 기준점 경도를 라디안으로 변환
         val olon = OLON * DEGRAD
+        // 기준점 위도를 라디안으로 변환
         val olat = OLAT * DEGRAD
 
+        // 투영에서 사용하는 비율(sn) 계산
         var sn = Math.tan(Math.PI * 0.25 + slat2 * 0.5) / Math.tan(Math.PI * 0.25 + slat1 * 0.5)
         sn = Math.log(Math.cos(slat1) / Math.cos(slat2)) / Math.log(sn)
+        // 투영 계수(sf) 계산
         var sf = Math.tan(Math.PI * 0.25 + slat1 * 0.5)
         sf = Math.pow(sf, sn) * Math.cos(slat1) / sn
+        // 기준점 반경(ro) 계산
         var ro = Math.tan(Math.PI * 0.25 + olat * 0.5)
         ro = re * sf / Math.pow(ro, sn)
 
+        // 입력 위도에 따른 반경(ra) 계산
         var ra = Math.tan(Math.PI * 0.25 + lat * DEGRAD * 0.5)
         ra = re * sf / Math.pow(ra, sn)
+        // 입력 경도에 따른 각도(theta) 계산
         var theta = lon * DEGRAD - olon
+        // 각도를 -π와 π 사이로 조정
         if (theta > Math.PI) theta -= 2.0 * Math.PI
         if (theta < -Math.PI) theta += 2.0 * Math.PI
+        // 각도를 비율(sn)에 맞게 조정
         theta *= sn
 
+        // 격자 X 좌표 계산
         val x = (ra * Math.sin(theta) + XO).toInt()
+        // 격자 Y 좌표 계산
         val y = (ro - ra * Math.cos(theta) + YO).toInt()
         return Pair(x, y)
     }

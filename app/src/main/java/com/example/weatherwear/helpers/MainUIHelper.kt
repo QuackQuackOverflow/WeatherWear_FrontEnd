@@ -287,7 +287,7 @@ class MainUIHelper(private val context: Context) {
 
             // 기온 TextView
             val tempTextView = TextView(context).apply {
-                text = "$minTemp°C / $maxTemp°C"
+                text = "$maxTemp°C / $minTemp°C" // 최고기온 먼저 표시되도록 변경
                 textSize = 16f
                 setTextColor(context.getColor(android.R.color.black))
                 id = View.generateViewId()

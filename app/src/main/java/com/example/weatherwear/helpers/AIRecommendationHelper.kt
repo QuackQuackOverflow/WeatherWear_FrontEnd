@@ -1,5 +1,6 @@
 package com.example.weatherwear.helpers
 
+import LoginHelper
 import android.content.Context
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -7,13 +8,13 @@ import com.example.weatherwear.R
 import com.example.weatherwear.data.api.ApiService
 import com.example.weatherwear.data.model.ClothingRecommendation
 import com.example.weatherwear.data.model.LearnedRecommendation
-import com.example.weatherwear.data.model.RWCResponse
 import com.example.weatherwear.data.sample.SampleAIRecommendation
-import com.example.weatherwear.helpers.MainUIHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.weatherwear.helpers.MainUIHelper
+import com.example.weatherwear.helpers.* // LoginHelper import 추가
 
 /**
  * AI 추천 요청 헬퍼 함수
@@ -34,18 +35,17 @@ fun requestAIRecommendation(
         populateClothingRecommendations(finalFromOfAIRecommendation)
     } else {
         // 실제 AI 추천 데이터 가져오기
-        val loginPrefs = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        val memberEmail = loginPrefs.getString("memberEmail", null)
-        val userType = loginPrefs.getString("userType", null)
+        val loginHelper = LoginHelper(context) // LoginHelper 초기화
+        val loginData = loginHelper.getLoginInfo() // 복호화된 로그인 정보 가져오기
 
-        if (memberEmail == null || userType == null) {
+        if (loginData == null || loginData.email.isNullOrEmpty() || loginData.userType.isNullOrEmpty()) {
             Toast.makeText(context, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
             return
         }
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiService.getAIRecommendation(memberEmail)
+                val response = apiService.getAIRecommendation(loginData.email) // 복호화된 이메일 사용
                 if (response.isSuccessful) {
                     val aiRecommendations = response.body()
                     aiRecommendations?.let {
