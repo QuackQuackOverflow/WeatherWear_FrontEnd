@@ -8,6 +8,7 @@ import com.example.weatherwear.data.api.ApiService
 import com.example.weatherwear.data.model.*
 import com.example.weatherwear.data.sample.SampleAIRecommendation
 import com.example.weatherwear.data.sample.SampleRWC
+import com.example.weatherwear.ui.MainActivity.Companion.useSample
 import com.example.weatherwear.util.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,15 @@ class APITest2Activity : AppCompatActivity() {
         resultTextView = findViewById(R.id.textViewResult)
         btnTestAIRecommendation = findViewById(R.id.btn_testAIrecommendation)
         btnTestAIRecommendationWithSample = findViewById(R.id.btn_testAIrecommendationWithSample)
+        // 샘플 데이터 스위칭 버튼 추가
+        val btnSwitchSampleMode: Button = findViewById(R.id.btn_switchSampleMode)
+
+        // 샘플 데이터 사용 여부 스위칭
+        btnSwitchSampleMode.setOnClickListener {
+            useSample = !useSample
+            val mode = if (useSample) "샘플 모드" else "실제 데이터 모드"
+            Toast.makeText(this, "데이터 모드가 '$mode'로 변경되었습니다.", Toast.LENGTH_SHORT).show()
+        }
 
         // API 초기화
         apiService = RetrofitInstance.getRetrofitInstance().create(ApiService::class.java)

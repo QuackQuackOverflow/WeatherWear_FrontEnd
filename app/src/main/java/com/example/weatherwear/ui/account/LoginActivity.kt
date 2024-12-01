@@ -50,16 +50,16 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        // 메인 화면 이동 버튼 클릭 이벤트
-//        moveToMainButton.setOnClickListener {
-//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//            startActivity(intent)
-//        }
-//
-//        // 서버 연결 테스트 버튼 클릭 이벤트
-//        connectServerTestButton.setOnClickListener {
-//            testServerConnection()
-//        }
+        // 메인 화면 이동 버튼 클릭 이벤트
+        moveToMainButton.setOnClickListener {
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 서버 연결 테스트 버튼 클릭 이벤트
+        connectServerTestButton.setOnClickListener {
+            testServerConnection()
+        }
     }
 
     // 입력값 검증 함수

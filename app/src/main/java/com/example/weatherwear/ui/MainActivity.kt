@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     // 샘플 데이터 사용 끝
     companion object {
-        var useSample : Boolean = false
+        var useSample : Boolean = true
     }
 
     /** 고정 nx ny 사용 시 */
